@@ -1,0 +1,14 @@
+[
+  {
+    prefix:                     "xxx",
+    hostname:                   "xxx",
+    admin_password:             "xxx",
+    ssh_key:                    "xxx",
+    inbound_rules:              [{protocol:"Tcp",port:"22"},{protocol:"Tcp",port:"8080"}],
+    outbound_rules:             [{}],
+    storage_image_reference_id: "xxxxxx",
+    subnet_id:                  "10.0.1.2",
+    tags:                       {environment:"production",tier:"web"},
+    public_ip:                  "yes"
+  }
+]

@@ -1,0 +1,46 @@
+---
+- hosts: all
+  vars:
+    ssh_key_filename: id_rsa
+    gitrepo: https://github.com/bortolo/Ansible_playbooks.git
+    host_user: myadmin
+    script_name: ConnectWithServers.sh
+    path_for_azure_credentials: /Users/andreabortolossi/Documents/GitHub/secrets/credentials
+    path_for_playbooks: "/home/{{host_user}}/ansibleplaybooks"
+
+  tasks:
+    - name: generate SSH key "{{ssh_key_filename}}"
+      openssh_keypair:
+        path: "~/.ssh/{{ssh_key_filename}}"
+        force: yes
+    - name: Install pip depdencdecies to manage azure-mgmt-resource
+      command: pip install azure-mgmt-resource
+    - name: Pull file from source
+      git:
+        repo: "{{gitrepo}}"
+        dest: "{{path_for_playbooks}}"
+        force: yes
+    - name: Create AZURE directory
+      file:
+        path: "/home/{{host_user}}/.azure"
+        state: directory
+    - name: Copy file with AZURE credentials
+      copy:
+       src: "{{path_for_azure_credentials}}"
+       dest: "/home/{{host_user}}/.azure/credentials"
+    - name: Make executable "{{script_name}}"
+      file:
+        dest: "{{path_for_playbooks}}/{{script_name}}"
+        mode: a+x
+    - name: Execute "{{script_name}}"
+      command: ./{{script_name}}
+      args:
+        chdir: "{{path_for_playbooks}}"
+    - name: Configure and launch application servers
+      command: ansible-playbook -i ./myazure_rm.yml deploy-appservers.yml -l tag_environment_app
+      args:
+        chdir: "{{path_for_playbooks}}"
+    - name: Configure and launch web servers
+      command: ansible-playbook -i ./myazure_rm.yml deploy-webservers.yml -l tag_environment_web
+      args:
+        chdir: "{{path_for_playbooks}}"
