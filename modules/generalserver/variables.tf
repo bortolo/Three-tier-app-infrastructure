@@ -13,7 +13,7 @@ variable "prefix" {
 }
 
 variable "subnet_id" {
-  description = "(Required) Subnet id to assign to webserver."
+  description = "(Required) Subnet id to assign to server."
 }
 
 variable "hostname" {
@@ -35,32 +35,22 @@ variable "inbound_rules" {
   default = ["22"]
 }
 
+variable "outbound_rules" {
+  description = "(Required) Which port to open in outbound"
+  default = []
+}
+
 variable "ssh_key" {
   description = "(Optional) id_rsa.pub for ssh remote connection"
   default = ""
 }
 
-variable "server_list" {
-  description = "Server rules"
-  type = list(object({
-       prefix                      = string
-       hostname                    = string
-     }))
+variable "enable_public_ip" {
+  description = "If set to true, enable public_ip"
+  type = bool
 }
 
-/*
-variable "server_list" {
-  description = "Server rules"
-  type = list(object({
-       prefix                      = string
-       hostname                    = string
-       admin_password              = string
-       ssh_key                     = string
-       inbound_rules               = list(object({protocol=string,port=string}))
-       outbound_rules              = list(object({protocol=string,port=string}))
-       storage_image_reference_id  = string
-       subnet_id                   = string
-       tags                        = object({environment=string,tier=string})
-       public_ip                   = string
-     }))
-}*/
+variable "environment_tag" {
+  description = "(Optional) Define what is the environment for these servers"
+  default = "management"
+}
