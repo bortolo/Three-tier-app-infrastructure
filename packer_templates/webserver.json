@@ -22,7 +22,7 @@
     "image_sku": "18.04-LTS",
 
     "location": "westeurope",
-    "vm_size": "Standard_B1s"
+    "vm_size": "Standard_A1_v2"
   }],
   "provisioners": [{
     "type": "shell",

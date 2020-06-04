@@ -1,0 +1,8 @@
+
+Dimensioni delle macchine virtuali di utilizzo generico
+https://docs.microsoft.com/it-it/azure/virtual-machines/sizes-general
+
+Serie Av2
+https://docs.microsoft.com/it-it/azure/virtual-machines/av2-series
+
+Time to create the template image on Azure: about 12 mins
