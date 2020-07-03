@@ -15,12 +15,17 @@ variable "prefix" {
 
 variable "management_vlan" {
   description = "(Required) Address space for mgmt purposes."
-  default     = "10.0.2.0/24"
+  default     = "10.0.3.0/24"
 }
 
 variable "production_vlan" {
   description = "(Required) Address space for production purposes."
   default     = "10.0.1.0/24"
+}
+
+variable "test_vlan" {
+  description = "(Required) Address space for production purposes."
+  default     = "10.0.2.0/24"
 }
 
 variable "address_space" {

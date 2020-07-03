@@ -17,9 +17,9 @@ resource "azurerm_network_security_group" "main" {
 }
 
 resource "azurerm_network_security_rule" "main_inbound" {
-        count                      = length(var.inbound_rules)
-        name                       = "rule-${count.index}"
-        priority                   = 1001
+        count                      = length(var.inbound_rules)*(var.number_of_servers>0 ? 1 : 0)
+        name                       = "rule-inbound-${count.index}"
+        priority                   = 1001+count.index
         direction                  = "Inbound"
         access                     = "Allow"
         protocol                   = "Tcp"
@@ -32,9 +32,9 @@ resource "azurerm_network_security_rule" "main_inbound" {
 }
 
 resource "azurerm_network_security_rule" "main_outbound" {
-        count                      = length(var.outbound_rules)
-        name                       = "rule-${count.index}"
-        priority                   = 1001
+        count                      = length(var.outbound_rules)*(var.number_of_servers>0 ? 1 : 0)
+        name                       = "rule-outbound-${count.index}"
+        priority                   = 1001+count.index
         direction                  = "Outbound"
         access                     = "Allow"
         protocol                   = "Tcp"
@@ -50,7 +50,7 @@ resource "azurerm_network_security_rule" "main_outbound" {
 
 resource "azurerm_network_interface" "main_public" {
   count               = var.number_of_servers*(var.enable_public_ip ? 1 : 0)
-  name                = "${var.prefix}-NIC-${count.index}"
+  name                = "${var.prefix}-NIC-public-${count.index}"
   location            = var.location
   resource_group_name = var.resource_group_name
   ip_configuration {
@@ -63,7 +63,7 @@ resource "azurerm_network_interface" "main_public" {
 
 resource "azurerm_network_interface" "main_private" {
   count               = var.number_of_servers*(var.enable_public_ip ? 0 : 1)
-  name                = "${var.prefix}-NIC-${count.index}"
+  name                = "${var.prefix}-NIC-private-${count.index}"
   location            = var.location
   resource_group_name = var.resource_group_name
   ip_configuration {
@@ -77,7 +77,7 @@ resource "azurerm_network_interface" "main_private" {
 
 resource "azurerm_virtual_machine" "main_public" {
   count                 = var.number_of_servers*(var.enable_public_ip ? 1 : 0)
-  name                  = "${var.prefix}-${count.index}"
+  name                  = "${var.prefix}-public-${count.index}"
   location              = var.location
   resource_group_name   = var.resource_group_name
   network_interface_ids = [azurerm_network_interface.main_public[count.index].id]
@@ -113,7 +113,7 @@ resource "azurerm_virtual_machine" "main_public" {
 
 resource "azurerm_virtual_machine" "main_private" {
   count                 = var.number_of_servers*(var.enable_public_ip ? 0 : 1)
-  name                  = "${var.prefix}-${count.index}"
+  name                  = "${var.prefix}-private-${count.index}"
   location              = var.location
   resource_group_name   = var.resource_group_name
   network_interface_ids = [azurerm_network_interface.main_private[count.index].id]
@@ -147,7 +147,7 @@ resource "azurerm_virtual_machine" "main_private" {
   }
 }
 
-# LINK TO SECURITY GROUP
+# LINK INSTANCE TO SECURITY GROUP
 resource "azurerm_network_interface_security_group_association" "main_public" {
     count = var.number_of_servers*(var.enable_public_ip ? 1 : 0)
     network_interface_id      = azurerm_network_interface.main_public[count.index].id

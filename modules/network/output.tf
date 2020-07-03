@@ -12,3 +12,8 @@ output "production_subnet_id" {
   value       = azurerm_subnet.production.id
   description = "The subnet id for the production services"
 }
+
+output "test_subnet_id" {
+  value       = azurerm_subnet.test.id
+  description = "The subnet id for the test services"
+}

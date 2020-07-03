@@ -18,3 +18,10 @@ resource "azurerm_subnet" "production" {
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefix       = var.production_vlan
 }
+
+resource "azurerm_subnet" "test" {
+  name                 = "${var.prefix}-test"
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.main.name
+  address_prefix       = var.test_vlan
+}
