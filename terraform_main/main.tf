@@ -1,6 +1,24 @@
+/*
+appserverImage:     /subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/appserverImage
+ansibleserverImage: /subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/ansibleserverImage
+nodejsserverImage:  /subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/nodejsserverImage
+webserverImage:     /subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/webserverImage
+*/
+
 locals {
   rgn     = "example-three-tier-app"            # Resource Group Name
   region  = "westeurope"                        # Selected Azure location where run the example
+
+  # JUMPHOST SERVER CONFIGURATIONS
+  name              = "jumphost"
+  hostname          = "myadmin"
+  storage_image_reference_id = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/ansibleserverImage"
+  quantity          = 1
+  inbound_port      = ["22"]
+  outbound_port     = []
+  ssh_key           = "/Users/andreabortolossi/.ssh/id_rsa.pub"
+  enable_public_ip  = true
+  environment_tag   = "management"
 }
 
 provider "azurerm" {
@@ -19,20 +37,27 @@ module network {
   location                = azurerm_resource_group.rg.location
   prefix                  = "mynetwork"
   address_space           = "10.0.0.0/16"
-  management_vlan         = "10.0.2.0/24"
+  management_vlan         = "10.0.3.0/24"
   production_vlan         = "10.0.1.0/24"
+  test_vlan               = "10.0.2.0/24"
 }
 
 # MANAGEMENT ===================================================================
 
-module "jumphost" {
-  source                     = "../modules/jumphostserver"
-  resource_group_name        = azurerm_resource_group.rg.name
+module "generalserver" {
+  source                     = "../modules/generalserver"
   location                   = azurerm_resource_group.rg.location
-  prefix                     = "jumphost"
-  storage_image_reference_id = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/ansibleserverImage"
+  resource_group_name        = azurerm_resource_group.rg.name
+  prefix                     = local.name
   subnet_id                  = module.network.management_subnet_id
-  hostname                   = "jumphost"
+  hostname                   = local.hostname
+  storage_image_reference_id = local.storage_image_reference_id
+  number_of_servers          = local.quantity
+  inbound_rules              = local.inbound_port
+  outbound_rules             = local.outbound_port
+  ssh_key                    = local.ssh_key
+  enable_public_ip           = local.enable_public_ip
+  environment_tag            = local.environment_tag
 }
 
 # LOAD BALANCER WEB ============================================================
@@ -80,19 +105,6 @@ module "web1" {
   storage_image_reference_id  = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/nodejsserverImage"
   subnet_id                   = module.network.production_subnet_id
   hostname                    = "web1"
-  availability_set_id         = azurerm_availability_set.webserver_HA.id
-  security_group_id           = azurerm_network_security_group.webserver_sec_rules.id
-  backend_address_pool_id     = module.web_lb.backend_address_pool_id
-  server_tag                  = "web"
-}
-module "web2" {
-  source                      = "../modules/server"
-  resource_group_name         = azurerm_resource_group.rg.name
-  location                    = azurerm_resource_group.rg.location
-  prefix                      = "web2"
-  storage_image_reference_id  = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/nodejsserverImage"
-  subnet_id                   = module.network.production_subnet_id
-  hostname                    = "web2"
   availability_set_id         = azurerm_availability_set.webserver_HA.id
   security_group_id           = azurerm_network_security_group.webserver_sec_rules.id
   backend_address_pool_id     = module.web_lb.backend_address_pool_id
@@ -185,20 +197,6 @@ module "app1" {
   storage_image_reference_id  = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/appserverImage"
   subnet_id                   = module.network.production_subnet_id
   hostname                    = "app1"
-  availability_set_id         = azurerm_availability_set.appserver_HA.id
-  security_group_id           = azurerm_network_security_group.appserver_sec_rules.id
-  backend_address_pool_id     = azurerm_lb_backend_address_pool.applb.id
-  server_tag                  = "app"
-}
-
-module "app2" {
-  source                      = "../modules/server"
-  resource_group_name         = azurerm_resource_group.rg.name
-  location                    = azurerm_resource_group.rg.location
-  prefix                      = "app2"
-  storage_image_reference_id  = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/appserverImage"
-  subnet_id                   = module.network.production_subnet_id
-  hostname                    = "app2"
   availability_set_id         = azurerm_availability_set.appserver_HA.id
   security_group_id           = azurerm_network_security_group.appserver_sec_rules.id
   backend_address_pool_id     = azurerm_lb_backend_address_pool.applb.id

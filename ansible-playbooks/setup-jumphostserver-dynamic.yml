@@ -5,7 +5,7 @@
     gitrepo: https://github.com/bortolo/Ansible_playbooks.git
     host_user: myadmin
     script_name: ConnectWithServers.sh
-    path_for_azure_credentials: /Users/andreabortolossi/Documents/GitHub/secrets/credentials
+    path_for_azure_credentials: /Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Secrets/credentials
     path_for_playbooks: "/home/{{host_user}}/ansibleplaybooks"
 
   tasks:

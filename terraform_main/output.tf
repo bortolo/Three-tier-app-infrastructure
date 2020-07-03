@@ -1,7 +1,9 @@
+/*
 output "managment_public_ip" {
   value       = module.jumphost.managment_public_ip
   description = "The public IP for remote mgmt"
 }
+*/
 
 /*output "loadbalancer_public_ip" {
   value       = module.web_lb.loadbalancer_public_ip
