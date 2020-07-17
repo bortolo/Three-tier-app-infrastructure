@@ -12,3 +12,9 @@ HOW TO RUN:
 
 HOW TO CHANGE TEMPLATES:
 - run "packer build template_name.json" from ./packer_templates
+
+
+Other useful links
+https://ubuntu.com/tutorials/install-and-configure-apache#1-overview
+https://openclassrooms.com/en/courses/2504541-ultra-fast-applications-using-node-js/2504972-creating-your-first-app-with-node-js
+https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-8-on-ubuntu-16-04

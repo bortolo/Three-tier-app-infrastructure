@@ -42,7 +42,7 @@ variable "outbound_rules" {
 
 variable "ssh_key" {
   description = "(Optional) id_rsa.pub for ssh remote connection"
-  default = ""
+  default = "./dummy"
 }
 
 variable "enable_public_ip" {
@@ -53,4 +53,22 @@ variable "enable_public_ip" {
 variable "environment_tag" {
   description = "(Optional) Define what is the environment for these servers"
   default = "management"
+}
+
+variable "enable_backend_address_pool" {
+  description = "If set to true, enable backend_address_pool_id variable usage"
+  type = bool
+  default = false
+}
+
+variable "backend_address_pool_id" {
+  description = "(Optional) Add the group of instances in a loadbalancer pool"
+  type = string
+  default = "NotApplicable"
+}
+
+variable "disable_password_authentication" {
+  description = "(Optional) If set to true, disable password authentication for linux server"
+  type = bool
+  default = false
 }
