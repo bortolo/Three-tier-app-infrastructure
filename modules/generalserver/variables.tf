@@ -72,3 +72,8 @@ variable "disable_password_authentication" {
   type = bool
   default = false
 }
+
+variable "availability_set_id" {
+  description = "Add the group of instances in a HA set"
+  type = string
+}

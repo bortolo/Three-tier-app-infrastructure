@@ -118,6 +118,7 @@ resource "azurerm_virtual_machine" "main_private" {
   resource_group_name   = var.resource_group_name
   network_interface_ids = [azurerm_network_interface.main_private[count.index].id]
   vm_size               = "Standard_DS1_v2"
+  availability_set_id   = var.availability_set_id
   delete_os_disk_on_termination = true
   delete_data_disks_on_termination = true
 

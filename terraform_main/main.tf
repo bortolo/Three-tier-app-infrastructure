@@ -67,6 +67,12 @@ module network {
 
 # MANAGEMENT ===================================================================
 
+resource "azurerm_availability_set" "jumphost_HA" {
+  name                = "jumphost_HA"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
 module "generalserver" {
   source                          = "../modules/generalserver"
   location                        = azurerm_resource_group.rg.location
@@ -82,6 +88,7 @@ module "generalserver" {
   enable_public_ip                = local.J_enable_public_ip
   environment_tag                 = local.J_environment_tag
   disable_password_authentication = local.J_disable_password_authentication
+  availability_set_id         = azurerm_availability_set.jumphost_HA.id
 }
 
 # LOAD BALANCER WEB ============================================================
@@ -135,6 +142,12 @@ module "web1" {
 }
 */
 
+resource "azurerm_availability_set" "webserver_HA" {
+  name                = "webserver_HA"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
 module "generalwebserver" {
   source                     = "../modules/generalserver"
   location                   = azurerm_resource_group.rg.location
@@ -151,6 +164,7 @@ module "generalwebserver" {
   environment_tag            = local.W_environment_tag
   enable_backend_address_pool = true
   backend_address_pool_id    = module.web_lb.backend_address_pool_id
+  availability_set_id         = azurerm_availability_set.webserver_HA.id
 }
 
 
