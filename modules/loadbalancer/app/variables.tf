@@ -24,5 +24,10 @@ variable "backend_port" {
 
 variable "prefix" {
   description = "(Required) Default prefix to use with your resource names."
-  default     = "mypublicLB"
+  default     = "myprivateLB"
+}
+
+variable "subnet_id" {
+  description = "(Optional) Subnet_id must be set for frontend_ip_configuration in case of private load balancer."
+  default     = "NotApplicable"
 }
