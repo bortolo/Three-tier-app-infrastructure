@@ -7,6 +7,7 @@
     script_name: ConnectWithServers.sh
     path_for_azure_credentials: /Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Secrets/credentials
     path_for_playbooks: "/home/{{host_user}}/ansibleplaybooks"
+    server_password: "{{password}}"
 
   tasks:
     - name: generate SSH key "{{ssh_key_filename}}"
@@ -19,6 +20,9 @@
       git:
         repo: "{{gitrepo}}"
         dest: "{{path_for_playbooks}}"
+        update: yes
+        version: master
+        force: yes
     - name: Create AZURE directory
       file:
         path: "/home/{{host_user}}/.azure"
@@ -32,7 +36,7 @@
         dest: "{{path_for_playbooks}}/{{script_name}}"
         mode: a+x
     - name: Execute "{{script_name}}"
-      command: ./{{script_name}}
+      command: ./{{script_name}} {{server_password}}
       args:
         chdir: "{{path_for_playbooks}}"
     - name: Configure and launch application servers
