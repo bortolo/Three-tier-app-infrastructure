@@ -13,12 +13,12 @@
       openssh_keypair:
         path: "~/.ssh/{{ssh_key_filename}}"
     - name: Install pip depdencdecies to manage azure-mgmt-resource
-      command: pip install azure-mgmt-resource
+      pip:
+        name: azure-mgmt-resource
     - name: Pull file from source
       git:
         repo: "{{gitrepo}}"
         dest: "{{path_for_playbooks}}"
-        force: yes
     - name: Create AZURE directory
       file:
         path: "/home/{{host_user}}/.azure"
