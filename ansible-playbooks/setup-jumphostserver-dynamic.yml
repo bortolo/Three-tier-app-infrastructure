@@ -12,7 +12,6 @@
     - name: generate SSH key "{{ssh_key_filename}}"
       openssh_keypair:
         path: "~/.ssh/{{ssh_key_filename}}"
-        force: yes
     - name: Install pip depdencdecies to manage azure-mgmt-resource
       command: pip install azure-mgmt-resource
     - name: Pull file from source
