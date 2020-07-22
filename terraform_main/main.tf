@@ -30,7 +30,7 @@ locals {
   W_name              = "web"
   W_hostname          = "myadmin"
   W_storage_image_reference_id = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/nodejsserverImage"
-  W_quantity          = 1
+  W_quantity          = 0
   W_inbound_port      = ["8081"]
   W_outbound_port     = []
   W_ssh_key           = "/Users/andreabortolossi/.ssh/id_rsa.pub"
@@ -41,7 +41,7 @@ locals {
   A_name              = "app"
   A_hostname          = "myadmin"
   A_storage_image_reference_id = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/appserverImage"
-  A_quantity          = 1
+  A_quantity          = 0
   A_inbound_port      = ["8080"]
   A_outbound_port     = []
   A_ssh_key           = "/Users/andreabortolossi/.ssh/id_rsa.pub"

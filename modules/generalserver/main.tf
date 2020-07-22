@@ -11,6 +11,7 @@ resource "azurerm_public_ip" "main" {
 # SECURITY RULES ===============================================================
 
 resource "azurerm_network_security_group" "main" {
+    count               = (var.number_of_servers>0 ? 1 : 0)
     name                = "${var.prefix}_sec_group"
     location            = var.location
     resource_group_name = var.resource_group_name
@@ -28,7 +29,7 @@ resource "azurerm_network_security_rule" "main_inbound" {
         source_address_prefix      = "*"
         destination_address_prefix = "*"
         resource_group_name         = var.resource_group_name
-        network_security_group_name = azurerm_network_security_group.main.name
+        network_security_group_name = azurerm_network_security_group.main[0].name
 }
 
 resource "azurerm_network_security_rule" "main_outbound" {
@@ -43,7 +44,7 @@ resource "azurerm_network_security_rule" "main_outbound" {
         source_address_prefix      = "*"
         destination_address_prefix = "*"
         resource_group_name         = var.resource_group_name
-        network_security_group_name = azurerm_network_security_group.main.name
+        network_security_group_name = azurerm_network_security_group.main[0].name
 }
 
 # NIC ==========================================================================
@@ -154,13 +155,13 @@ resource "azurerm_virtual_machine" "main_private" {
 resource "azurerm_network_interface_security_group_association" "main_public" {
     count = var.number_of_servers*(var.enable_public_ip ? 1 : 0)
     network_interface_id      = azurerm_network_interface.main_public[count.index].id
-    network_security_group_id = azurerm_network_security_group.main.id
+    network_security_group_id = azurerm_network_security_group.main[0].id
 }
 
 resource "azurerm_network_interface_security_group_association" "main_private" {
     count = var.number_of_servers*(var.enable_public_ip ? 0 : 1)
     network_interface_id      = azurerm_network_interface.main_private[count.index].id
-    network_security_group_id = azurerm_network_security_group.main.id
+    network_security_group_id = azurerm_network_security_group.main[0].id
 }
 
 # LINK TO PRIVATE LB BACKEND POOL
