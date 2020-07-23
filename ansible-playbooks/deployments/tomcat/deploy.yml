@@ -6,6 +6,7 @@
     host_user: myadmin
     war_file_path: HelloWorldServlet.war #target/my-real-app-war.war
     path_for_the_app: "/home/{{host_user}}/tomcatapp"
+    service_name: tomcat8
 
   tasks:
     - name: Pull file from source
@@ -18,3 +19,10 @@
       become_user: myadmin
       args:
        chdir: "{{path_for_the_app}}"
+    - name: restart service {{service_name}}, in all cases, also issue daemon-reload to pick up config changes
+      become: yes
+      systemd:
+       state: restarted
+       daemon_reload: yes
+       enabled: yes
+       name: "{{service_name}}"

@@ -77,3 +77,9 @@ variable "availability_set_id" {
   description = "Add the group of instances in a HA set"
   type = string
 }
+
+variable "vm_size" {
+  description = "Size of the Azure VM"
+  type = string
+  default = "Standard_B1ls"
+}
