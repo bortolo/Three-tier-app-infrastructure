@@ -6,9 +6,10 @@
     # CHANGE HERE
     # Set the host name of your servers (must be aligned with the one of terraform)
     host_user: myadmin
-    script_name: ConnectWithServers.sh
+    script_name: onboard-servers.sh
     yml_azure_rm_file: myazure_rm.yml
     yml_file_to_deploy_web: deploy-webservers.yml
+    deployment_type: nodejs # Deployments available: nodejs |
     yml_file_to_deploy_app: deploy-appservers.yml
     # CHANGE HERE
     # Set your local path to AZURE credintial file
@@ -61,6 +62,6 @@
       args:
         chdir: "{{path_for_playbooks}}"
     - name: Configure and launch web servers
-      command: ansible-playbook -i ./{{yml_azure_rm_file}} {{yml_file_to_deploy_web}} -l tag_environment_web
+      command: ansible-playbook -i ./{{yml_azure_rm_file}} ./{{deployment_type}}/deploy.yml -l tag_environment_web
       args:
         chdir: "{{path_for_playbooks}}"
