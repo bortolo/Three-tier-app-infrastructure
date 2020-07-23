@@ -1,0 +1,26 @@
+---
+- hosts: all
+  vars:
+    gitrepo: https://github.com/bortolo/Todolist.git
+    host_user: myadmin
+    service_name: todolistapp
+    path_for_the_app: "/home/{{host_user}}/{{service_name}}"
+
+  tasks:
+    - name: Pull file from source
+      git:
+        repo: "{{gitrepo}}"
+        dest: "{{path_for_the_app}}"
+    - name: Move systemctl config file
+      become: yes
+      become_user: root
+      copy:
+       src: "{{path_for_the_app}}/{{service_name}}.service"
+       dest: /lib/systemd/system/{{service_name}}.service
+       remote_src: yes
+    - name: restart service {{service_name}}, in all cases, also issue daemon-reload to pick up config changes
+      systemd:
+        state: restarted
+        daemon_reload: yes
+        name: "{{service_name}}"
+      become: yes

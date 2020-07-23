@@ -1,0 +1,11 @@
+IMPORTANT TO CONFIGURE:
+- name of the AZURE resource group on which run dynamic inventory (myazure_rm.yml)
+- name of the user (we are assuming that all the hosts have one user defined with that name)
+- name of the gitrepo (web is based on node.js app and app is based on .war file)
+- Configure tags (jumphost=tag_environment_management, web=tag_environment_web, app=tag_environment_app)
+
+NOTE: the last point is highly dependent on terraform provisioning.
+
+USEFUL LINKS
+Install and configure ansible
+https://www.techrepublic.com/article/how-to-install-ansible-on-ubuntu-server-18-04/

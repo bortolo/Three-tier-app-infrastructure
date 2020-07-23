@@ -13,7 +13,8 @@
     # CHANGE HERE
     # Set your local path to AZURE credintial file
     path_for_azure_credentials: /Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Secrets/credentials
-    path_for_playbooks: "/home/{{host_user}}/ansibleplaybooks"
+    path_for_playbooks: "/home/{{host_user}}/deployments"
+    #"/home/{{host_user}}/ansibleplaybooks"
     # CHANGE HERE
     # 1) Create an ansible vault record for the server password (must be ailgned with the one that you set up in terraform)
     #     ansible-vault encrypt_string --vault-id @prompt [your_secure_password]
@@ -35,13 +36,10 @@
     - name: Install pip depdencdecies to manage azure-mgmt-resource
       pip:
         name: azure-mgmt-resource
-    - name: Pull file from source
-      git:
-        repo: "{{gitrepo}}"
-        dest: "{{path_for_playbooks}}"
-        update: yes
-        version: master
-        force: yes
+    - name: Copy deployments to jumphost server
+      copy:
+        src: ./deployments
+        dest: "/home/{{host_user}}"
     - name: Create AZURE directory
       file:
         path: "/home/{{host_user}}/.azure"
