@@ -1,0 +1,20 @@
+---
+- hosts: all
+  vars:
+    #gitrepo: https://github.com/bortolo/javawebapp.git
+    gitrepo: https://github.com/bortolo/mainappTodolilst.git
+    host_user: myadmin
+    war_file_path: HelloWorldServlet.war #target/my-real-app-war.war
+    path_for_the_app: "/home/{{host_user}}/tomcatapp"
+
+  tasks:
+    - name: Pull file from source
+      git:
+        repo: "{{gitrepo}}"
+        dest: "{{path_for_the_app}}"
+    - name: Copy war file in tomcat directory
+      #command: sudo cp target/my-real-app-war.war /var/lib/tomcat8/webapps
+      command: sudo cp {{war_file_path}} /var/lib/tomcat8/webapps
+      become_user: myadmin
+      args:
+       chdir: "{{path_for_the_app}}"

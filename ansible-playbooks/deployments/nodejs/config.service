@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Environment=NODE_PORT=8081
 Type=simple
-WorkingDirectory=/home/myadmin/todolistapp
+WorkingDirectory=/home/myadmin/nodejsapp
 User=myadmin
 Group=myadmin
 ExecStart=/usr/bin/node app.js

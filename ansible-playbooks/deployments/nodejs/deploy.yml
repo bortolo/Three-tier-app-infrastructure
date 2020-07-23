@@ -19,7 +19,7 @@
       become: yes
       become_user: root
       copy:
-       src: "./{{service_name}}.service"
+       src: "./config.service"
        dest: /lib/systemd/system/{{service_name}}.service
     - name: restart service {{service_name}}, in all cases, also issue daemon-reload to pick up config changes
       become: yes

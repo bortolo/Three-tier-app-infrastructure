@@ -2,20 +2,17 @@
 - hosts: all
   vars:
     ssh_key_filename: id_rsa
-    gitrepo: https://github.com/bortolo/Ansible_playbooks.git
-    # CHANGE HERE
-    # Set the host name of your servers (must be aligned with the one of terraform)
-    host_user: myadmin
+    host_user: myadmin # Set the host name of your servers (must be aligned with the one of terraform)
     script_name: onboard-servers.sh
     yml_azure_rm_file: myazure_rm.yml
-    yml_file_to_deploy_web: deploy-webservers.yml
-    deployment_type: nodejs # Deployments available: nodejs |
-    yml_file_to_deploy_app: deploy-appservers.yml
+    deployment_type_web: nodejs
+    tag_web: tag_environment_web # Set the tag used for web servers in terraform
+    deployment_type_app: tomcat
+    tag_app: tag_environment_app # Set the tag used for app servers in terraform
     # CHANGE HERE
     # Set your local path to AZURE credintial file
     path_for_azure_credentials: /Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Secrets/credentials
     path_for_playbooks: "/home/{{host_user}}/deployments"
-    #"/home/{{host_user}}/ansibleplaybooks"
     # CHANGE HERE
     # 1) Create an ansible vault record for the server password (must be ailgned with the one that you set up in terraform)
     #     ansible-vault encrypt_string --vault-id @prompt [your_secure_password]
@@ -58,10 +55,10 @@
       args:
         chdir: "{{path_for_playbooks}}"
     - name: Configure and launch application servers
-      command: ansible-playbook -i ./{{yml_azure_rm_file}} {{yml_file_to_deploy_app}} -l tag_environment_app
+      command: ansible-playbook -i ./{{yml_azure_rm_file}} ./{{deployment_type_app}}/deploy.yml -l {{tag_app}}
       args:
         chdir: "{{path_for_playbooks}}"
     - name: Configure and launch web servers
-      command: ansible-playbook -i ./{{yml_azure_rm_file}} ./{{deployment_type}}/deploy.yml -l tag_environment_web
+      command: ansible-playbook -i ./{{yml_azure_rm_file}} ./{{deployment_type_web}}/deploy.yml -l {{tag_web}}
       args:
         chdir: "{{path_for_playbooks}}"
