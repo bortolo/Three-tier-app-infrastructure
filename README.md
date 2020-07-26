@@ -1,4 +1,4 @@
-[INTRODUCTION]
+#INTRODUCTION
 
 Deploy a three-tier-app (currently just web and app layer) using packer templates, terraform provisioning techniques and ansible playbooks.
 
@@ -33,6 +33,7 @@ RUN:
 - run "terraform destroy" to shut down everything you just created
 
 [ANSIBLE]
+
 Use this tool to configure all the infrastructure resources deployed with terraform.
 Install all the useful packages, download the gitrepos and start the app services.
 
