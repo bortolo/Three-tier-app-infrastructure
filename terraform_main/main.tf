@@ -25,6 +25,7 @@ locals {
   J_enable_public_ip  = true
   J_environment_tag   = "management"
   J_disable_password_authentication = true
+  J_vm_size           = "Standard_B1s"
 
   # WEB SERVER CONFIGURATIONS
   W_name              = "web"
@@ -36,7 +37,7 @@ locals {
   W_ssh_key           = "/Users/andreabortolossi/.ssh/id_rsa.pub"
   W_enable_public_ip  = false
   W_environment_tag   = "web"
-  W_vm_size           = "Standard_B1ls"
+  W_vm_size           = "Standard_B1s"
 
   # APP SERVER CONFIGURATIONS
   A_name              = "app"
@@ -48,7 +49,7 @@ locals {
   A_ssh_key           = "/Users/andreabortolossi/.ssh/id_rsa.pub"
   A_enable_public_ip  = false
   A_environment_tag   = "app"
-  A_vm_size           = "Standard_B1ls"
+  A_vm_size           = "Standard_B1s"
 }
 
 # MAIN =========================================================================
@@ -98,6 +99,7 @@ module "generalserver" {
   environment_tag                 = local.J_environment_tag
   disable_password_authentication = local.J_disable_password_authentication
   availability_set_id             = azurerm_availability_set.jumphost_HA.id
+  vm_size                   = local.J_vm_size
 }
 
 # LOAD BALANCER WEB ============================================================
