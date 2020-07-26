@@ -44,7 +44,7 @@
     - name: Copy file with AZURE credentials
       copy:
        src: "{{path_for_azure_credentials}}"
-       dest: "/home/{{host_user}}/.azure/credentials"
+       dest: "/home/{{host_user}}/.azure/credentials" #TODO it is not good copy the file in each jumphost server not encrypted
     - name: Make executable "{{script_name}}"
       file:
         dest: "{{path_for_playbooks}}/{{script_name}}"
