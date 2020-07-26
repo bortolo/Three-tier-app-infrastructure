@@ -1,4 +1,9 @@
-PACKER
+[INTRODUCTION]
+
+Deploy a three-tier-app (currently just web and app layer) using packer templates, terraform provisioning techniques and ansible playbooks.
+
+[PACKER]
+
 Use this tool to create template images in your Azure account for the servers you are going to deploy.
 
 CONFIGURE
@@ -11,7 +16,8 @@ CONFIGURE
 RUN
 - run "packer build template_name.json" from ./packer_templates
 
-TERRAFORM
+[TERRAFORM]
+
 Use this tool to deploy all the infrastructure resources your application need (network, servers, storage ...)
 
 CONFIGURE
@@ -26,7 +32,7 @@ RUN:
 - run "terraform apply" from ./terraform_main folder
 - run "terraform destroy" to shut down everything you just created
 
-ANSIBLE PLAYBOOKS
+[ANSIBLE]
 Use this tool to configure all the infrastructure resources deployed with terraform.
 Install all the useful packages, download the gitrepos and start the app services.
 
