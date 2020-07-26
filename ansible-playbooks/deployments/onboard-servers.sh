@@ -10,6 +10,11 @@
 PASSWORD=$1
 
 rm -f server.txt
+rm -f azure_resource_list.json
+
+# Print the dynamic inventory on a json file
+# TODO Work with this file to enable dynamic tag choice for different groups of servers
+ansible-inventory -i myazure_rm.yml --list > azure_resource_list.json
 
 # Append all IP of the host with tag_environment_app
 LENGTH=$(ansible-inventory -i myazure_rm.yml --list | jq '.tag_environment_app.hosts | length')

@@ -6,9 +6,9 @@
     script_name: onboard-servers.sh
     yml_azure_rm_file: myazure_rm.yml # Set the dynamic ansible inventory for azure resources
     deployment_type_web: nodejs
-    tag_web: tag_environment_web # Set the tag used for web servers in terraform
+    tag_web: tag_environment_web # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
     deployment_type_app: tomcat
-    tag_app: tag_environment_app # Set the tag used for app servers in terraform
+    tag_app: tag_environment_app # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
     # CHANGE HERE
     # Set your local path to AZURE credintial file
     path_for_azure_credentials: ./credentials
