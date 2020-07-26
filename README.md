@@ -2,6 +2,8 @@
 
 Deploy a three-tier-app (currently just web and app layer) using packer templates, terraform provisioning techniques and ansible playbooks.
 
+![photo_name](./images/Architecture.png)
+
 # PACKER
 
 Use this tool to create template images in your Azure account for the servers you are going to deploy.
