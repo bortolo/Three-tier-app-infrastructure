@@ -6,7 +6,7 @@ Deploy a three-tier-app (currently just web and app layer) using packer template
 
 Use this tool to create template images in your Azure account for the servers you are going to deploy.
 
-## CONFIGURE
+## Configure
 - Enable AZURE credentials before launch packer commands
 ```
   export ARM_SUBSCRIPTION_ID=XXXXXXX
@@ -15,14 +15,14 @@ Use this tool to create template images in your Azure account for the servers yo
   export ARM_TENANT_ID=XXXXXXX
 ```
 
-## RUN
+## Run
 - run "packer build template_name.json" from ./packer_templates
 
 # TERRAFORM
 
 Use this tool to deploy all the infrastructure resources your application need (network, servers, storage ...)
 
-## CONFIGURE
+## Configure
 - Enable AZURE credentials before launch terraform commands
 ```
   export ARM_SUBSCRIPTION_ID=XXXXXXX
@@ -32,7 +32,7 @@ Use this tool to deploy all the infrastructure resources your application need (
 ```
 - Configure tags (jumphost=tag_environment_management, web=tag_environment_web, app=tag_environment_app). Please take care about tag choice. Right now the code is not fully automated. See the onboard-servers.sh file to see what is missing to fully automate it.
 
-## RUN
+## Run
 - run "terraform apply" from ./terraform_main folder to deploy the resources listed in main.tf
 - run "terraform destroy" to shut down everything you just created
 
@@ -41,7 +41,7 @@ Use this tool to deploy all the infrastructure resources your application need (
 Use this tool to configure all the infrastructure resources deployed with terraform.
 Install all the useful packages, download the gitrepos and start the app services.
 
-## CONFIGURE
+## Configure
 - name of the AZURE resource group on which run dynamic inventory (myazure_rm.yml)
 - name of the user (we are assuming that all the hosts have one user defined with that name)
 - name of the gitrepos (in this example web is based on node.js app and app is based on .war file)
@@ -49,7 +49,7 @@ Install all the useful packages, download the gitrepos and start the app service
 
 ### NOTE: the last point is highly dependent on terraform provisioning and it is not yet completely dynamic.
 
-## SECURITY
+## Security
 - Create a password file (don't upload this file on a gitrepo)
   echo "mypassword" > password_file
 - Change the credential file with your azure credential file and encrypt it
@@ -70,7 +70,7 @@ secret=XXXXXXX
 tenant=XXXXXXX
 ```
 
-## RUN
+## Run
 
 - To deploy all the configurations run
 
