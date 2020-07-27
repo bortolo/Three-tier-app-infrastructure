@@ -9,7 +9,7 @@ pipeline {
 
         TF_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/terraform_main" //Sets the Terraform Workspace
         AB_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/ansible-playbooks" //Sets the Ansible Workspace
-        AB_SECRET_FILE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Secrets/ansible_vault_password"
+        AB_SECRET_FILE = "/Users/andreabortolossi/ansible_vault_password"
     }
 
    tools {
@@ -51,7 +51,7 @@ pipeline {
          steps {
              dir("${env.AB_WORKSPACE}"){
                     echo "*** CONFIGURING RESOURCES WITH ANSIBLE ***"
-                    sh "ansible-playbook --vault-id '"/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Secrets/ansible_vault_password"' -i ./myazure_rm.yml deploy-master-local-dev.yml -l tag_environment_management"
+                    sh "ansible-playbook --vault-id "${AB_SECRET_FILE} -i ./myazure_rm.yml deploy-master-local-dev.yml -l tag_environment_management"
                     echo "*** END ANSIBLE ***"
              }
 
