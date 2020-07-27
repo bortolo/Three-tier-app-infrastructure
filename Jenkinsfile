@@ -36,11 +36,11 @@ pipeline {
              dir("${env.TF_WORKSPACE}"){
                     echo "*** CREATING RESOURCES WITH TERRAFORM ***"
                     echo "INIT"
-                    //sh "terraform init -input=false"
+                    sh "terraform init -input=false"
                     echo "PLAN"
-                    //sh "terraform plan -var-file='terraform.tfvars' -out=tfplan -input=false"
+                    sh "terraform plan -var-file='terraform.tfvars' -out=tfplan -input=false"
                     echo "APPLY"
-                    //sh "terraform apply -input=false tfplan"
+                    sh "terraform apply -input=false tfplan"
                     echo "*** END TERRAFORM ***"
              }
          }
