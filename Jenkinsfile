@@ -51,7 +51,7 @@ pipeline {
          steps {
              dir("${env.AB_WORKSPACE}"){
                     echo "*** CONFIGURING RESOURCES WITH ANSIBLE ***"
-                    sh "ansible-playbook --vault-id '${env.AB_SECRET_FILE}' -i ./myazure_rm.yml deploy-master-local-dev.yml -l tag_environment_management"
+                    sh "ansible-playbook --vault-id "${env.AB_SECRET_FILE}" -i ./myazure_rm.yml deploy-master-local-dev.yml -l tag_environment_management"
                     echo "*** END ANSIBLE ***"
              }
 
