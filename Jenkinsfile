@@ -38,7 +38,7 @@ pipeline {
 
      stage('Create infra resources') {
          steps {
-             dir(${env.TF_WORKSPACE}){
+             dir("${env.TF_WORKSPACE}"){
                     echo "*** CREATING RESOURCES WITH TERRAFORM ***"
                     echo "INIT"
                     sh "terraform init -input=false"
@@ -54,7 +54,7 @@ pipeline {
 
            stage('Deploy code and configure services') {
          steps {
-             dir(${env.AB_WORKSPACE}){
+             dir("${env.AB_WORKSPACE}"){
                     echo "*** CONFIGURING RESOURCES WITH ANSIBLE ***"
                     sh "ansible-playbook --vault-id ${env.AB_SECRET_FILE} -i ./myazure_rm.yml deploy-master-local-dev.yml -l tag_environment_management"
                     echo "*** END ANSIBLE ***"
