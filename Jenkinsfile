@@ -1,7 +1,6 @@
 pipeline {
     agent {
         node {
-            label 'my-defined-label'
             customWorkspace "./jenkins_workspace" //Sets the Jenkins Workspace
         }
     }
