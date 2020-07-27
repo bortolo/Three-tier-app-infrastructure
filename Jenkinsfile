@@ -36,11 +36,11 @@ pipeline {
              dir("${env.TF_WORKSPACE}"){
                     echo "*** CREATING RESOURCES WITH TERRAFORM ***"
                     echo "INIT"
-                    sh "terraform init -input=false"
+                    //sh "terraform init -input=false"
                     echo "PLAN"
-                    sh "terraform plan -var-file='terraform.tfvars' -out=tfplan -input=false"
+                    //sh "terraform plan -var-file='terraform.tfvars' -out=tfplan -input=false"
                     echo "APPLY"
-                    sh "terraform apply -input=false tfplan"
+                    //sh "terraform apply -input=false tfplan"
                     echo "*** END TERRAFORM ***"
              }
          }
@@ -51,7 +51,7 @@ pipeline {
          steps {
              dir("${env.AB_WORKSPACE}"){
                     echo "*** CONFIGURING RESOURCES WITH ANSIBLE ***"
-                    sh "ansible-playbook --vault-id /Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Secrets/ansible_vault_password -i ./myazure_rm.yml deploy-master-local-dev.yml -l tag_environment_management"
+                    sh "ansible-playbook --vault-id '"/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Secrets/ansible_vault_password"' -i ./myazure_rm.yml deploy-master-local-dev.yml -l tag_environment_management"
                     echo "*** END ANSIBLE ***"
              }
 
