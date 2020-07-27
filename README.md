@@ -77,3 +77,20 @@ tenant=XXXXXXX
 - To deploy all the configurations run
 
 `ansible-playbook --vault-id [path_to_the_file_with_your_password] -i ./myazure_rm.yml deploy-master.yml -l [jumphost_azure_tag]`
+
+# JENKINS
+
+Use this tool to orchestrate pipelines.
+Current Jenkinsfile covers only local jenkins server orchestration.
+
+## Configure
+
+- Install and run on your local machine Jenkins.
+- Create your own pipeline project and configure the pipeline section with "Pipeline script from SCM". Use the URL of this git repository.The script path must be Jenkinsfile.
+- Download the repository
+- Set the environment variables with the path of the terraform and ansible scripts (TF_WORKSPACE and AB_WORKSPACE)
+- Set the path to the password file for ansible playbooks (AB_SECRET_FILE)
+
+## Run
+
+Click on "build now" in the overview page of your jenkins project.
