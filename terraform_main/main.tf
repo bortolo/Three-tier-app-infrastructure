@@ -31,25 +31,25 @@ locals {
   W_name              = "web"
   W_hostname          = "myadmin"
   W_storage_image_reference_id = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/nodejsserverImage"
-  W_quantity          = 1
+  //W_quantity          = 1
   W_inbound_port      = ["8081"]
   W_outbound_port     = []
   W_ssh_key           = "/Users/andreabortolossi/.ssh/id_rsa.pub"
   W_enable_public_ip  = false
   W_environment_tag   = "web"
-  W_vm_size           = "Standard_B1s"
+  //W_vm_size           = "Standard_B1s"
 
   # APP SERVER CONFIGURATIONS
   A_name              = "app"
   A_hostname          = "myadmin"
   A_storage_image_reference_id = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/appserverImage"
-  A_quantity          = 1
+  //A_quantity          = 1
   A_inbound_port      = ["8080"]
   A_outbound_port     = []
   A_ssh_key           = "/Users/andreabortolossi/.ssh/id_rsa.pub"
   A_enable_public_ip  = false
   A_environment_tag   = "app"
-  A_vm_size           = "Standard_B1s"
+  //A_vm_size           = "Standard_B1s"
 }
 
 # MAIN =========================================================================
@@ -130,7 +130,7 @@ module "generalwebserver" {
   subnet_id                   = module.network.production_subnet_id
   hostname                    = local.W_hostname
   storage_image_reference_id  = local.W_storage_image_reference_id
-  number_of_servers           = local.W_quantity
+  number_of_servers           = var.W_quantity
   inbound_rules               = local.W_inbound_port
   outbound_rules              = local.W_outbound_port
   ssh_key                     = local.W_ssh_key
@@ -139,7 +139,7 @@ module "generalwebserver" {
   enable_backend_address_pool = true
   backend_address_pool_id     = module.web_lb.backend_address_pool_id
   availability_set_id         = azurerm_availability_set.webserver_HA.id
-  vm_size                   = local.W_vm_size
+  vm_size                   = var.W_vm_size
 }
 
 # DNS PRIVATE ZONE =============================================================
@@ -193,7 +193,7 @@ module "generalappserver" {
   subnet_id                   = module.network.production_subnet_id
   hostname                    = local.A_hostname
   storage_image_reference_id  = local.A_storage_image_reference_id
-  number_of_servers           = local.A_quantity
+  number_of_servers           = var.A_quantity
   inbound_rules               = local.A_inbound_port
   outbound_rules              = local.A_outbound_port
   ssh_key                     = local.A_ssh_key
@@ -202,5 +202,5 @@ module "generalappserver" {
   enable_backend_address_pool = true
   backend_address_pool_id     = module.app_lb.backend_address_pool_id
   availability_set_id         = azurerm_availability_set.appserver_HA.id
-  vm_size                   = local.A_vm_size
+  vm_size                   = var.A_vm_size
 }
