@@ -9,7 +9,7 @@
     tag_web: tag_environment_web # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
     deployment_type_app: tomcat
     tag_app: tag_environment_app # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
-    path_for_artifact_war: "/Users/andreabortolossi/.jenkins/workspace/my-real-app-war/target"
+    jenkins_workspace_local: "/Users/andreabortolossi/.jenkins/workspace/my-real-app-war/target"
     # CHANGE HERE
     # Set your local path to AZURE credintial file
     path_for_azure_credentials: ./credentials
@@ -46,14 +46,14 @@
       copy:
        src: "{{path_for_azure_credentials}}"
        dest: "/home/{{host_user}}/.azure/credentials" #TODO it is not good copy the file in each jumphost server not encrypted
-    - name: Create ARTIFACT directory
+    - name: Create Jenkins artifact directory
       file:
-        path: "/home/{{host_user}}/artifact"
+        path: "/home/{{host_user}}/jenkins_artifact"
         state: directory
-    - name: Copy .war artifact from local Jenkins workspace to jumphost server
+    - name: Copy jenkins artifact from local Jenkins workspace to jumphost server
       copy:
-        src: "{{path_for_artifact_war}}"
-        dest: "/home/{{host_user}}/artifact/"
+        src: "{{jenkins_workspace_local}}"
+        dest: "/home/{{host_user}}/jenkins_artifact/"
     - name: Make executable "{{script_name}}"
       file:
         dest: "{{path_for_playbooks}}/{{script_name}}"

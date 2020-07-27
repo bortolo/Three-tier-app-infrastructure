@@ -4,7 +4,7 @@
     host_user: myadmin
     war_file_path: target/my-real-app-war.war
     service_name: tomcat8
-    path_for_artifact_war: "/home/{{host_user}}/artifact/"
+    path_for_artifact_war: "/home/{{host_user}}/jenkins_artifact/"
 
   tasks:
     - name: Copy .war artifact from local jumphost server to local directory

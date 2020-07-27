@@ -1,20 +1,15 @@
 pipeline {
-    agent {
-        node {
-            label any
-            customWorkspace "./jenkins_workspace" //Sets the Jenkins Workspace
-        }
-    }
+    agent any
+
     environment {
         ARM_SUBSCRIPTION_ID="de2dd9f0-a856-4177-b9f8-9fe12d786b1a"
         ARM_CLIENT_ID="f152ae7e-5da0-49ca-97dc-8d2e16617e85"
         ARM_CLIENT_SECRET="7ec68b63-7f52-4980-88f5-17b780cfbfc8"
         ARM_TENANT_ID="7ea682b6-6e2a-4f9a-b4f4-9bfff0782f62"
 
-        TF_WORKSPACE = "../terraform_main" //Sets the Terraform Workspace
-        AB_WORKSPACE = "../ansible_playbooks" //Sets the Ansible Workspace
-
-        AB_SECRET_FILE = "../../Secrets/ansible_vault_password"
+        TF_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/terraform_main" //Sets the Terraform Workspace
+        AB_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/ansible-playbooks" //Sets the Ansible Workspace
+        AB_SECRET_FILE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Secrets/ansible_vault_password"
     }
 
    tools {
@@ -36,7 +31,7 @@ pipeline {
 
       }
 
-     stage('Create infra resources') {
+     stage('Create resources') {
          steps {
              dir("${env.TF_WORKSPACE}"){
                     echo "*** CREATING RESOURCES WITH TERRAFORM ***"
@@ -52,7 +47,7 @@ pipeline {
 
       }
 
-           stage('Deploy code and configure services') {
+           stage('Deploy') {
          steps {
              dir("${env.AB_WORKSPACE}"){
                     echo "*** CONFIGURING RESOURCES WITH ANSIBLE ***"
