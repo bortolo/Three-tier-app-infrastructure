@@ -88,6 +88,7 @@ Current Jenkinsfile covers only local jenkins server orchestration.
 - Install and run on your local machine Jenkins.
 - Create your own pipeline project and configure the pipeline section with "Pipeline script from SCM". Use the URL of this git repository.The script path must be Jenkinsfile.
 - Download the repository
+- Add azure credentials in jenkins as secret text (see https://www.jenkins.io/doc/book/using/using-credentials/)
 - Set the environment variables with the path of the terraform and ansible scripts (TF_WORKSPACE and AB_WORKSPACE)
 - Set the path to the password file for ansible playbooks (AB_SECRET_FILE)
 
