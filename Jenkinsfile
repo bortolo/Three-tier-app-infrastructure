@@ -4,10 +4,10 @@ pipeline {
     withCredentials([string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARMSUBID'),string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARMCLID'),string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARMCLSEC'),string(credentialsId: 'ARM_TENANT_ID', variable: 'ARMTNID')]) {
 
     environment {
-        ARM_SUBSCRIPTION_ID=$ARMSUBID
-        ARM_CLIENT_ID=$ARMCLID
-        ARM_CLIENT_SECRET=$ARMCLSEC
-        ARM_TENANT_ID=$ARMTNID
+        ARM_SUBSCRIPTION_ID="$ARMSUBID"
+        ARM_CLIENT_ID="$ARMCLID"
+        ARM_CLIENT_SECRET="$ARMCLSEC"
+        ARM_TENANT_ID="$ARMTNID"
 
         TF_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/terraform_main" //Sets the Terraform Workspace
         AB_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/ansible-playbooks" //Sets the Ansible Workspace
