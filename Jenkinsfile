@@ -1,11 +1,7 @@
 pipeline {
     agent any
 
-    withCredentials([
-      string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARMSUBID'),
-      string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARMCLID'),
-      string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARMCLSEC'),
-      string(credentialsId: 'ARM_TENANT_ID', variable: 'ARMTNID')]) {
+    withCredentials([string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARMSUBID'),string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARMCLID'),string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARMCLSEC'),string(credentialsId: 'ARM_TENANT_ID', variable: 'ARMTNID')]) {
 
     environment {
         ARM_SUBSCRIPTION_ID=$ARMSUBID
