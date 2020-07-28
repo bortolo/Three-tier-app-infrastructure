@@ -8,6 +8,7 @@
 # The password for the hosts should be passed as parameter.
 
 PASSWORD=$1
+USER=$2
 
 rm -f server.txt
 rm -f azure_resource_list.json
@@ -49,5 +50,5 @@ rm ~/.ssh/known_hosts
 for server in `cat server.txt`;
 do
     ssh-keyscan -H $server >> ~/.ssh/known_hosts
-    sshpass -p $PASSWORD ssh-copy-id -i ~/.ssh/id_rsa.pub myadmin@$server
+    sshpass -p $PASSWORD ssh-copy-id -i ~/.ssh/id_rsa.pub $USER@$server
 done
