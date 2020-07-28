@@ -1,16 +1,14 @@
 pipeline {
     agent any
 
-    withCredentials([usernamePassword(credentialsId: 'server_user', passwordVariable: 'server_password', usernameVariable: 'server_user')]){
-    export TF_VAR_username=server_user
-    export TF_VAR_password=server_password
-    }
-    
     environment {
         ARM_SUBSCRIPTION_ID=credentials('ARM_SUBSCRIPTION_ID')
         ARM_CLIENT_ID=credentials('ARM_CLIENT_ID')
         ARM_CLIENT_SECRET=credentials('ARM_CLIENT_SECRET')
         ARM_TENANT_ID=credentials('ARM_TENANT_ID')
+
+        TF_VAR_username=credentials('server_user',usernameVariable)
+        TF_VAR_password=credentials('server_user',passwordVariable)
 
         TF_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/terraform_main" //Sets the Terraform Workspace
         AB_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/ansible-playbooks" //Sets the Ansible Workspace
