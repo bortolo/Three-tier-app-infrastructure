@@ -19,3 +19,11 @@ variable "A_vm_size" {
   type = string
   default = "Standard_B1ls"
 }
+
+variable "username" {
+  description = "(Required) username"
+}
+
+variable "password" {
+  description = "(Required) password for the username"
+}

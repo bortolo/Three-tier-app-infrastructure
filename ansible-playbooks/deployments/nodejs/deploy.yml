@@ -15,12 +15,14 @@
       git:
         repo: "{{gitrepo}}"
         dest: "{{path_for_the_app}}"
+
     - name: Copy the systemctl config file
       become: yes
       become_user: root
       copy:
        src: "./config.service"
        dest: /lib/systemd/system/{{service_name}}.service
+
     - name: restart service {{service_name}}, in all cases, also issue daemon-reload to pick up config changes
       become: yes
       systemd:

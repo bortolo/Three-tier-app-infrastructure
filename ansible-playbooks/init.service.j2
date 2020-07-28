@@ -1,0 +1,13 @@
+[Unit]
+Description={{serviceName}}
+After=network.target
+
+[Service]
+User={{ userId }}
+Group={{ groupId }}
+Restart=on-failure
+Type=simple
+ExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus/prometheus.conf
+
+[Install]
+WantedBy=multi-user.target

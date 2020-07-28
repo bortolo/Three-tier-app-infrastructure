@@ -97,8 +97,8 @@ resource "azurerm_virtual_machine" "main_public" {
   }
   os_profile {
     computer_name  = var.hostname
-    admin_username = var.hostname
-    admin_password = "Password1234!"
+    admin_username = var.username
+    admin_password = var.password
   }
   os_profile_linux_config {
     disable_password_authentication = true
@@ -134,8 +134,8 @@ resource "azurerm_virtual_machine" "main_private" {
   }
   os_profile {
     computer_name  = var.hostname
-    admin_username = var.hostname
-    admin_password = "Password1234!"
+    admin_username = var.username
+    admin_password = var.password
   }
 
   os_profile_linux_config {

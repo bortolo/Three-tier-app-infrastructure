@@ -21,6 +21,16 @@ variable "hostname" {
   default     = "host"
 }
 
+variable "username" {
+  description = "(Required) username"
+  default     = "myadmin"
+}
+
+variable "password" {
+  description = "(Required) password for the username"
+  default     = "Password1234!"
+}
+
 variable "storage_image_reference_id" {
   description = "(Required) Id of the reference image"
 }
