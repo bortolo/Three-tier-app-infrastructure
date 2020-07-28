@@ -7,8 +7,7 @@ pipeline {
         ARM_CLIENT_SECRET=credentials('ARM_CLIENT_SECRET')
         ARM_TENANT_ID=credentials('ARM_TENANT_ID')
 
-        TF_VAR_username=credentials('server_user','usernameVariable')
-        TF_VAR_password=credentials('server_user','passwordVariable')
+        withCredentials([usernamePassword(credentialsId: 'server_user', passwordVariable: 'TF_VAR_password', usernameVariable: 'TF_VAR_username')]) {}
 
         TF_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/terraform_main" //Sets the Terraform Workspace
         AB_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/ansible-playbooks" //Sets the Ansible Workspace
