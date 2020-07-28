@@ -1,19 +1,24 @@
 pipeline {
     agent any
 
-    withCredentials([string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARMSUBID'),string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARMCLID'),string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARMCLSEC'),string(credentialsId: 'ARM_TENANT_ID', variable: 'ARMTNID')]) {
-
+//    withCredentials([string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARMSUBID'),string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARMCLID'),string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARMCLSEC'),string(credentialsId: 'ARM_TENANT_ID', variable: 'ARMTNID')]) {
+//}
     environment {
-        ARM_SUBSCRIPTION_ID="$ARMSUBID"
-        ARM_CLIENT_ID="$ARMCLID"
-        ARM_CLIENT_SECRET="$ARMCLSEC"
-        ARM_TENANT_ID="$ARMTNID"
+        //ARM_SUBSCRIPTION_ID="$ARMSUBID"
+        //ARM_CLIENT_ID="$ARMCLID"
+        //ARM_CLIENT_SECRET="$ARMCLSEC"
+        //ARM_TENANT_ID="$ARMTNID"
+
+        ARM_SUBSCRIPTION_ID=credentials('ARM_SUBSCRIPTION_ID')
+        ARM_CLIENT_ID=credentials('ARM_CLIENT_ID')
+        ARM_CLIENT_SECRET=credentials('ARM_CLIENT_SECRET')
+        ARM_TENANT_ID=credentials('ARM_TENANT_ID')
 
         TF_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/terraform_main" //Sets the Terraform Workspace
         AB_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/ansible-playbooks" //Sets the Ansible Workspace
         AB_SECRET_FILE = "/Users/andreabortolossi/ansible_vault_password"
         }
-    }
+
 
    tools {
       // Install the Maven version configured as "M3" and add it to the path.
