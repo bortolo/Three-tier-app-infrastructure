@@ -8,7 +8,7 @@ pipeline {
         ARM_TENANT_ID=credentials('ARM_TENANT_ID')
 
         TF_CRED=credentials('server_user')
-        TF_VAR_user="${TF_CRED_USR}"
+        TF_VAR_username="${TF_CRED_USR}"
         TF_VAR_password="${TF_CRED_PSW}"
 
         TF_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/terraform_main" //Sets the Terraform Workspace
