@@ -103,7 +103,7 @@ resource "azurerm_virtual_machine" "main_public" {
   os_profile_linux_config {
     disable_password_authentication = true
     ssh_keys {
-      path     = "/home/${var.hostname}/.ssh/authorized_keys"
+      path     = "/home/${var.username}/.ssh/authorized_keys"
       key_data = file(var.ssh_key)
       }
     }
@@ -141,7 +141,7 @@ resource "azurerm_virtual_machine" "main_private" {
   os_profile_linux_config {
     disable_password_authentication = false
     ssh_keys {
-      path     = "/home/${var.hostname}/.ssh/authorized_keys"
+      path     = "/home/${var.username}/.ssh/authorized_keys"
       key_data = file(var.ssh_key)
       }
     }
