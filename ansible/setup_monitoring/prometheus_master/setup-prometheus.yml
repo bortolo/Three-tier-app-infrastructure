@@ -6,6 +6,7 @@
     version: 2.20.0
     serviceName: prometheus
     user: myadmin
+    server_file: "/home/{{user}}/onboardserver/server.txt"
 
   tasks:
 
@@ -38,7 +39,7 @@
      group: "{{groupId}}"
      remote_src: yes
      mode: 0755
-    become: true
+    become: yes
 
   - name: Delete prometheus tmp folder
     file:
@@ -49,45 +50,59 @@
     file:
      path: "/etc/prometheus"
      state: directory
-    become: true
+    become: yes
 
   - name: Create /var/lib/prometheus directory
     file:
      path: "/var/lib/prometheus"
      state: directory
-    become: true
+    become: yes
 
   - name: Create prometheus workspace directory
     file:
      path: "/home/{{user}}/prometheus"
      state: directory
-    become: true
 
   - name: Copy config file
     copy:
      src: prometheus.yml
      dest: /home/{{user}}/prometheus/prometheus.yml
 
-  - name: Copy config file
-    become: true
+  - name: Copy script file
     copy:
-     src: prometheus.yml
+     src: update_monitored_servers.sh
+     dest: /home/{{user}}/prometheus/update_monitored_servers.sh
+
+  - name: Make executable script
+    file:
+     dest: "/home/{{user}}/prometheus/update_monitored_servers.sh"
+     mode: a+x
+
+  - name: Execute script
+    command: ./update_monitored_servers.sh {{server_file}}
+    args:
+     chdir: "/home/{{user}}/prometheus"
+
+  - name: Copy config file
+    copy:
+     src: /home/{{user}}/prometheus/prometheus-new.yml
      dest: /etc/prometheus/prometheus.yml
+     remote_src: yes
+    become: yes
 
   - name: Copy systemd init file
-    become: yes
-    become_user: root
     copy:
      src: init.service
      dest: /lib/systemd/system/prometheus.service
+    become: yes
 
   - name: Start prometheus service
-    become: yes
     systemd:
      state: restarted
      daemon_reload: yes
      enabled: yes
      name: prometheus
+    become: yes
 
   - name: Check if prometheus is accessible
     uri:

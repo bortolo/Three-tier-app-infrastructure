@@ -76,7 +76,8 @@
      daemon_reload: yes
      enabled: yes
      name: prometheus
-
+    become_user: root
+    
   - name: Check if prometheus is accessible
     uri:
      url: http://localhost:9090
