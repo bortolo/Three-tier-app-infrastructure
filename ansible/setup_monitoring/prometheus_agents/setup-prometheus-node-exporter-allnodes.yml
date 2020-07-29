@@ -17,10 +17,31 @@
           3139
 
   tasks:
+    - name: generate SSH key "{{ssh_key_filename}}"
+      openssh_keypair:
+        path: "~/.ssh/{{ssh_key_filename}}"
+    - name: Install pip dependecies to manage azure-mgmt-resource
+      command: pip install azure-mgmt-resource
     - name: Copy prometheus-node-exporter to jumphost server
       copy:
         src: ../prometheus-node-exporter
         dest: "/home/{{user}}"
+    - name: Create AZURE directory
+      file:
+        path: "/home/{{user}}/.azure"
+        state: directory
+    - name: Copy file with AZURE credentials
+      copy:
+       src: "{{path_for_azure_credentials}}"
+       dest: "/home/{{user}}/.azure/credentials" #TODO it is not good copy the file in each jumphost server not encrypted
+    - name: Make executable "{{script_name}}"
+      file:
+        dest: "{{path_for_playbooks}}/{{script_name}}"
+        mode: a+x
+    - name: Execute "{{script_name}}"
+      command: ./{{script_name}} {{password}} {{user}}
+      args:
+        chdir: "{{path_for_playbooks}}"
     - name: Configure node_exporter on servers
       command: ansible-playbook -i ./{{yml_azure_rm_file}} setup-prometheus-node-exporter.yml -l {{tag_web}}
       args:
