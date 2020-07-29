@@ -2,7 +2,7 @@
 - hosts: all
 
   # The target of this scripts is the jumphost server
-  # ansible-playbook -i ../../myazure_rm.yml setup-prometheus.yml -l tag_environment_management
+  # ansible-playbook -i ../myazure_rm.yml setup-prometheus.yml -l tag_environment_management
 
   vars:
     groupId: prometheus
@@ -11,12 +11,15 @@
     serviceName: prometheus
     user: myadmin
     server_file: "/home/{{user}}/onboardserver/server.txt"
+    azure_rm_file: /home/{{user}}/myazure_rm.yml
+    tag_monitoring: tag_monitoring_yes
+    path_for_playbooks: "/home/{{user}}/prometheus/node_exporter"
 
   tasks:
 
   - name: Creating prometheus user group
     group: name="{{groupId}}"
-    become: true
+    become: yes
 
   - name: Creating prometheus user
     user:
@@ -27,7 +30,7 @@
      comment: "{{userId}} nologin User"
      createhome: "no"
      state: present
-    become: true
+    become: yes
 
   - name: Install prometheus
     unarchive:
@@ -113,3 +116,13 @@
      url: http://localhost:9090
      method: GET
      status_code: 200
+
+  - name: Copy prometheus-node-exporter to jumphost server
+    copy:
+     src: ./node_exporter
+     dest: "/home/{{user}}/prometheus/"
+
+  - name: Configure node_exporter on webservers
+    command: ansible-playbook -i {{azure_rm_file}} setup-prometheus-node-exporter.yml -l {{tag_monitoring}}
+    args:
+     chdir: "{{path_for_playbooks}}"
