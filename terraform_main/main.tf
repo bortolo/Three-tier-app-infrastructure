@@ -98,6 +98,7 @@ module "generalserver" {
   vm_size                         = local.J_vm_size
   username                        = var.username
   password                        = var.password
+  monitoring_tag                  = "no"
 }
 
 # LOAD BALANCER WEB ============================================================

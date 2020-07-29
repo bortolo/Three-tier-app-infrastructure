@@ -109,6 +109,7 @@ resource "azurerm_virtual_machine" "main_public" {
     }
   tags = {
   environment = var.environment_tag
+  monitoring  = var.monitoring_tag
   }
 }
 
@@ -148,6 +149,7 @@ resource "azurerm_virtual_machine" "main_private" {
 
   tags = {
   environment = var.environment_tag
+  monitoring  = var.monitoring_tag
   }
 }
 

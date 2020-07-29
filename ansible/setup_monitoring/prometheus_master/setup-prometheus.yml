@@ -1,5 +1,9 @@
 ---
 - hosts: all
+
+  # The target of this scripts is the jumphost server
+  # ansible-playbook -i ../../myazure_rm.yml setup-prometheus.yml -l tag_environment_management
+
   vars:
     groupId: prometheus
     userId: prometheus

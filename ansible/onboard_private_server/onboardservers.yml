@@ -2,7 +2,7 @@
 - hosts: all
 
   # The target of this scripts is the jumphost server
-  # ansible-playbook --vault-id [path to ansible_vault_password] -i ../myazure_rm.yml onboardservers.yml -l tag_environment_management
+  # ansible-playbook --vault-id /Users/andreabortolossi/ansible_vault_password -i ../myazure_rm.yml onboardservers.yml -l tag_environment_management
 
   vars:
     ssh_key_filename: id_rsa

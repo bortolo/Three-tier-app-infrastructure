@@ -1,7 +1,11 @@
 ---
 - hosts: all
+
+  # The target of this scripts is the jumphost server
+  # ansible-playbook -i ../../myazure_rm.yml setup-prometheus-agents.yml -l tag_environment_management
+
   vars:
-    tag_web: tag_environment_web # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
+    tag_monitoring: tag_monitoring_yes # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
     path_for_playbooks: "/home/{{user}}/prometheus/node_exporter"
     user: myadmin # Set the host name of your servers (must be aligned with the one of terraform)
     azure_rm_file: /home/{{user}}/myazure_rm.yml
@@ -11,7 +15,7 @@
       copy:
         src: ./node_exporter
         dest: "/home/{{user}}/prometheus/"
-    - name: Configure node_exporter on servers
-      command: ansible-playbook -i {{azure_rm_file}} setup-prometheus-node-exporter.yml -l {{tag_web}}
+    - name: Configure node_exporter on webservers
+      command: ansible-playbook -i {{azure_rm_file}} setup-prometheus-node-exporter.yml -l {{tag_monitoring}}
       args:
         chdir: "{{path_for_playbooks}}"

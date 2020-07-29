@@ -65,6 +65,11 @@ variable "environment_tag" {
   default = "management"
 }
 
+variable "monitoring_tag" {
+  description = "(Optional) Define what is under monitoring or not"
+  default = "yes"
+}
+
 variable "enable_backend_address_pool" {
   description = "If set to true, enable backend_address_pool_id variable usage"
   type = bool
