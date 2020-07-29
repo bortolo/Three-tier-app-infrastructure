@@ -31,7 +31,7 @@ locals {
   W_name              = "web"
   W_hostname          = "webhost"
   W_storage_image_reference_id = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/nodejsserverImage"
-  W_inbound_port      = ["8081"]
+  W_inbound_port      = ["8081","9100"]
   W_outbound_port     = []
   W_ssh_key           = "/Users/andreabortolossi/.ssh/id_rsa.pub"
   W_enable_public_ip  = false

@@ -1,0 +1,48 @@
+---
+- hosts: all
+  vars:
+    ssh_key_filename: id_rsa
+    script_name: onboard-servers.sh
+    yml_azure_rm_file: myazure_rm.yml # Set the dynamic ansible inventory for azure resources
+    tag_web: tag_environment_web # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
+    path_for_azure_credentials: ./credentials
+    path_for_playbooks: "/home/{{user}}/prometheus-node-exporter"
+    user: myadmin # Set the host name of your servers (must be aligned with the one of terraform)
+    password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          37646636623032346535326339376631656138653161313663393463636331653962376235356466
+          3536363462643331643930653935663235336233366138660a626636373930633536653733386330
+          34646131356531626166343630376164616662653763353666633531353664323835616466333330
+          3564326336333831390a393362343265343635633462633937373738316261623935646462363037
+          3139
+
+  tasks:
+    - name: generate SSH key "{{ssh_key_filename}}"
+      openssh_keypair:
+        path: "~/.ssh/{{ssh_key_filename}}"
+    - name: Install pip dependecies to manage azure-mgmt-resource
+      command: pip install azure-mgmt-resource
+    - name: Copy prometheus-node-exporter to jumphost server
+      copy:
+        src: ../prometheus-node-exporter
+        dest: "/home/{{user}}"
+    - name: Create AZURE directory
+      file:
+        path: "/home/{{user}}/.azure"
+        state: directory
+    - name: Copy file with AZURE credentials
+      copy:
+       src: "{{path_for_azure_credentials}}"
+       dest: "/home/{{user}}/.azure/credentials" #TODO it is not good copy the file in each jumphost server not encrypted
+    - name: Make executable "{{script_name}}"
+      file:
+        dest: "{{path_for_playbooks}}/{{script_name}}"
+        mode: a+x
+    - name: Execute "{{script_name}}"
+      command: ./{{script_name}} {{password}} {{user}}
+      args:
+        chdir: "{{path_for_playbooks}}"
+    - name: Configure node_exporter on servers
+      command: ansible-playbook -i ./{{yml_azure_rm_file}} setup-prometheus-node-exporter.yml -l {{tag_web}}
+      args:
+        chdir: "{{path_for_playbooks}}"
