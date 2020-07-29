@@ -5,6 +5,7 @@
     userId: prometheus
     version: 2.20.0
     serviceName: prometheus
+    user: myadmin
 
   tasks:
 
@@ -56,7 +57,18 @@
      state: directory
     become: true
 
-  - name: config file
+  - name: Create prometheus workspace directory
+    file:
+     path: "/home/{{user}}/prometheus"
+     state: directory
+    become: true
+
+  - name: Copy config file
+    copy:
+     src: prometheus.yml
+     dest: /home/{{user}}/prometheus/prometheus.yml
+
+  - name: Copy config file
     become: true
     copy:
      src: prometheus.yml
