@@ -1,0 +1,25 @@
+---
+- hosts: all
+  vars:
+    host_user: myadmin
+    war_file_path: target/my-real-app-war.war
+    service_name: tomcat8
+    path_for_artifact_war: "/home/{{host_user}}/jenkins_artifact/"
+
+  tasks:
+    - name: Copy .war artifact from local jumphost server to local directory
+      copy:
+        src: "{{path_for_artifact_war}}"
+        dest: "/home/{{host_user}}/"
+    - name: Copy war file in tomcat directory
+      command: sudo cp {{war_file_path}} /var/lib/tomcat8/webapps
+      become_user: myadmin
+      args:
+       chdir: "/home/{{host_user}}"
+    - name: restart service {{service_name}}, in all cases, also issue daemon-reload to pick up config changes
+      become: yes
+      systemd:
+       state: restarted
+       daemon_reload: yes
+       enabled: yes
+       name: "{{service_name}}"

@@ -12,7 +12,7 @@ pipeline {
         TF_VAR_password="${TF_CRED_PSW}"
 
         TF_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/terraform_main" //Sets the Terraform Workspace
-        AB_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/ansible" //Sets the Ansible Workspace
+        AB_WORKSPACE = "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Three-tier-app-infrastructure/ansible-playbooks" //Sets the Ansible Workspace
         AB_SECRET_FILE = "/Users/andreabortolossi/ansible_vault_password"
         }
 
@@ -56,16 +56,7 @@ pipeline {
          steps {
              dir("${env.AB_WORKSPACE}"){
                     echo "*** CONFIGURING RESOURCES WITH ANSIBLE ***"
-
-                    echo "*** Onboarding servers ***"
-                    sh "ansible-playbook --vault-id ${AB_SECRET_FILE} -i ./myazure_rm.yml ./onboard_private_server/onboardservers.yml -l tag_environment_management"
-
-                    echo "*** Configuring monitoring ***"
-                    sh "ansible-playbook -i ./myazure_rm.yml ./setup_monitoring/setup-prometheus.yml -l tag_environment_management"
-
-                    echo "*** Deploying three tier app ***"
-                    sh "ansible-playbook -i ./myazure_rm.yml ./deployments/deploy-local-build.yml -l tag_environment_management"
-
+                    sh "ansible-playbook --vault-id ${AB_SECRET_FILE} -i ./myazure_rm.yml deploy-master-local-dev.yml -l tag_environment_management"
                     echo "*** END ANSIBLE ***"
              }
 

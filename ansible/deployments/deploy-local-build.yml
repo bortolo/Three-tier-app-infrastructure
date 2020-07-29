@@ -1,0 +1,38 @@
+---
+- hosts: all
+  vars:
+    deployment_type_web: nodejs
+    tag_web: tag_environment_web # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
+    deployment_type_app: tomcat
+    tag_app: tag_environment_app # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
+    jenkins_workspace_local: "/Users/andreabortolossi/.jenkins/workspace/my-real-app-war/target"
+    path_for_playbooks: "/home/{{user}}/deployments"
+    user: myadmin # Set the host name of your servers (must be aligned with the one of terraform)
+    azure_rm_file: /home/{{user}}/myazure_rm.yml
+
+  tasks:
+
+    - name: Copy deployments to jumphost server
+      copy:
+        src: ./deployments
+        dest: "/home/{{user}}"
+
+    - name: Create Jenkins artifact directory
+      file:
+        path: "/home/{{user}}/jenkins_artifact"
+        state: directory
+
+    - name: Copy jenkins artifact from local Jenkins workspace to jumphost server
+      copy:
+        src: "{{jenkins_workspace_local}}"
+        dest: "/home/{{user}}/jenkins_artifact/"
+
+    - name: Configure and launch application servers
+      command: ansible-playbook -i {{azure_rm_file}} ./{{deployment_type_app}}/deploy-local-dev.yml -l {{tag_app}}
+      args:
+        chdir: "{{path_for_playbooks}}"
+
+    - name: Configure and launch web servers
+      command: ansible-playbook -i {{azure_rm_file}} ./{{deployment_type_web}}/deploy.yml -l {{tag_web}}
+      args:
+        chdir: "{{path_for_playbooks}}"
