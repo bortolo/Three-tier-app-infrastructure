@@ -46,7 +46,6 @@
 
   - name: Copy systemd init file
     become: yes
-    become_user: root
     copy:
      src: init.service
      dest: /lib/systemd/system/node_exporter.service

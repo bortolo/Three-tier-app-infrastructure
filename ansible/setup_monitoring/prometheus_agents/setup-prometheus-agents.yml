@@ -1,0 +1,17 @@
+---
+- hosts: all
+  vars:
+    tag_web: tag_environment_web # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
+    path_for_playbooks: "/home/{{user}}/prometheus/node_exporter"
+    user: myadmin # Set the host name of your servers (must be aligned with the one of terraform)
+    azure_rm_file: /home/{{user}}/myazure_rm.yml
+
+  tasks:
+    - name: Copy prometheus-node-exporter to jumphost server
+      copy:
+        src: ./node_exporter
+        dest: "/home/{{user}}/prometheus/"
+    - name: Configure node_exporter on servers
+      command: ansible-playbook -i {{azure_rm_file}} setup-prometheus-node-exporter.yml -l {{tag_web}}
+      args:
+        chdir: "{{path_for_playbooks}}"
