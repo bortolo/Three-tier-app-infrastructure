@@ -19,7 +19,7 @@ locals {
   J_hostname          = "jumphost"
   J_storage_image_reference_id = "/subscriptions/de2dd9f0-a856-4177-b9f8-9fe12d786b1a/resourceGroups/TemplatePackerGenerator/providers/Microsoft.Compute/images/ansibleserverImage"
   J_quantity          = 1
-  J_inbound_port      = ["22","9090","9100"]
+  J_inbound_port      = ["22","9090","9100","3000"]
   J_outbound_port     = []
   J_ssh_key           = "/Users/andreabortolossi/.ssh/id_rsa.pub"
   J_enable_public_ip  = true
