@@ -2,7 +2,7 @@
 
 Deploy a three-tier-app (currently just web and app layer) using packer templates, terraform provisioning techniques and ansible playbooks.
 
-![photo_name](./images/Architecturev02.png)
+![photo_name](./images/Architecturev03.png)
 
 # PACKER
 
