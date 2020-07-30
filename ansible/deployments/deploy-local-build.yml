@@ -5,10 +5,13 @@
     tag_web: tag_environment_web # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
     deployment_type_app: tomcat
     tag_app: tag_environment_app # TODO it is not possible to change this tag. Update also onboard-servers.sh if you want to use a different tag
-    jenkins_workspace_local: "/Users/andreabortolossi/.jenkins/workspace/my-real-app-war/target"
+#    jenkins_workspace_local: "/Users/andreabortolossi/.jenkins/workspace/my-real-app-war/target"
+    jenkins_workspace_local: "/Users/andreabortolossi/Documents/Documents – Andrea’s MacBook Pro/Coding projects/Java-Experiments/JavaMavenApp/my-real-app-war/target"
     path_for_playbooks: "/home/{{user}}/deployments"
     user: myadmin # Set the host name of your servers (must be aligned with the one of terraform)
     azure_rm_file: /home/{{user}}/myazure_rm.yml
+
+# ansible-playbook -i ./myazure_rm.yml ./deployments/deploy-local-build.yml -l tag_environment_management
 
   tasks:
 

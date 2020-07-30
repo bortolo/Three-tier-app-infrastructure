@@ -46,12 +46,16 @@ locals {
   A_ssh_key           = "/Users/andreabortolossi/.ssh/id_rsa.pub"
   A_enable_public_ip  = false
   A_environment_tag   = "app"
+
+  # MYSQL SERVER CONFIGURATIONS
+  D_name              = "mybortolodbprova"
+
 }
 
 # MAIN =========================================================================
 
 provider "azurerm" {
-  version = "=2.5.0"
+  version = ">=2.7"
   features {}
 }
 
@@ -206,4 +210,14 @@ module "generalappserver" {
   vm_size                     = var.A_vm_size
   username                    = var.username
   password                    = var.password
+}
+
+# DATABASE =====================================================================
+
+
+module "generalmydbserver" {
+  source                      = "../modules/generaldb"
+  location                    = azurerm_resource_group.rg.location
+  resource_group_name         = azurerm_resource_group.rg.name
+  prefix                      = local.D_name
 }
