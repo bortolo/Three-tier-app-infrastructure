@@ -48,7 +48,8 @@ locals {
   A_environment_tag   = "app"
 
   # MYSQL SERVER CONFIGURATIONS
-  D_name              = "mybortolodbprova"
+  D_db_names              = ["mypgsqldb"]
+  D_fw_rules          = [{ name = "test1", start_ip = "0.0.0.0", end_ip = "0.0.0.0" }]
 
 }
 
@@ -214,10 +215,39 @@ module "generalappserver" {
 
 # DATABASE =====================================================================
 
-
+/*
 module "generalmydbserver" {
   source                      = "../modules/generaldb"
   location                    = azurerm_resource_group.rg.location
   resource_group_name         = azurerm_resource_group.rg.name
   prefix                      = local.D_name
+}
+*/
+module "postgresql" {
+  source = "../modules/azure_postgreSQL"
+
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+
+  server_name = "mybortolodbprova"
+  sku_name    = "B_Gen5_1"
+
+  storage_mb                   = 5120
+  backup_retention_days        = 7
+  geo_redundant_backup_enabled = false
+  administrator_login          = "psqladminun"
+  administrator_password       = "H@Sh1CoR3!"
+  server_version               = "9.6"
+  ssl_enforcement_enabled      = true
+  db_names                     = local.D_db_names
+  db_charset                   = "UTF8"
+  db_collation                 = "English_United States.1252"
+
+  firewall_rule_prefix = "firewall"
+  firewall_rules       = local.D_fw_rules
+
+  vnet_rule_name_prefix = "vnet-db-rule"
+  vnet_rules = [
+    { name = "subnet1", subnet_id = module.network.production_subnet_id }
+  ]
 }

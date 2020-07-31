@@ -26,7 +26,7 @@
 
     - name: Copy jenkins artifact from local Jenkins workspace to jumphost server
       copy:
-        src: "{{jenkins_workspace_local}}"
+        src: "{{build_workspace_local}}"
         dest: "/home/{{user}}/app_artifact/"
 
     - name: Configure and launch application servers

@@ -129,17 +129,17 @@
 
 #  GRAFANA SERVICE ===================================
 
-  # - name: install usefull packages (command routine)
-  #   command: apt-get install gnupg2 curl software-properties-common
-  #   become: yes
-
-  - name: install usefull packages
-    apt:
-     pkg:
-     - gnupg2
-     - curl
-     - software-properties-common
+  - name: install usefull packages (command routine)
+    command: apt-get install gnupg2 curl software-properties-common
     become: yes
+
+  # - name: install usefull packages
+  #   apt:
+  #    pkg:
+  #    - gnupg2
+  #    - curl
+  #    - software-properties-common
+  #   become: yes
 
   - name: Add Grafana gpg key which allows you to install signed packages
     apt_key:
