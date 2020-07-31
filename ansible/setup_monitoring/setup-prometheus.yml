@@ -129,9 +129,8 @@
 
 #  GRAFANA SERVICE ===================================
 
-  # - name: Ensure your Ubuntu / Debian system is up to date
-  #   apt:
-  #    update_cache: yes
+  # - name: install usefull packages (command routine)
+  #   command: apt-get install gnupg2 curl software-properties-common
   #   become: yes
 
   - name: install usefull packages

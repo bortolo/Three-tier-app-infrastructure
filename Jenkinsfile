@@ -64,7 +64,7 @@ pipeline {
                     sh "ansible-playbook -i ./myazure_rm.yml ./setup_monitoring/setup-prometheus.yml -l tag_environment_management"
 
                     echo "*** Deploying three tier app ***"
-                    sh "ansible-playbook -i ./myazure_rm.yml ./deployments/deploy-local-build.yml -l tag_environment_management"
+                    sh "ansible-playbook -i ./myazure_rm.yml ./deployments/deploy-with-jenkins.yml -l tag_environment_management"
 
                     echo "*** END ANSIBLE ***"
              }
