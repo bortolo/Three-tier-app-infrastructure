@@ -10,7 +10,7 @@ region = var.region
 iaas_classic_username = var.iaas_classic_username
 iaas_classic_api_key  = var.iaas_classic_api_key
 }
-
+/*
 data "ibm_space" "spacedata" {
   space = "dev"   # this will be different if you aren't is this space
   org   = "andrea.bortolossi@icloud.com" # this will be different if you aren't is this org
@@ -23,12 +23,14 @@ resource "ibm_service_instance" "service_instance" {
   plan       = "lite"
   tags       = ["cluster-service", "cluster-bind"]
 }
-/*
+*/
+
+// DATACENTER CODES: https://cloud.ibm.com/docs/overview?topic=overview-locations&locale=en
 resource "ibm_compute_vm_instance" "twc_terraform_sample" {
     hostname = "twc-terraform-sample-name"
     domain = "bar.example.com"
     os_reference_code = "DEBIAN_8_64"
-    datacenter = "wdc01"
+    datacenter = "LON04"
     network_speed = 10
     hourly_billing = true
     private_network_only = false
@@ -42,4 +44,3 @@ resource "ibm_compute_vm_instance" "twc_terraform_sample" {
     private_vlan_id = 7721931
     private_security_group_ids = [576973]
 }
-*/

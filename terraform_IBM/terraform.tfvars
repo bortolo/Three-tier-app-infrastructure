@@ -1,1 +1,1 @@
-### COPY HERE TERREFORM.TFVARS from .terraform.d/plugin folder
+### copy file from ./terraform.d/plugins
