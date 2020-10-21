@@ -19,7 +19,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module hub_spokes {
-  source                  = "../modules/hub_spokes"
+  source                  = "../../modules/hub_spokes"
   resource_group_name     = azurerm_resource_group.rg.name
   location                = azurerm_resource_group.rg.location
   prefix                  = "test_topology"
