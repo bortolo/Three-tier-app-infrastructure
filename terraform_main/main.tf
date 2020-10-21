@@ -102,7 +102,8 @@ module "generalserver" {
   availability_set_id             = azurerm_availability_set.jumphost_HA.id
   vm_size                         = local.J_vm_size
   username                        = var.username
-  password                        = var.password
+  password                    = "${data.azurerm_key_vault_secret.server.value}"
+  //password                    = var.password
   monitoring_tag                  = "no"
 }
 
@@ -145,7 +146,8 @@ module "generalwebserver" {
   availability_set_id         = azurerm_availability_set.webserver_HA.id
   vm_size                   = var.W_vm_size
   username                        = var.username
-  password                        = var.password
+  password                    = "${data.azurerm_key_vault_secret.server.value}"
+  //password                    = var.password
 }
 
 # DNS PRIVATE ZONE =============================================================
@@ -210,19 +212,12 @@ module "generalappserver" {
   availability_set_id         = azurerm_availability_set.appserver_HA.id
   vm_size                     = var.A_vm_size
   username                    = var.username
-  password                    = var.password
+  password                    = "${data.azurerm_key_vault_secret.server.value}"
+  //password                    = var.password
 }
 
 # DATABASE =====================================================================
 
-/*
-module "generalmydbserver" {
-  source                      = "../modules/generaldb"
-  location                    = azurerm_resource_group.rg.location
-  resource_group_name         = azurerm_resource_group.rg.name
-  prefix                      = local.D_name
-}
-*/
 module "postgresql" {
   source = "../modules/azure_postgreSQL"
 
@@ -235,8 +230,8 @@ module "postgresql" {
   storage_mb                   = 5120
   backup_retention_days        = 7
   geo_redundant_backup_enabled = false
-  administrator_login          = "psqladminun"
-  administrator_password       = "H@Sh1CoR3!"
+  administrator_login          = "psqladmin"
+  administrator_password       = "${data.azurerm_key_vault_secret.db.value}"
   server_version               = "9.6"
   ssl_enforcement_enabled      = true
   db_names                     = local.D_db_names
@@ -250,4 +245,44 @@ module "postgresql" {
   vnet_rules = [
     { name = "subnet1", subnet_id = module.network.production_subnet_id }
   ]
+}
+
+# KEY VAULT =====================================================================
+
+module keyvault {
+  source              = "../modules/keyvault"
+  name                = "keyvaultbortolo"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  enabled_for_deployment          = var.kv-vm-deployment
+  enabled_for_disk_encryption     = var.kv-disk-encryption
+  enabled_for_template_deployment = var.kv-template-deployment
+
+  tags = {
+    environment = "test"
+  }
+
+  policies = {
+    full = {
+      tenant_id               = var.azure_tenant_id #Set the tenant ID as environment variable
+      object_id               = var.kv-full-object-id
+      key_permissions         = var.kv-key-permissions-full
+      secret_permissions      = var.kv-secret-permissions-full
+      certificate_permissions = var.kv-certificate-permissions-full
+      storage_permissions     = var.kv-storage-permissions-full
+    }
+  }
+
+  secrets = var.kv-secrets
+
+}
+
+data "azurerm_key_vault_secret" "server" {
+  key_vault_id = module.keyvault.key-vault-id
+  name      = "serveradmin"
+}
+
+data "azurerm_key_vault_secret" "db" {
+  key_vault_id = module.keyvault.key-vault-id
+  name      = "sqldb"
 }

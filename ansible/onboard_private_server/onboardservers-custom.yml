@@ -1,0 +1,60 @@
+---
+- hosts: all
+
+  # The target of this scripts is the jumphost server
+  # ansible-playbook --vault-id /Users/andreabortolossi/ansible_vault_password -i ../myazure_rm.yml onboardservers.yml -l tag_environment_management
+
+  vars:
+    ssh_key_filename: id_rsa
+    onboard_script: onboard-servers.sh
+    azure_rm_file: ../myazure_rm.yml
+    path_for_azure_credentials: ./credentials
+    user: myadmin
+    password: 635(&?PAz_?j?ESw48VX
+
+  tasks:
+
+    - name: generate SSH key "{{ssh_key_filename}}"
+      openssh_keypair:
+        path: "~/.ssh/{{ssh_key_filename}}"
+
+    - name: Install pip dependecies to manage azure-mgmt-resource
+      command: pip install azure-mgmt-resource
+
+    - name: Install pip dependecies to manage msrestazure
+      command: pip install msrestazure
+
+    - name: Create AZURE directory
+      file:
+        path: "/home/{{user}}/.azure"
+        state: directory
+
+    - name: Copy file with AZURE credentials
+      copy:
+       src: "{{path_for_azure_credentials}}"
+       dest: "/home/{{user}}/.azure/credentials" #TODO it is not good copy the file in each jumphost server not encrypted
+
+    - name: Copy dynamic azure inventory script
+      copy:
+       src: "{{azure_rm_file}}"
+       dest: "/home/{{user}}/"
+
+    - name: Create onboardserver workspace directory
+      file:
+       path: "/home/{{user}}/onboardserver"
+       state: directory
+
+    - name: Copy onboard script
+      copy:
+       src: "{{onboard_script}}"
+       dest: "/home/{{user}}/onboardserver/"
+
+    - name: Make executable "{{onboard_script}}"
+      file:
+        dest: "/home/{{user}}/onboardserver/{{onboard_script}}"
+        mode: a+x
+
+    - name: Execute "{{onboard_script}}"
+      command: ./{{onboard_script}} {{password}} {{user}}
+      args:
+        chdir: "/home/{{user}}/onboardserver"
