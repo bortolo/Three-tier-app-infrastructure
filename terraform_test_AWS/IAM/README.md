@@ -68,6 +68,11 @@ terraform output userXX_login_profile_encrypted_password | base64 -D | gpg --dec
 Use you username and this password to access the AWS console.
 Do the same with `userXX_access_key_encrypted_secret` to get the API secret.
 
+Sometime GPG is confused where to read input from. Simply configuring it to look for input from tty (the terminal connected to standard input):
+```
+export GPG_TTY=$(tty)
+```
+
 ## Add a group
 Define a new group in `main.tf` in the section `IAM groups`.
 Remember that module names must be unique. Define the users to be included in this group in `group_users` and the policy to attach to this group in `custom_group_policy_arns`. Browse among the ready-to-use polices in AWS and select the arn value.
