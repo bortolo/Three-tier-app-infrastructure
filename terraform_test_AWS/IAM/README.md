@@ -67,3 +67,30 @@ terraform output userXX_login_profile_encrypted_password | base64 -D | gpg --dec
 ```
 Use you username and this password to access the AWS console.
 Do the same with `userXX_access_key_encrypted_secret` to get the API secret.
+
+## Add a group
+Define a new group in `main.tf` in the section `IAM groups`.
+Remember that module names must be unique. Define the users to be included in this group in `group_users` and the policy to attach to this group in `custom_group_policy_arns`. Browse among the ready-to-use polices in AWS and select the arn value.
+
+```
+module "iam_group_complete_XXXXXXXX" {
+  source = "../../modules_AWS/terraform-aws-iam-master/modules/iam-group-with-policies"
+  name = "EC2users"
+  group_users = [
+    module.iam_user2.this_iam_user_name,
+    module.iam_user3.this_iam_user_name,
+    module.iam_user4.this_iam_user_name,
+  ]
+  custom_group_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonEC2FullAccess",
+  ]
+}
+```
+
+## USEFUL WEB resources
+
+Getting started with policy simulator
+https://www.youtube.com/watch?v=1IIhVcXhvcE
+
+Setting up an AWS organization from scratch with Terraform
+https://tbekas.dev/posts/setting-up-an-aws-organization-from-scratch-with-terraform
