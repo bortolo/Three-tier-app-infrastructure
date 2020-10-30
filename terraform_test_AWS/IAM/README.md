@@ -5,21 +5,37 @@ It is possible to set-up different policies for different groups.
 
 ## Add an user
 
-Define a new user in `main.tf` in the section `IAM user`.
+Define a new user in `main.tf` in the section `IAM user`. `XX` is the number of the new user (remember, must be unique, you can't have two modules with the same name).
 ```
-module "iam_user-XX" {
+module "iam_userXX" {
   source = "../../modules_AWS/terraform-aws-iam-master/modules/iam-user"
   name = "user-name"                    // your username
   force_destroy = true
   create_iam_user_login_profile = true  // generate login password
-  pgp_key = "xxxxxxx"                   //public key to generate login password
+  pgp_key = "your-pgp-key"               //public key to generate login password
   create_iam_access_key         = true  // generate API access key (useful for terraform provisioning)
 }
 ```
+In the section `IAM groups` add the user in the correct group.
+```
+module "iam_group_complete_administrators" {
+  source = "../../modules_AWS/terraform-aws-iam-master/modules/iam-group-with-policies"
+  name = "administrators"
+  group_users = [
+    module.iam_user1.this_iam_user_name,
+    module.iam_user3.this_iam_user_name,
+    module.iam_userXX.this_iam_user_name,
+  ]
+  custom_group_policy_arns = [
+    "arn:aws:iam::aws:policy/AdministratorAccess",
+  ]
+}
+```
+Add the correct output in `output.tf`. Copy a full section from a previous `IAM User y` and append it at the end of the file. Update the user number on all the functions of this new section.
 
 To generate the `pgp_key` on your local machine do the following steps
 
-### Install gnupg
+#### Install gnupg
 macOS
 ```
 brew install gnupg
@@ -28,11 +44,12 @@ Ubuntu
 ```
 sudo apt install gnupg
 ```
-### Generate an encryption key
+#### Generate an encryption key
 ```
 gpg  --generate-key
 ```
-### Export the public key
+#### Export the public key
+With the following command you will get the `"your-pgp-key"`
 ```
 gpg --export <public-key-id> | base64
 ```
@@ -40,3 +57,13 @@ The `<public-key-id>` parameter can be found by listing all keys.
 ```
 gpg --list-keys
 ```
+
+## Retrieve new user credentials
+Run `terraform apply` to deploy the new user.
+At the end you will get important outputs on your CLI.
+To get the login password you have to decrypt the `userXX_login_profile_encrypted_password` output.
+```
+terraform output userXX_login_profile_encrypted_password | base64 -D | gpg --decrypt
+```
+Use you username and this password to access the AWS console.
+Do the same with `userXX_access_key_encrypted_secret` to get the API secret.
