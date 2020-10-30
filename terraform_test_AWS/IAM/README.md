@@ -58,7 +58,7 @@ The `<public-key-id>` parameter can be found by listing all keys.
 gpg --list-keys
 ```
 
-## Retrieve new user credentials
+### Retrieve new user credentials
 Run `terraform apply` to deploy the new user.
 At the end you will get important outputs on your CLI.
 To get the login password you have to decrypt the `userXX_login_profile_encrypted_password` output.
