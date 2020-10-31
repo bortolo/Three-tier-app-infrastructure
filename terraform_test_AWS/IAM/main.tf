@@ -65,9 +65,60 @@ module "iam_group_complete_EC2users" {
   group_users = [
     module.iam_user2.this_iam_user_name,
     module.iam_user3.this_iam_user_name,
+  ]
+  custom_group_policy_arns = [
+    aws_iam_policy.EC2_t2micro.arn,
+  ]
+}
+
+module "iam_group_complete_SelfMgmt" {
+  source = "../../modules_AWS/terraform-aws-iam-master/modules/iam-group-with-policies"
+  name = "IAMSelf"
+  group_users = [
     module.iam_user4.this_iam_user_name,
   ]
   custom_group_policy_arns = [
-    "arn:aws:iam::aws:policy/AmazonEC2FullAccess",
+    "arn:aws:iam::aws:policy/IAMReadOnlyAccess",
+    "arn:aws:iam::aws:policy/IAMSelfManageServiceSpecificCredentials",
+    "arn:aws:iam::aws:policy/IAMUserChangePassword",
+    aws_iam_policy.self_manage_vmfa.arn,
   ]
+}
+
+module "iam_group_complete_BillingViewer" {
+  source = "../../modules_AWS/terraform-aws-iam-master/modules/iam-group-with-policies"
+  name = "BillingViewer"
+  group_users = [
+    module.iam_user2.this_iam_user_name,
+    module.iam_user3.this_iam_user_name,
+    module.iam_user4.this_iam_user_name,
+  ]
+  custom_group_policy_arns = [
+    "arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess",
+  ]
+}
+/*
+module "iam_group_complete_BillingManager" {
+  source = "../../modules_AWS/terraform-aws-iam-master/modules/iam-group-with-policies"
+  name = "BillingManager"
+  group_users = [
+    module.iam_user1.this_iam_user_name,
+  ]
+  custom_group_policy_arns = [
+    "arn:aws:iam::aws:policy/job-function/Billing",
+  ]
+}
+*/
+#############################################################################################
+# IAM Custom policies
+#############################################################################################
+
+resource "aws_iam_policy" "self_manage_vmfa" {
+  name   = "SelfManageVMFA"
+  policy = file("./custom_policies/self_manage_vmfa.json")
+}
+
+resource "aws_iam_policy" "EC2_t2micro" {
+  name   = "EC2_t2micro"
+  policy = file("./custom_policies/EC2_t2micro.json")
 }

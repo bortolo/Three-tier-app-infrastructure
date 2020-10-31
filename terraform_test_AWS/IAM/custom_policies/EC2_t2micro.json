@@ -1,0 +1,73 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "ec2:*",
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+      "Effect": "Deny",
+      "Action": "ec2:RunInstances",
+      "Resource": [
+         "arn:aws:ec2:*:152371567679:instance/*"
+            ],
+      "Condition": {
+               "StringEquals": {
+                  "ec2:InstanceType": "t2.small",
+                  "ec2:InstanceType": "t2.medium",
+                  "ec2:InstanceType": "t2.large",
+                  "ec2:InstanceType": "t2.xlarge",
+                  "ec2:InstanceType": "t2.2xlarge",
+                  "ec2:InstanceType": "t3.nano",
+                  "ec2:InstanceType": "t3.micro",
+                  "ec2:InstanceType": "t3.small",
+                  "ec2:InstanceType": "t3.medium",
+                  "ec2:InstanceType": "t3.large",
+                  "ec2:InstanceType": "t3.xlarge",
+                  "ec2:InstanceType": "t3.2xlarge",
+                  "ec2:InstanceType": "t3a.micro",
+                  "ec2:InstanceType": "t3a.nano",
+                  "ec2:InstanceType": "t3a.micro",
+                  "ec2:InstanceType": "t3a.small",
+                  "ec2:InstanceType": "t3a.medium",
+                  "ec2:InstanceType": "t3a.large",
+                  "ec2:InstanceType": "t3a.xlarge",
+                  "ec2:InstanceType": "t3a.2xlarge"
+               }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": "elasticloadbalancing:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "cloudwatch:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "autoscaling:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:AWSServiceName": [
+                        "autoscaling.amazonaws.com",
+                        "ec2scheduled.amazonaws.com",
+                        "elasticloadbalancing.amazonaws.com",
+                        "spot.amazonaws.com",
+                        "spotfleet.amazonaws.com",
+                        "transitgateway.amazonaws.com"
+                    ]
+                }
+            }
+        }
+    ]
+}
