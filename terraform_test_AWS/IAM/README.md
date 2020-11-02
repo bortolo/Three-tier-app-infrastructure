@@ -92,6 +92,9 @@ module "iam_group_complete_XXXXXXXX" {
 }
 ```
 
+## Custom policies
+Deny action on specific Regions - https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_deny-requested-region.html
+
 ## USEFUL WEB resources
 
 Getting started with policy simulator
