@@ -8,33 +8,15 @@
         },
         {
       "Effect": "Deny",
-      "Action": "ec2:RunInstances",
-      "Resource": [
-         "arn:aws:ec2:*:152371567679:instance/*"
-            ],
+      "Action": [
+                  "ec2:RunInstances",
+                  "ec2:ModifyInstanceAttribute"
+                ],
+      "Resource": "arn:aws:ec2:*:152371567679:instance/*",
       "Condition": {
-               "StringEquals": {
-                  "ec2:InstanceType": "t2.small",
-                  "ec2:InstanceType": "t2.medium",
-                  "ec2:InstanceType": "t2.large",
-                  "ec2:InstanceType": "t2.xlarge",
-                  "ec2:InstanceType": "t2.2xlarge",
-                  "ec2:InstanceType": "t3.nano",
-                  "ec2:InstanceType": "t3.micro",
-                  "ec2:InstanceType": "t3.small",
-                  "ec2:InstanceType": "t3.medium",
-                  "ec2:InstanceType": "t3.large",
-                  "ec2:InstanceType": "t3.xlarge",
-                  "ec2:InstanceType": "t3.2xlarge",
-                  "ec2:InstanceType": "t3a.micro",
-                  "ec2:InstanceType": "t3a.nano",
-                  "ec2:InstanceType": "t3a.micro",
-                  "ec2:InstanceType": "t3a.small",
-                  "ec2:InstanceType": "t3a.medium",
-                  "ec2:InstanceType": "t3a.large",
-                  "ec2:InstanceType": "t3a.xlarge",
-                  "ec2:InstanceType": "t3a.2xlarge"
-               }
+                "StringNotEqualsIfExists": {
+                    "ec2:InstanceType": "t2.micro"
+                }
             }
         },
         {
