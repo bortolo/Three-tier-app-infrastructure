@@ -6,7 +6,7 @@ We are trying to replicate the following network layout (with some changes):
 ![AWS network diagram](https://aws-quickstart.github.io/quickstart-aws-vpc/images/architecture_diagram.png)
 
 Main changes:
-- This network layout is deployed in eu-central-1 regions that has just three availability zones.
+- This network layout is deployed in eu-central-1 region that has just three availability zones.
 - We changes Private Subnet B with Database subnet
 
 ## Useful links
