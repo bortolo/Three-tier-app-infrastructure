@@ -43,6 +43,19 @@ module "vpc" {
   single_nat_gateway = false
   one_nat_gateway_per_az = true
 
+  customer_gateways = {
+    IP1 = {
+      bgp_asn    = 65112
+      ip_address = "1.2.3.4"
+    },
+    IP2 = {
+      bgp_asn    = 65112
+      ip_address = "5.6.7.8"
+    }
+  }
+
+  enable_vpn_gateway = true
+  
   enable_dhcp_options              = true
   //dhcp_options_domain_name         = "service.consul"
   //dhcp_options_domain_name_servers = ["127.0.0.1", "10.10.0.2"]

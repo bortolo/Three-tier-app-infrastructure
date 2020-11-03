@@ -30,6 +30,16 @@
         {
             "Effect": "Deny",
             "Action": [
+                        "ec2:CreateNatGateway",
+                        "ec2:CreateVpnConnection",
+                        "ec2:CreateVpnConnectionRoute",
+                        "ec2:CreateVpnGateway"
+                      ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Deny",
+            "Action": [
                         "ec2:RunInstances",
                         "ec2:ModifyInstanceAttribute"
                       ],
@@ -43,11 +53,6 @@
         {
             "Effect": "Allow",
             "Action": "elasticloadbalancing:*",
-            "Resource": "arn:aws:ec2:eu-central-1:152371567679:*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "cloudwatch:*",
             "Resource": "arn:aws:ec2:eu-central-1:152371567679:*"
         },
         {

@@ -59,15 +59,15 @@ module "iam_group_complete_administrators" {
   ]
 }
 
-module "iam_group_complete_EC2users" {
+module "iam_group_complete_EC2_restricted_users" {
   source = "../../modules_AWS/terraform-aws-iam-master/modules/iam-group-with-policies"
-  name = "EC2users"
+  name = "EC2_restricted_users"
   group_users = [
     module.iam_user2.this_iam_user_name,
     module.iam_user3.this_iam_user_name,
   ]
   custom_group_policy_arns = [
-    aws_iam_policy.EC2_t2micro.arn,
+    aws_iam_policy.EC2_restricted.arn,
   ]
 }
 
@@ -97,6 +97,7 @@ module "iam_group_complete_BillingViewer" {
     "arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess",
   ]
 }
+
 /*
 module "iam_group_complete_BillingManager" {
   source = "../../modules_AWS/terraform-aws-iam-master/modules/iam-group-with-policies"
@@ -118,7 +119,7 @@ resource "aws_iam_policy" "self_manage_vmfa" {
   policy = file("./custom_policies/self_manage_vmfa.json")
 }
 
-resource "aws_iam_policy" "EC2_t2micro" {
-  name   = "EC2_t2micro"
-  policy = file("./custom_policies/EC2_t2micro.json")
+resource "aws_iam_policy" "EC2_restricted" {
+  name   = "EC2_restricted"
+  policy = file("./custom_policies/EC2_restricted.json")
 }

@@ -11,13 +11,13 @@ Main changes:
 
 ## Useful links
 
-AWS VPC site - https://aws.amazon.com/vpc/
+[AWS VPC site](https://aws.amazon.com/vpc/)
 
-AWS VPC User Guide - https://docs.aws.amazon.com/vpc/index.html
+[AWS VPC User Guide](https://docs.aws.amazon.com/vpc/index.html)
 
-VPC on AWS Quickstart - https://aws-quickstart.github.io/quickstart-aws-vpc/
+[VPC on AWS Quickstart](https://aws-quickstart.github.io/quickstart-aws-vpc/)
 
-AWS SINGLE VPC DESIGN - http://d0.awsstatic.com/aws-answers/AWS_Single_VPC_Design.pdf
+[AWS SINGLE VPC DESIGN](http://d0.awsstatic.com/aws-answers/AWS_Single_VPC_Design.pdf)
 
 ## Usage
 
