@@ -1,11 +1,13 @@
-# Complete VPC
+# Complete VPC architecture
 
-Configuration in this directory creates set of VPC resources which may be sufficient for staging or production environment (look into [simple-vpc](../simple-vpc) for more simplified setup).
+Configuration in this directory creates set of VPC resources which may be sufficient for staging or production environment. This example has been developed starting from [simple-vpc](../../modules_AWS/terraform-aws-vpc-master/examples/complete-vpc).
 
-There are public, private, database, ElastiCache, intra (private w/o Internet access) subnets, and NAT Gateways created in each availability zone.
+We are trying to replicate the following network layout:
+![AWS network diagram](https://aws-quickstart.github.io/quickstart-aws-vpc/images/architecture_diagram.png)
 
 ## Useful links
 VPC on AWS Quickstart - https://aws-quickstart.github.io/quickstart-aws-vpc/
+
 AWS SINGLE VPC DESIGN - http://d0.awsstatic.com/aws-answers/AWS_Single_VPC_Design.pdf
 
 ## Usage
