@@ -2,8 +2,12 @@
 
 Configuration in this directory creates set of VPC resources which may be sufficient for staging or production environment. This example has been developed starting from [simple-vpc](../../modules_AWS/terraform-aws-vpc-master/examples/complete-vpc).
 
-We are trying to replicate the following network layout:
+We are trying to replicate the following network layout (with some changes):
 ![AWS network diagram](https://aws-quickstart.github.io/quickstart-aws-vpc/images/architecture_diagram.png)
+
+Main changes:
+- This network layout is deployed in eu-central-1 regions that has just three availability zones.
+- We changes Private Subnet B with Database subnet
 
 ## Useful links
 VPC on AWS Quickstart - https://aws-quickstart.github.io/quickstart-aws-vpc/
