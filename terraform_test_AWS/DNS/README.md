@@ -6,7 +6,7 @@ We are trying to build and configure a DNS server. Read this [guide](https://bad
 
 ## Useful links
 
-AWS DHCP options - https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html
+[AWS DHCP options](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html)
 
 ## Usage (Terraform part)
 
