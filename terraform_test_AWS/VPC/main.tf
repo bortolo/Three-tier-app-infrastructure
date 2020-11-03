@@ -44,8 +44,8 @@ module "vpc" {
   one_nat_gateway_per_az = true
 
   enable_dhcp_options              = true
-  dhcp_options_domain_name         = "service.consul"
-  dhcp_options_domain_name_servers = ["127.0.0.1", "10.10.0.2"]
+  //dhcp_options_domain_name         = "service.consul"
+  //dhcp_options_domain_name_servers = ["127.0.0.1", "10.10.0.2"]
 
   # Default security group - ingress/egress rules cleared to deny all
   manage_default_security_group  = true

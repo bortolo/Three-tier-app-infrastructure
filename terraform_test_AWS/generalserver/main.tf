@@ -1,5 +1,5 @@
 locals {
-  region            = "eu-central-1"                # Selected location where run the example
+  region            = "eu-west-1"                # Selected location where run the example
   instance_name     = "tomcat_server"               # name of the single server
   ami               = "ami-09d992b9d8aa89dcf"       # ami type:
                                                     # apache server; "ami-07982b5f754eddb42"
