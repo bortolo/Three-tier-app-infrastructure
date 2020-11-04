@@ -24,9 +24,9 @@ EOF
 # Change the zone to your domain name
 
 tee /etc/bind/named.conf.local << EOF
-zone "machane.ga" {
+zone "awstestdomain.cf" {
         type master;
-        file "/etc/bind/zones/db.machane.ga";
+        file "/etc/bind/zones/db.awstestdomain.cf";
 };
 EOF
 
@@ -35,21 +35,21 @@ mkdir /etc/bind/zones
 # Creating the zone files
 # Setting AWS elastic IP
 
-ElasticIP=18.156.149.190
+ElasticIP=18.158.247.254
 
 # Please dont forget . at the end of the DNS entries
 
-tee /etc/bind/zones/db.machane.ga << EOF
+tee /etc/bind/zones/db.awstestdomain.cf << EOF
 \$TTL 900
-@       IN      SOA     ns1.machane.ga. admin.machane.ga. (
+@       IN      SOA     ns1.awstestdomain.cf. admin.awstestdomain.cf. (
                                 1       ;<serial-number>
                               900       ;<time-to-refresh>
                               900       ;<time-to-retry>
                            604800       ;<time-to-expire>
                               900)      ;<minimum-TTL>
 ;List Nameservers
-        IN      NS      ns1.machane.ga.
-        IN      NS      ns2.machane.ga.
+        IN      NS      ns1.awstestdomain.cf.
+        IN      NS      ns2.awstestdomain.cf.
 ;Create A record
         IN      A       127.0.0.1
 ;address to name mapping

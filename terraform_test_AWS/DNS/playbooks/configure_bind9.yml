@@ -18,6 +18,7 @@
     - name: Install bind
       become: yes
       apt:
+       update_cache: yes
        pkg:
        - bind9
        - bind9-doc

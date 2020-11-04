@@ -23,17 +23,12 @@ module "vpc" {
     subnet_type = "public"
   }
 
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+  //enable_dns_hostnames = true
+  //enable_dns_support   = true
 
   enable_dhcp_options = true
-  //dhcp_options_domain_name         = "awstestdomain.ml"
+  //dhcp_options_domain_name         = "awstestdomain.cf"
   //dhcp_options_domain_name_servers = ["127.0.0.1"]
-
-  # Default security group - ingress/egress rules cleared to deny all
-  manage_default_security_group  = true
-  default_security_group_ingress = [{}]
-  default_security_group_egress  = [{}]
 
   tags = {
     Owner       = "user"
