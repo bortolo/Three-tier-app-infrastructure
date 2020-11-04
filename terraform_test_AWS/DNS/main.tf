@@ -115,11 +115,11 @@ resource "aws_security_group" "instance" {
   name    = "DNS_security_group"
   vpc_id      = module.vpc.vpc_id
 }
-resource "aws_security_group_rule" "allow_inbound_to_instance_CUSTOM" {
+resource "aws_security_group_rule" "allow_inbound_to_instance_DNS" {
   type              = "ingress"
   security_group_id = aws_security_group.instance.id
-  from_port         = 8080
-  to_port           = 8080
+  from_port         = 53
+  to_port           = 53
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
 }
