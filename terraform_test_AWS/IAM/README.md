@@ -3,6 +3,8 @@
 This script deploys users and groups.
 It is possible to set-up different policies for different groups.
 
+**IMPORTANT:** you must be an AWS administrator to run this test.
+
 ## Add an user
 
 Define a new user in `main.tf` in the section `IAM user`. `XX` is the number of the new user (remember, must be unique, you can't have two modules with the same name).
