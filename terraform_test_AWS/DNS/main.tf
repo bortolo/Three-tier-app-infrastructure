@@ -9,43 +9,26 @@ data "aws_security_group" "default" {
 
 module "vpc" {
   source = "../../modules_AWS/terraform-aws-vpc-master"
+  name   = "complete-example"
+  cidr   = "10.0.0.0/16"
+  azs    = ["eu-central-1a"]
 
-  name = "complete-example"
-
-  cidr = "10.0.0.0/16" # 10.0.0.0/8 is reserved for EC2-Classic
-
-  azs                 = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
-
-  private_subnets     = ["10.0.0.0/19", "10.0.32.0/19", "10.0.64.0/19"]
+  private_subnets = ["10.0.0.0/19"]
   private_subnet_tags = {
-    subnet_type       = "private"
+    subnet_type = "private"
   }
 
-  public_subnets      = ["10.0.128.0/20", "10.0.144.0/20", "10.0.160.0/20"]
+  public_subnets = ["10.0.128.0/20"]
   public_subnet_tags = {
-    subnet_type       = "public"
+    subnet_type = "public"
   }
-
-  database_subnets    = ["10.0.192.0/21", "10.0.200.0/21", "10.0.208.0/21"]
-  database_subnet_tags = {
-    subnet_type       = "database"
-  }
-
-  create_database_subnet_group = false
 
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  enable_classiclink             = false
-  enable_classiclink_dns_support = false
-
-  enable_nat_gateway = false
-  //single_nat_gateway = false
-  //one_nat_gateway_per_az = true
-
-  enable_dhcp_options              = true
-  //dhcp_options_domain_name         = "service.consul"
-  //dhcp_options_domain_name_servers = ["127.0.0.1", "10.10.0.2"]
+  enable_dhcp_options = true
+  //dhcp_options_domain_name         = "awstestdomain.ml"
+  //dhcp_options_domain_name_servers = ["127.0.0.1"]
 
   # Default security group - ingress/egress rules cleared to deny all
   manage_default_security_group  = true
@@ -56,11 +39,6 @@ module "vpc" {
     Owner       = "user"
     Environment = "staging"
     Name        = "complete"
-  }
-
-  vpc_endpoint_tags = {
-    Project  = "Secret"
-    Endpoint = "true"
   }
 }
 
@@ -84,8 +62,8 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_key_pair" "this" {
-  key_name        = "andreaskey"
-  public_key      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCVPI+y9VK/2KhV0kNH1boKE3xTkVIo57fWX1qf8+AR4uu+IIr1sM4LLWcbhTR4WY8okfzv9LoCl/LWg30ODsbLuYX2heamZOuSg5CyFSJj6i2RgS2M2wppKLo13+tEqUm4c4E6dnVk2YHeDs7A5asL1IUGnqvcpey2+ZMTgCEa6nfqxitSl3wWSuMZpNUTXtnQh/3Yp1dMlHjdUuiUCHEKIPyHdz2mF/i6yEf4RPLFWVKpX+o1TpfnoVlFipiobcqiZ0SOOgJsbqWGrykrdnYbvOYtKBpNF3OSTZdBaxRHtH907ykre+9gqTPnQFqq3hncUNQuQvpiv9SlZyuCVmr5 andreabortolossi@Andreas-MBP.lan"
+  key_name   = "andreaskey"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCVPI+y9VK/2KhV0kNH1boKE3xTkVIo57fWX1qf8+AR4uu+IIr1sM4LLWcbhTR4WY8okfzv9LoCl/LWg30ODsbLuYX2heamZOuSg5CyFSJj6i2RgS2M2wppKLo13+tEqUm4c4E6dnVk2YHeDs7A5asL1IUGnqvcpey2+ZMTgCEa6nfqxitSl3wWSuMZpNUTXtnQh/3Yp1dMlHjdUuiUCHEKIPyHdz2mF/i6yEf4RPLFWVKpX+o1TpfnoVlFipiobcqiZ0SOOgJsbqWGrykrdnYbvOYtKBpNF3OSTZdBaxRHtH907ykre+9gqTPnQFqq3hncUNQuQvpiv9SlZyuCVmr5 andreabortolossi@Andreas-MBP.lan"
 }
 
 resource "aws_eip" "lb" {
@@ -110,7 +88,7 @@ module "ec2_DNS" {
 }
 
 module "aws_security_group_DNS" {
-  source = "../../modules_AWS/terraform-aws-security-group-master"
+  source      = "../../modules_AWS/terraform-aws-security-group-master"
   name        = "DNS_security_group"
   description = "Security group for DNS servers"
   vpc_id      = module.vpc.vpc_id
