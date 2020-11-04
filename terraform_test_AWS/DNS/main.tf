@@ -75,12 +75,12 @@ resource "aws_key_pair" "this" {
 }
 
 resource "aws_eip" "lb" {
-  instance = module.ec2_DNS.id[0]
+  //instance = module.ec2_DNS.id[0]
   vpc      = true
   tags = local.user_tag
 }
 
-module "ec2_DNS" {
+/*module "ec2_DNS" {
   source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
   name                   = "dns_server"
   instance_count         = 1
@@ -91,7 +91,7 @@ module "ec2_DNS" {
   vpc_security_group_ids = [module.aws_security_group_DNS.this_security_group_id]
   subnet_id              = module.vpc.public_subnets[0]
   tags = merge(local.user_tag,local.ec2_tag)
-}
+}*/
 
 module "aws_security_group_DNS" {
   source      = "../../modules_AWS/terraform-aws-security-group-master"

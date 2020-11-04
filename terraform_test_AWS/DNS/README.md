@@ -4,6 +4,9 @@ This example has been developed starting from [VPC](../VPC).
 
 We are trying to build and configure a DNS server. Read this [guide](https://badshah.io/how-i-hosted-a-dns-server-on-aws/) before start with this exercise.
 
+![Architectural diagram](./images/DNStest.png)
+![Estimated budget](./images/DNStestbudget.png)
+
 ## Useful links
 
 [AWS DHCP options](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html)
