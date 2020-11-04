@@ -95,47 +95,55 @@ resource "aws_eip" "lb" {
 
 module "ec2_DNS" {
   source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
-
   name                   = "dns_server"
   instance_count         = 1
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.this.key_name
   monitoring             = false
-  vpc_security_group_ids = [aws_security_group.instance.id]
+  vpc_security_group_ids = [module.aws_security_group_DNS.this_security_group_id]
   subnet_id              = module.vpc.public_subnets[0]
-
   tags = {
     Terraform   = "true"
     Environment = "dev"
   }
 }
 
-resource "aws_security_group" "instance" {
-  name    = "DNS_security_group"
+module "aws_security_group_DNS" {
+  source = "../../modules_AWS/terraform-aws-security-group-master"
+  name        = "DNS_security_group"
+  description = "Security group for DNS servers"
   vpc_id      = module.vpc.vpc_id
-}
-resource "aws_security_group_rule" "allow_inbound_to_instance_DNS" {
-  type              = "ingress"
-  security_group_id = aws_security_group.instance.id
-  from_port         = 53
-  to_port           = 53
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-resource "aws_security_group_rule" "allow_inbound_to_instance_SSH" {
-  type              = "ingress"
-  security_group_id = aws_security_group.instance.id
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-resource "aws_security_group_rule" "allow_all_outbound" {
-  type              = "egress"
-  security_group_id = aws_security_group.instance.id
-  from_port   = 0
-  to_port     = 0
-  protocol    = -1
-  cidr_blocks = ["0.0.0.0/0"]
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 53
+      to_port     = 53
+      protocol    = "tcp"
+      description = "DNS port"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 53
+      to_port     = 53
+      protocol    = "udp"
+      description = "DNS port"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      description = "SSH port"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+  egress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = -1
+      description = "allow all outbound"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
 }
