@@ -39,6 +39,12 @@ To see the dynamic inventory of aws ec2 instances run:
 
 See this [link](https://aws.amazon.com/blogs/apn/getting-started-with-ansible-and-dynamic-amazon-ec2-inventory-management/) for more detailed instructions.
 
+IMPORTANT: `ec2.ini` is the configuration file that set the behaviour of `ec2.py`. It is crucial to set up the configuration file, in particular when you are using IAM restrictions. As for example in this case if the API_secret of the user is limited to EC2 services in a specific region you have to change the `ec2.ini` file (see row 14 and 45), otherwise you will receive a message like the following:
+```
+Error connecting to AWS backend.
+You are not authorized to perform this operation.
+```
+
 ### Configure DNS server
 
 We are using `bind9` to automate the setup of DNS zones ([link](https://help.ubuntu.com/community/BIND9ServerHowto)).
