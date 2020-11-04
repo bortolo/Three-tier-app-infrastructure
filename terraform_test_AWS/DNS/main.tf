@@ -2,6 +2,22 @@ provider "aws" {
   region = "eu-central-1"
 }
 
+locals {
+
+  user_tag = {
+              Owner       = var.awsusername
+              Test        = "DNS"
+              }
+
+  ec2_tag =  {
+              server_type = "dns"
+              }
+
+  security_group_tag = {
+                        scope = "dns_server"
+                        }
+}
+
 data "aws_security_group" "default" {
   name   = "default"
   vpc_id = module.vpc.vpc_id
@@ -30,11 +46,7 @@ module "vpc" {
   //dhcp_options_domain_name         = "awstestdomain.cf"
   //dhcp_options_domain_name_servers = ["127.0.0.1"]
 
-  tags = {
-    Owner       = "user"
-    Environment = "staging"
-    Name        = "complete"
-  }
+  tags = local.user_tag
 }
 
 #*****************
@@ -59,11 +71,13 @@ data "aws_ami" "ubuntu" {
 resource "aws_key_pair" "this" {
   key_name   = "andreaskey"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCVPI+y9VK/2KhV0kNH1boKE3xTkVIo57fWX1qf8+AR4uu+IIr1sM4LLWcbhTR4WY8okfzv9LoCl/LWg30ODsbLuYX2heamZOuSg5CyFSJj6i2RgS2M2wppKLo13+tEqUm4c4E6dnVk2YHeDs7A5asL1IUGnqvcpey2+ZMTgCEa6nfqxitSl3wWSuMZpNUTXtnQh/3Yp1dMlHjdUuiUCHEKIPyHdz2mF/i6yEf4RPLFWVKpX+o1TpfnoVlFipiobcqiZ0SOOgJsbqWGrykrdnYbvOYtKBpNF3OSTZdBaxRHtH907ykre+9gqTPnQFqq3hncUNQuQvpiv9SlZyuCVmr5 andreabortolossi@Andreas-MBP.lan"
+  tags = local.user_tag
 }
 
 resource "aws_eip" "lb" {
   instance = module.ec2_DNS.id[0]
   vpc      = true
+  tags = local.user_tag
 }
 
 module "ec2_DNS" {
@@ -76,10 +90,7 @@ module "ec2_DNS" {
   monitoring             = false
   vpc_security_group_ids = [module.aws_security_group_DNS.this_security_group_id]
   subnet_id              = module.vpc.public_subnets[0]
-  tags = {
-    Terraform   = "true"
-    Environment = "dev"
-  }
+  tags = merge(local.user_tag,local.ec2_tag)
 }
 
 module "aws_security_group_DNS" {
@@ -119,4 +130,5 @@ module "aws_security_group_DNS" {
       cidr_blocks = "0.0.0.0/0"
     },
   ]
+  tags = merge(local.user_tag,local.security_group_tag)
 }
