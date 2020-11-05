@@ -2,17 +2,29 @@
 
 Deploy a mySQL RDS instance and use mySQL dbs stored in it through a local node.js application.
 
+| Time to deploy | 8 min (with backup) / (?) min (without backup) |
+| Estimated cost | 0,03 €/h |
+
 ## Useful links
 
 [AWS RDS site](https://docs.aws.amazon.com/rds/index.html?nc2=h_ql_doc_rds)
 
 ## Usage
 
-### Deploy RDS instance - *still not available*
+### Set db Credentials
+
+Set user and password in `set_db_credentials.sh` script and than run it
+```
+. ./set_db_credentials.sh
+```
+
+Now you can deploy the db instance with terraform. Remember that at the and of the terraform deployment phase you have to copy/paste the `this_db_instance_endpoint` output variable (without the port number) in `dbsees.js` and `index.js`.
+
+### Deploy RDS instance
 
 To run this example you need to execute:
 
-```bash
+```
 $ terraform init
 $ terraform plan
 $ terraform apply
@@ -26,7 +38,7 @@ Before to do this step you have to deploy an RDS mySQL instance.
 
 If you do not have npm yet installed please follow this [guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 
-Update `dbseed.js` and `index.js` with your RDS inputs:
+Update `dbseed.js` and `index.js` with your RDS inputs (if you user the `set_db_credentials.sh` script you just need to update `<your-db-endpoint>`):
 ```
 const con = mysql.createConnection({
     host: "<your-db-endpoint>",                  //Find this info in the db panel Connectivity&Security
@@ -76,25 +88,32 @@ On your preferred browser, go to `localhost:3000/views`, you should see a screen
 
 ## Inputs
 
-No input.
+| Name | Description |
+|------|---------|
+| awsusername | Aws username |
+| db_username | db username |
+| db_password | db password |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| cgw\_ids | List of IDs of Customer Gateway |
-| database\_subnets | List of IDs of database subnets |
-| elasticache\_subnets | List of IDs of elasticache subnets |
-| intra\_subnets | List of IDs of intra subnets |
-| nat\_public\_ips | List of public Elastic IPs created for AWS NAT Gateway |
-| private\_subnets | List of IDs of private subnets |
-| public\_subnets | List of IDs of public subnets |
-| redshift\_subnets | List of IDs of redshift subnets |
-| this\_customer\_gateway | Map of Customer Gateway attributes |
-| vpc\_endpoint\_ssm\_dns\_entry | The DNS entries for the VPC Endpoint for SSM. |
-| vpc\_endpoint\_ssm\_id | The ID of VPC endpoint for SSM |
-| vpc\_endpoint\_ssm\_network\_interface\_ids | One or more network interfaces for the VPC Endpoint for SSM. |
-| vpc\_id | The ID of the VPC |
+| this\_db\_instance\_address | The address of the RDS instance |
+| this\_db\_instance\_arn | The ARN of the RDS instance |
+| this\_db\_instance\_availability\_zone | The availability zone of the RDS instance |
+| this\_db\_instance\_endpoint | The connection endpoint |
+| this\_db\_instance\_hosted\_zone\_id | The canonical hosted zone ID of the DB instance (to be used in a Route 53 Alias record) |
+| this\_db\_instance\_id | The RDS instance ID |
+| this\_db\_instance\_name | The database name |
+| this\_db\_instance\_password | The database password (this password may be old, because Terraform doesn't track it after initial creation) |
+| this\_db\_instance\_port | The database port |
+| this\_db\_instance\_resource\_id | The RDS Resource ID of this instance |
+| this\_db\_instance\_status | The RDS instance status |
+| this\_db\_instance\_username | The master username for the database |
+| this\_db\_parameter\_group\_arn | The ARN of the db parameter group |
+| this\_db\_parameter\_group\_id | The db parameter group id |
+| this\_db\_subnet\_group\_arn | The ARN of the db subnet group |
+| this\_db\_subnet\_group\_id | The db subnet group name |
 
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

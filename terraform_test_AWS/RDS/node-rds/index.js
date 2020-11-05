@@ -3,9 +3,9 @@ const mysql = require('mysql');
 // First you need to create a connection to the database
 // Be sure to replace 'user' and 'password' with the correct values
 const con = mysql.createConnection({
-  host: "my-node-database.ck0joffnfyxn.eu-central-1.rds.amazonaws.com",
-  user: "admin",
-  password: "p12345678",
+  host: "demodb.ck0joffnfyxn.eu-central-1.rds.amazonaws.com",
+  user: process.env.TF_VAR_db_username,
+  password: process.env.TF_VAR_db_password,
   database: "main"
 });
 
