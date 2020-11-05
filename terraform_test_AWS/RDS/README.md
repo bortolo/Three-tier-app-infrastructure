@@ -2,6 +2,7 @@
 
 Deploy a mySQL RDS instance and use mySQL dbs stored in it through a local node.js application.
 
+|------|---------|
 | Time to deploy | 8 min (with backup) / (?) min (without backup) |
 | Estimated cost | 0,03 €/h |
 
