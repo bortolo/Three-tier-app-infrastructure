@@ -4,9 +4,11 @@ Deploy a mySQL RDS instance and use mySQL dbs stored in it through a local node.
 
 ## Useful links
 
-[AWS RDS site](https://aws.amazon.com/vpc/)
+[AWS RDS site](https://docs.aws.amazon.com/rds/index.html?nc2=h_ql_doc_rds)
 
-## Usage - still not available
+## Usage
+
+### Deploy RDS instance - *still not available*
 
 To run this example you need to execute:
 
@@ -52,8 +54,8 @@ Now that you have created the main table you can run your code
 ```
 node index.js
 ```
-On your preferred browser, go to `localhost:3000/views`, you should see a screen like this (with zero rows because it still empty)
-![appview](./images/appview)
+On your preferred browser, go to `localhost:3000/views`, you should see a screen like this (with zero rows because it is still empty)
+![appview](./images/appview.png)
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
