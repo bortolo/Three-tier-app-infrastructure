@@ -51,60 +51,20 @@ module "db" {
 
   publicly_accessible = true
 
-  //multi_az = true
-
   # disable backups to create DB faster
-  //backup_retention_period = 0
+  backup_retention_period = 0
 
   tags = local.user_tag
 
-  //enabled_cloudwatch_logs_exports = ["audit", "general"]
-
   # DB subnet group
   subnet_ids = data.aws_subnet_ids.all.ids
-
 
   # DB parameter group
   family = "mysql8.0"
 
   # DB option group
   major_engine_version = "8.0"
-
-  # Snapshot name upon DB deletion
-  //final_snapshot_identifier = "demodb"
-
-  # Database Deletion Protection
-  //deletion_protection = false
-
-/*
-  parameters = [
-    {
-      name  = "character_set_client"
-      value = "utf8"
-    },
-    {
-      name  = "character_set_server"
-      value = "utf8"
-    }
-  ]
-
-  options = [
-    {
-      option_name = "MARIADB_AUDIT_PLUGIN"
-
-      option_settings = [
-        {
-          name  = "SERVER_AUDIT_EVENTS"
-          value = "CONNECT"
-        },
-        {
-          name  = "SERVER_AUDIT_FILE_ROTATIONS"
-          value = "37"
-        },
-      ]
-    },
-  ]
-  */
+  
 }
 
 module "aws_security_group_db" {
