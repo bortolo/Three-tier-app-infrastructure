@@ -16,6 +16,9 @@ This is the list of the available tests with a short description. Click on one o
 - [VPC](./VPC):
   - **Status**, work in progress
   - **Description**, xxxxx
+- [RDS](./RDS):
+  - **Status**, work in progress
+  - **Description**, xxxxx
 
 ## Getting started
 ### Install and configure terraform
