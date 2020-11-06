@@ -49,6 +49,30 @@ resource "aws_route53_record" "database" {
   records = ["${module.db.this_db_instance_address}"]
 }
 
+##############
+# Secret Manager
+##############
+module "db-secrets" {
+  source = "../../modules_AWS/terraform-aws-secrets-manager-master"
+  secrets = [
+   {
+      name        = "db-secrets"
+      description = "db user and password"
+      secret_key_value = {
+        username = var.db_username
+        password = var.db_password
+      }
+      recovery_window_in_days = 7
+    },
+ ]
+
+  tags = local.user_tag
+}
+
+data "aws_secretsmanager_secret_version" "db-secret" {
+  secret_id = module.db-secrets.secret_ids[0]
+}
+
 #######
 # EC2
 #######
@@ -139,8 +163,8 @@ module "db" {
   allocated_storage = 5
   storage_encrypted = false
   name     = "demodb"
-  username = var.db_username
-  password = var.db_password
+  username = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
+  password = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
   port     = "3306"
   vpc_security_group_ids = [module.aws_security_group_db.this_security_group_id]
   maintenance_window = "Mon:00:00-Mon:03:00"
