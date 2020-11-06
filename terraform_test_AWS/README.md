@@ -19,6 +19,9 @@ This is the list of the available tests with a short description. Click on one o
 - [RDS](./RDS):
   - **Status**, work in progress
   - **Description**, xxxxx
+- [EC2 + RDS](./EC2andRDS):
+  - **Status**, work in progress
+  - **Description**, xxxxx
 
 ## Getting started
 ### Install and configure terraform
