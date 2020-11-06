@@ -6,10 +6,11 @@ Deploy a EC2 with a node.js app and a mySQL RDS instance.
 
 | Topic | Data |
 |------|---------|
-| Time to deploy (Terraform) | 8 min |
+| Time to deploy (Terraform) | (?) min |
 | Time to deploy (Ansible) | 30 sec |
 | Time to destroy | 5 min |
-| Estimated cost | 0,05 €/h |
+| Estimated cost | (?) €/h |
+
 
 ## Useful links
 
