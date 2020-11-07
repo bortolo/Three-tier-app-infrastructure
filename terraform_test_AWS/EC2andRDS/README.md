@@ -42,14 +42,14 @@ Note that this example may create resources which can cost money (AWS Elastic IP
 
 ### Deploy node.js app
 
-Before to do this step you have to deploy the EC2 and the RDS mySQL instance.
+Before this step you have to deploy the EC2 and the RDS mySQL instance.
 
 If you already updated both `config.service` and `configure_nodejs.yml` just run the following command from the `playbooks` folder.
 ```
 ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_fe_server
 ```
 
-On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you should see a screen like this (with zero rows because it is still empty)
+On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you should see a screen like this (with zero rows because db is still empty)
 
 ![appview](./images/appview.png)
 

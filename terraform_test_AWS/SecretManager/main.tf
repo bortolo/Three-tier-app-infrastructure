@@ -56,7 +56,7 @@ module "db-secrets" {
   source = "../../modules_AWS/terraform-aws-secrets-manager-master"
   secrets = [
    {
-      name        = "db-secrets-02"
+      name        = var.db_secret_name
       description = "db user and password"
       secret_key_value = {
         username = var.db_username

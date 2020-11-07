@@ -1,6 +1,6 @@
 # RDS usage - WIP
 
-Deploy a EC2 with a node.js app and a mySQL RDS instance.
+Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in AWS SecretsManager.
 
 ![appview](./images/architecture.png)
 
@@ -20,16 +20,17 @@ Deploy a EC2 with a node.js app and a mySQL RDS instance.
 
 ### Set db Credentials
 
-Set user and password in `set_db_credentials.sh` script and than run it
+Set user, password, AWS SecretsManager name and db DNS name in `set_db_credentials.sh` script and than run it
 ```
 . ./set_db_credentials.sh
 ```
+**Important:** If you already used the same AWS SecretsManager name remember that each AWS secret needs at least 7 days to complete the deletion of the secret. Until the end of this period you cannot use the same secret name.
 
-Set also `config.service` and `configure_nodejs.yml` with the same inputs of `set_db_credentials.sh`.
+Set also `config.service` with the same DNS name and with the regione name that you are going to use.
 
-Now you can deploy the ec2 and the db instance with terraform.
+Now you can deploy the terraform infrastructure.
 
-### Deploy EC2 and RDS instance
+### Deploy EC2, RDS and AWS SecretsManager
 
 To run this example you need to execute:
 
@@ -38,19 +39,20 @@ $ terraform init
 $ terraform plan
 $ terraform apply
 ```
+Run terraform apply one more time if something goes wrong.
 
 Note that this example may create resources which can cost money (AWS Elastic IP, for example). Run `terraform destroy` when you don't need these resources.
 
 ### Deploy node.js app
 
-Before to do this step you have to deploy the EC2 and the RDS mySQL instance.
+Before this step you have to deploy the terraform script.
 
-If you already updated both `config.service` and `configure_nodejs.yml` just run the following command from the `playbooks` folder.
+If you already updated the `config.service` just run the following command from the `playbooks` folder.
 ```
 ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_fe_server
 ```
 
-On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you should see a screen like this (with zero rows because it is still empty)
+On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you should see a screen like this (with zero rows because the db is still empty)
 
 ![appview](./images/appview.png)
 

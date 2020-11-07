@@ -82,3 +82,8 @@ output "secret_id" {
   description = "The ARN of the db parameter group"
   value       = module.db-secrets.secret_ids[0]
 }
+
+output "instance_profile_name" {
+  description = "The ARN of the db parameter group"
+  value       = module.iam_assumable_role_custom.this_iam_instance_profile_name
+}

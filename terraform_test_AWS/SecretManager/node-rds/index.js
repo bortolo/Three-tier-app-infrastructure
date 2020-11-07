@@ -2,8 +2,8 @@
 *** AWS SDK ***
 ***************/
 var AWS = require('aws-sdk'),
-region = 'eu-central-1',
-secretName = 'db-secrets-02',
+region = process.env.TF_VAR_region,
+secretName = process.env.TF_VAR_db_secret,
 secret,
 decodedBinarySecret;
 var client = new AWS.SecretsManager({region: region});
