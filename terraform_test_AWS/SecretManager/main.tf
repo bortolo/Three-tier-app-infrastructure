@@ -56,11 +56,12 @@ module "db-secrets" {
   source = "../../modules_AWS/terraform-aws-secrets-manager-master"
   secrets = [
    {
-      name        = "db-secrets"
+      name        = "db-secrets-02"
       description = "db user and password"
       secret_key_value = {
         username = var.db_username
         password = var.db_password
+        db_dns = var.db_private_dns
       }
       recovery_window_in_days = 7
     },
@@ -71,6 +72,26 @@ module "db-secrets" {
 
 data "aws_secretsmanager_secret_version" "db-secret" {
   secret_id = module.db-secrets.secret_ids[0]
+}
+
+##########################################
+# IAM assumable role with custom policies
+##########################################
+module "iam_assumable_role_custom" {
+  source = "../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
+  trusted_role_arns = []
+  trusted_role_services = [
+    "ec2.amazonaws.com"
+  ]
+  create_role = true
+  create_instance_profile = true
+  role_name         = "custom"
+  role_requires_mfa = false
+  custom_role_policy_arns = [
+    "arn:aws:iam::aws:policy/SecretsManagerReadWrite",
+  ]
+
+  tags = local.user_tag
 }
 
 #######
@@ -113,6 +134,7 @@ module "ec2_FE" {
   monitoring             = false
   vpc_security_group_ids = [module.aws_security_group_FE.this_security_group_id]
   subnet_id              = tolist(data.aws_subnet_ids.all.ids)[0]
+  iam_instance_profile   = module.iam_assumable_role_custom.this_iam_instance_profile_name
 
   tags = merge(local.user_tag,local.ec2_tag)
 }

@@ -77,3 +77,8 @@ output "this_db_parameter_group_arn" {
   description = "The ARN of the db parameter group"
   value       = module.db.this_db_parameter_group_arn
 }
+
+output "secret_id" {
+  description = "The ARN of the db parameter group"
+  value       = module.db-secrets.secret_ids[0]
+}
