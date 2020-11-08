@@ -15,7 +15,8 @@ Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in
 
 | Automation | Time |
 |------|---------|
-| terraform apply | 8 min |
+| terraform apply (1st run) | 1 min |
+| terraform apply (2nd run) | 7 min |
 | ansible-playbook | 30 sec |
 | terraform destroy | 5 min |
 
