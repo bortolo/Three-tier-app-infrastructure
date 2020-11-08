@@ -4,13 +4,19 @@ Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in
 
 ![appview](./images/architecture.png)
 
-| Topic | Data |
+| Automation | Time |
 |------|---------|
-| Time to deploy (Terraform) | 8 min |
-| Time to deploy (Ansible) | 30 sec |
-| Time to destroy | 5 min |
-| Estimated cost | (?) €/h |
+| terraform apply | 8 min |
+| ansible-playbook | 30 sec |
+| terraform destroy | 5 min |
 
+| Resource | Estimated cost (without VAT) | Link |
+|------|---------|---------|
+| EC2 | 0,13 $/h | Pricing |
+| RDS | 0,2 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| Pricing |
+| SecretsManager | see Pricing | [Pricing](https://aws.amazon.com/secrets-manager/pricing/) |
+| Route53 | | Pricing |
+| Elastic IP | 0 $/h (it costs only if it is not assigned to EC2 0,05$/h)| Pricing |
 
 ## Useful links
 
