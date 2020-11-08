@@ -9,9 +9,9 @@ Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in
 |------|---------|---------|
 | EC2 | 0,13 $/h | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
 | RDS | 0,2 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
-| SecretsManager | see Pricing | [Pricing](https://aws.amazon.com/secrets-manager/pricing/) |
+| SecretsManager | <0,4$/month per secret - see pricing | [Pricing](https://aws.amazon.com/secrets-manager/pricing/) |
 | Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
-| Elastic IP | 0 $/h (it costs only if it is not assigned to EC2 0,05$/h)| [Pricing](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/) |
+| Elastic IP | 0 $/h (it costs only if it is not assigned to EC2: 0,05$/h)| [Pricing](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/) |
 
 | Automation | Time |
 |------|---------|
@@ -82,30 +82,15 @@ On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you shou
 
 | Name | Description |
 |------|---------|
-| awsusername | Aws username |
-| db_username | db username |
-| db_password | db password |
+| awsusername | Aws username to tag resources with owner |
+| db_username | username for the MySQL db |
+| db_password | password for the MySQL db |
+| db_private_dns | domain called by the node.js app to call the mysql db |
+| db_secret_name | name of the secret to store in AWS SecretsManager |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| this\_db\_instance\_address | The address of the RDS instance |
-| this\_db\_instance\_arn | The ARN of the RDS instance |
-| this\_db\_instance\_availability\_zone | The availability zone of the RDS instance |
-| this\_db\_instance\_endpoint | The connection endpoint |
-| this\_db\_instance\_hosted\_zone\_id | The canonical hosted zone ID of the DB instance (to be used in a Route 53 Alias record) |
-| this\_db\_instance\_id | The RDS instance ID |
-| this\_db\_instance\_name | The database name |
-| this\_db\_instance\_password | The database password (this password may be old, because Terraform doesn't track it after initial creation) |
-| this\_db\_instance\_port | The database port |
-| this\_db\_instance\_resource\_id | The RDS Resource ID of this instance |
-| this\_db\_instance\_status | The RDS instance status |
-| this\_db\_instance\_username | The master username for the database |
-| this\_db\_parameter\_group\_arn | The ARN of the db parameter group |
-| this\_db\_parameter\_group\_id | The db parameter group id |
-| this\_db\_subnet\_group\_arn | The ARN of the db subnet group |
-| this\_db\_subnet\_group\_id | The db subnet group name |
+No outputs
 
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
