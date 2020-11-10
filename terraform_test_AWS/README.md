@@ -25,6 +25,9 @@ This is the list of the available tests with a short description. Click on one o
 - [SecretManager](./SecretManager):
   - **Status**, work in progress
   - **Description**, xxxxx
+- [Loadbalancer](./Loadbalancer):
+  - **Status**, work in progress
+  - **Description**, xxxxx
 
 ## Getting started
 ### Install and configure terraform

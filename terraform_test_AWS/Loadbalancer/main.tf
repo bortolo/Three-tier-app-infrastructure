@@ -182,7 +182,7 @@ resource "aws_key_pair" "this" {
 module "ec2_FE" {
   source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
   name                   = "fe_server"
-  instance_count         = 3
+  instance_count         = 1
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.this.key_name
