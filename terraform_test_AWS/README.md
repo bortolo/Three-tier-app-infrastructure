@@ -1,30 +1,42 @@
 # AWS tests
 
-Here you can find many different deployment with terraform and ansible.
-We are extensively using these terraform [modules](../modules_AWS).
+Here you can find many different deployments with terraform and ansible.
+We are extensively using these terraform [modules](../modules_AWS), so please download also this folder to run with success the following examples.
 
 Have a look to [this](https://learn.hashicorp.com/tutorials/terraform/aws-build) brief guide about terraform, if you are a beginner using terraform on AWS.
 
-This is the list of the available tests with a short description. Click on one of them if you are interested to examine in depth (each test has its own README file).
+This is the list of the available tests with a short description. Click on one of them if you are interested to examine in depth.
 
-- [VPC](./VPC):
+- **[VPC](./VPC)**:
   - **Status**, completed (alpha)
   - **Description**, deploy a custom VPC and several EC2 instances to test route tables from remote workstation and inside AWS.
+  - **AWS services**, VPC, Route53, EC2.
+  - **other technologies**, terraform.
 - [IAM](./IAM):
   - **Status**, work in progress
-  - **Description**, xxxxx
+  - **Description**, create several users and groups. Assign users to groups and upload custom policies.
+  - **AWS services**, IAM.
+  - **other technologies**, terraform.
 - [RDS with local front-end server](./RDS):
   - **Status**, work in progress
-  - **Description**, xxxxx
+  - **Description**, deploy an RDS mysql instance and access it through a local node.js app.
+  - **AWS services**, RDS.
+  - **other technologies**, terraform, node.js, MySQL
 - [RDS with front-end server running on EC2 instance](./EC2andRDS):
   - **Status**, work in progress
-  - **Description**, xxxxx
+  - **Description**, deploy an RDS instance and an EC2 instance. Configure EC2 instance with a node.js app similar to the one used in the previous example.
+  - **AWS services**, Elastic IP, Route53, EC2, RDS.
+  - **other technologies**, terraform, ansible, node.js, MySQL
 - [Manage RDS DB secrets with AWS SecretsManager](./SecretManager):
   - **Status**, work in progress
-  - **Description**, xxxxx
+  - **Description**, deploy an example similar to the previous one and in addition manage the DB secrets with AWS SecretsManager.
+  - **AWS services**, SecretsManager, IAM roles, Elastic IP, Route53, EC2, RDS.
+  - **other technologies**, terraform, ansible, node.js, MySQL
 - [Deploy network loadbalancer](./Loadbalancer):
   - **Status**, work in progress
-  - **Description**, xxxxx
+  - **Description**, deploy an example similar to the previous one and in addition add a network loadbalancer in front of the EC2 instances
+  - **AWS services**, NLB, SecretsManager, IAM roles, Elastic IP, Route53, EC2, RDS.
+  - **other technologies**, terraform, ansible, node.js, MySQL
 
 ## Getting started
 ### Install and configure terraform
