@@ -1,13 +1,18 @@
 # Complete VPC architecture
 
-Configuration in this directory creates set of VPC resources which may be sufficient for staging or production environment. This example has been developed starting from [simple-vpc](../../modules_AWS/terraform-aws-vpc-master/examples/complete-vpc).
+Deploy a custom VPC with Route53 records and simple EC2 instances to test ping and ssh authentication.
 
-We are trying to replicate the following network layout (with some changes):
-![AWS network diagram](https://aws-quickstart.github.io/quickstart-aws-vpc/images/architecture_diagram.png)
+ ![appview](./images/architecture.png)
 
-Main changes:
-- This network layout is deployed in eu-central-1 region that has just three availability zones.
-- We changes Private Subnet B with Database subnet
+ | Resource | Estimated cost (without VAT) | Link |
+ |------|---------|---------|
+ | EC2 | 0,13x3 $/h | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
+ | Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
+
+ | Automation | Time |
+ |------|---------|
+ | terraform apply | 2min 30sec |
+ | terraform destroy | 1min 30sec |
 
 ## Useful links
 
@@ -21,6 +26,7 @@ Main changes:
 
 ## Usage
 
+Generete your [public ssh key](https://www.ssh.com/ssh/keygen/) and update `main.tf` file with your `id_rsa.pub` in the field `public_key` of the `aws_key_pair` resource.
 To run this example you need to execute:
 
 ```bash
@@ -29,7 +35,13 @@ $ terraform plan
 $ terraform apply
 ```
 
-Note that this example may create resources which can cost money (AWS Elastic IP, for example). Run `terraform destroy` when you don't need these resources.
+Note that this example may create resources which can cost money. Run `terraform destroy` when you don't need these resources.
+
+### How to test it
+
+All the EC2 instances have public_ip enabled but only public_subnet is routed to the internet gateway. Therefore you will be able to reach only the public instance from your workstation (with both `ssh` or `ping` command).
+
+If you log-in the public instance you can also try the Route53 records. Run the `ping` command using `database.example.com.private_host_zone` or `private.example.com.private_host_zone` instead of the IP address of the instances.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
