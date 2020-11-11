@@ -1,4 +1,4 @@
-# Complete VPC architecture
+# VPC architecture
 
 Deploy a custom VPC with Route53 records and simple EC2 instances to test ping and ssh authentication.
 
