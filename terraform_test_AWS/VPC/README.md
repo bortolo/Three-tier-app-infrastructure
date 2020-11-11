@@ -65,19 +65,11 @@ No input.
 
 | Name | Description |
 |------|-------------|
-| cgw\_ids | List of IDs of Customer Gateway |
-| database\_subnets | List of IDs of database subnets |
-| elasticache\_subnets | List of IDs of elasticache subnets |
-| intra\_subnets | List of IDs of intra subnets |
-| nat\_public\_ips | List of public Elastic IPs created for AWS NAT Gateway |
-| private\_subnets | List of IDs of private subnets |
-| public\_subnets | List of IDs of public subnets |
-| redshift\_subnets | List of IDs of redshift subnets |
-| this\_customer\_gateway | Map of Customer Gateway attributes |
-| vpc\_endpoint\_ssm\_dns\_entry | The DNS entries for the VPC Endpoint for SSM. |
-| vpc\_endpoint\_ssm\_id | The ID of VPC endpoint for SSM |
-| vpc\_endpoint\_ssm\_network\_interface\_ids | One or more network interfaces for the VPC Endpoint for SSM. |
-| vpc\_id | The ID of the VPC |
-
+| public_instance_ip | public ip of the public instance |
+| private_instance_ip | public ip of the private instance |
+| database_instance_ip | public ip of the database instance |
+| public_instance_private_ip | private ip of the public instance |
+| private_instance_private_ip | private ip of the private instance |
+| database_instance_private_ip | private ip of the database instance |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
