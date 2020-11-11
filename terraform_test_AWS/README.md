@@ -7,25 +7,22 @@ Have a look to [this](https://learn.hashicorp.com/tutorials/terraform/aws-build)
 
 This is the list of the available tests with a short description. Click on one of them if you are interested to examine in depth (each test has its own README file).
 
-- [DNS](./DNS);
-  - **Status**, work in progress
-  - **Description**, xxxxx
+- [VPC](./VPC):
+  - **Status**, completed (alpha)
+  - **Description**, deploy a custom VPC and several EC2 instances to test route tables from remote workstation and inside AWS.
 - [IAM](./IAM):
   - **Status**, work in progress
   - **Description**, xxxxx
-- [VPC](./VPC):
+- [RDS with local front-end server](./RDS):
   - **Status**, work in progress
   - **Description**, xxxxx
-- [RDS](./RDS):
+- [RDS with front-end server running on EC2 instance](./EC2andRDS):
   - **Status**, work in progress
   - **Description**, xxxxx
-- [EC2 + RDS](./EC2andRDS):
+- [Manage RDS DB secrets with AWS SecretsManager](./SecretManager):
   - **Status**, work in progress
   - **Description**, xxxxx
-- [SecretManager](./SecretManager):
-  - **Status**, work in progress
-  - **Description**, xxxxx
-- [Loadbalancer](./Loadbalancer):
+- [Deploy network loadbalancer](./Loadbalancer):
   - **Status**, work in progress
   - **Description**, xxxxx
 
