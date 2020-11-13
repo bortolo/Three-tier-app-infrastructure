@@ -31,24 +31,38 @@ module "vpc" {
   cidr   = "10.0.0.0/16"
   azs    = ["eu-central-1a","eu-central-1b","eu-central-1c"]
 
-  private_subnets = ["10.0.0.0/19","10.0.32.0/19","10.0.64.0/19"]
-  private_subnet_tags = {
-    subnet_type = "private"
-  }
-
   public_subnets = ["10.0.128.0/20","10.0.144.0/20","10.0.160.0/20"]
   public_subnet_tags = {
     subnet_type = "public"
   }
+
+  database_subnets = ["10.0.176.0/21","10.0.184.0/21","10.0.192.0/21"]
+  database_subnet_tags = {
+    subnet_type = "database"
+  }
+
+  enable_dhcp_options              = true
+  dhcp_options_domain_name         = "eu-central-1.compute.internal"
+
+  create_database_subnet_group = true
+
 /*
   enable_rds_endpoint = true
   rds_endpoint_security_group_ids = [module.aws_security_group_db.this_security_group_id]
   rds_endpoint_private_dns_enabled = true
-
+*/
   enable_dns_hostnames = true
   enable_dns_support   = true
-  */
+
   tags = local.user_tag
+}
+
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnet_ids" "all" {
+  vpc_id = data.aws_vpc.default.id
 }
 
 ##############
@@ -84,7 +98,7 @@ data "aws_secretsmanager_secret_version" "db-secret" {
 resource "aws_route53_zone" "private" {
   name = "private_host_zone"
   vpc {
-    vpc_id = module.vpc.vpc_id
+    vpc_id = data.aws_vpc.default.id //module.vpc.vpc_id
   }
 
   tags = local.user_tag
@@ -94,9 +108,10 @@ resource "aws_route53_record" "database" {
   zone_id = aws_route53_zone.private.zone_id
   name = var.db_private_dns
   type = "CNAME"
-  ttl = "300"
+  ttl = "5"
   records = ["${module.db.this_db_instance_address}"]
 }
+
 
 ##########################################
 # IAM assumable role with custom policies
@@ -213,11 +228,61 @@ module "ec2_FE" {
   tags = merge(local.user_tag,local.ec2_tag)
 }
 
+module "ec2_FE2" {
+  source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  name                   = "fe_server2"
+  instance_count         = 1
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t2.micro"
+  key_name               = aws_key_pair.this.key_name
+  associate_public_ip_address = true //use this feature only for test/dev purposes
+  monitoring             = false
+  vpc_security_group_ids = [module.aws_security_group_FE2.this_security_group_id]
+  subnet_id              = tolist(data.aws_subnet_ids.all.ids)[0]
+  iam_instance_profile   = module.iam_assumable_role_custom.this_iam_instance_profile_name
+
+  tags = merge(local.user_tag,local.ec2_tag)
+}
+
 module "aws_security_group_FE" {
   source      = "../../modules_AWS/terraform-aws-security-group-master"
   name        = "FE_security_group"
   description = "Security group for front-end servers"
   vpc_id      = module.vpc.vpc_id
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 8080
+      to_port     = 8080
+      protocol    = "tcp"
+      description = "http port"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      description = "SSH port"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+  egress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = -1
+      description = "allow all outbound"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+
+  tags = merge(local.user_tag,local.security_group_tag_ec2)
+}
+
+module "aws_security_group_FE2" {
+  source      = "../../modules_AWS/terraform-aws-security-group-master"
+  name        = "FE_security_group"
+  description = "Security group for front-end servers"
+  vpc_id      = data.aws_vpc.default.id
   ingress_with_cidr_blocks = [
     {
       from_port   = 8080
@@ -267,7 +332,56 @@ module "db" {
   backup_window      = "03:00-06:00"
   publicly_accessible = false
   backup_retention_period = 0
-  subnet_ids = module.vpc.public_subnets
+  db_subnet_group_name = module.vpc.database_subnet_group
+  family = "mysql8.0"
+  major_engine_version = "8.0"
+
+  tags = local.user_tag
+}
+
+module "db2" {
+  source = "../../modules_AWS/terraform-aws-rds-master/"
+  identifier = "demodb2"
+  engine            = "mysql"
+  engine_version    = "8.0.20"
+  instance_class    = "db.t2.micro"
+  allocated_storage = 5
+  storage_encrypted = false
+  name     = "demodb2"
+  username = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
+  password = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
+  port     = "3306"
+  vpc_security_group_ids = [module.aws_security_group_db.this_security_group_id]
+  maintenance_window = "Mon:00:00-Mon:03:00"
+  backup_window      = "03:00-06:00"
+  publicly_accessible = false
+  backup_retention_period = 0
+  //db_subnet_group_name = module.vpc.database_subnet_group
+  subnet_ids=module.vpc.public_subnets
+  family = "mysql8.0"
+  major_engine_version = "8.0"
+
+  tags = local.user_tag
+}
+
+module "db3" {
+  source = "../../modules_AWS/terraform-aws-rds-master/"
+  identifier = "demodb3"
+  engine            = "mysql"
+  engine_version    = "8.0.20"
+  instance_class    = "db.t2.micro"
+  allocated_storage = 5
+  storage_encrypted = false
+  name     = "demodb3"
+  username = var.db_username
+  password = var.db_password
+  port     = "3306"
+  vpc_security_group_ids = [module.aws_security_group_db3.this_security_group_id]
+  maintenance_window = "Mon:00:00-Mon:03:00"
+  backup_window      = "03:00-06:00"
+  publicly_accessible = false
+  backup_retention_period = 0
+  subnet_ids = data.aws_subnet_ids.all.ids
   family = "mysql8.0"
   major_engine_version = "8.0"
 
@@ -279,6 +393,34 @@ module "aws_security_group_db" {
   name        = "db_security_group"
   description = "Security group for db mysql"
   vpc_id      = module.vpc.vpc_id
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = -1
+      description = "allo all inbound"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+  egress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = -1
+      description = "allow all outbound"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+
+  tags = merge(local.user_tag,local.security_group_tag_db)
+}
+
+
+module "aws_security_group_db3" {
+  source      = "../../modules_AWS/terraform-aws-security-group-master"
+  name        = "db_security_group"
+  description = "Security group for db mysql"
+  vpc_id      = data.aws_vpc.default.id
   ingress_with_cidr_blocks = [
     {
       from_port   = 0
