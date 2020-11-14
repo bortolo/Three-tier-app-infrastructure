@@ -7,10 +7,10 @@ locals {
     Owner = var.awsusername
     Test  = "Backup"
   }
-  ec2_tag_public = {server_type = "public"}
-  ec2_tag_private = {server_type = "private"}
-  ec2_tag_database = {server_type = "database"}
-  security_group_tag_ec2 = {scope = "security_server"}
+  ec2_tag_public         = { server_type = "public" }
+  ec2_tag_private        = { server_type = "private" }
+  ec2_tag_database       = { server_type = "database" }
+  security_group_tag_ec2 = { scope = "security_server" }
 }
 
 
@@ -51,7 +51,7 @@ module "aws_backup_example" {
   #  - Selection-2: Only by resources
   selections = [
     {
-      name      = "selection-1"
+      name = "selection-1"
       //resources = ["arn:aws:dynamodb:us-east-1:123456789101:table/mydynamodb-table1"]
       selection_tag = {
         type  = "STRINGEQUALS"

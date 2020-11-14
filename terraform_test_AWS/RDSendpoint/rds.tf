@@ -6,74 +6,74 @@
 #####
 
 module "db_1" {
-  source = "../../modules_AWS/terraform-aws-rds-master/"
-  identifier = "demodb1"
-  engine            = "mysql"
-  engine_version    = "8.0.20"
-  instance_class    = "db.t2.micro"
-  allocated_storage = 5
-  storage_encrypted = false
-  name     = "demodb1"
-  username = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
-  password = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
-  port     = "3306"
-  vpc_security_group_ids = [module.aws_security_group_db_custom.this_security_group_id]
-  maintenance_window = "Mon:00:00-Mon:03:00"
-  backup_window      = "03:00-06:00"
-  publicly_accessible = false
+  source                  = "../../modules_AWS/terraform-aws-rds-master/"
+  identifier              = "demodb1"
+  engine                  = "mysql"
+  engine_version          = "8.0.20"
+  instance_class          = "db.t2.micro"
+  allocated_storage       = 5
+  storage_encrypted       = false
+  name                    = "demodb1"
+  username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
+  password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
+  port                    = "3306"
+  vpc_security_group_ids  = [module.aws_security_group_db_custom.this_security_group_id]
+  maintenance_window      = "Mon:00:00-Mon:03:00"
+  backup_window           = "03:00-06:00"
+  publicly_accessible     = false
   backup_retention_period = 0
-  db_subnet_group_name = module.vpc.database_subnet_group
-  family = "mysql8.0"
-  major_engine_version = "8.0"
+  db_subnet_group_name    = module.vpc.database_subnet_group
+  family                  = "mysql8.0"
+  major_engine_version    = "8.0"
 
   tags = local.user_tag
 }
 
 module "db_2" {
-  source = "../../modules_AWS/terraform-aws-rds-master/"
-  identifier = "demodb2"
-  engine            = "mysql"
-  engine_version    = "8.0.20"
-  instance_class    = "db.t2.micro"
-  allocated_storage = 5
-  storage_encrypted = false
-  name     = "demodb2"
-  username = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
-  password = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
-  port     = "3306"
-  vpc_security_group_ids = [module.aws_security_group_db_custom.this_security_group_id]
-  maintenance_window = "Mon:00:00-Mon:03:00"
-  backup_window      = "03:00-06:00"
-  publicly_accessible = false
+  source                  = "../../modules_AWS/terraform-aws-rds-master/"
+  identifier              = "demodb2"
+  engine                  = "mysql"
+  engine_version          = "8.0.20"
+  instance_class          = "db.t2.micro"
+  allocated_storage       = 5
+  storage_encrypted       = false
+  name                    = "demodb2"
+  username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
+  password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
+  port                    = "3306"
+  vpc_security_group_ids  = [module.aws_security_group_db_custom.this_security_group_id]
+  maintenance_window      = "Mon:00:00-Mon:03:00"
+  backup_window           = "03:00-06:00"
+  publicly_accessible     = false
   backup_retention_period = 0
   //db_subnet_group_name = module.vpc.database_subnet_group
-  subnet_ids=module.vpc.public_subnets
-  family = "mysql8.0"
+  subnet_ids           = module.vpc.public_subnets
+  family               = "mysql8.0"
   major_engine_version = "8.0"
 
   tags = local.user_tag
 }
 
 module "db_3" {
-  source = "../../modules_AWS/terraform-aws-rds-master/"
-  identifier = "demodb3"
-  engine            = "mysql"
-  engine_version    = "8.0.20"
-  instance_class    = "db.t2.micro"
-  allocated_storage = 5
-  storage_encrypted = false
-  name     = "demodb3"
-  username = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
-  password = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
-  port     = "3306"
-  vpc_security_group_ids = [module.aws_security_group_db_default.this_security_group_id]
-  maintenance_window = "Mon:00:00-Mon:03:00"
-  backup_window      = "03:00-06:00"
-  publicly_accessible = false
+  source                  = "../../modules_AWS/terraform-aws-rds-master/"
+  identifier              = "demodb3"
+  engine                  = "mysql"
+  engine_version          = "8.0.20"
+  instance_class          = "db.t2.micro"
+  allocated_storage       = 5
+  storage_encrypted       = false
+  name                    = "demodb3"
+  username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
+  password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
+  port                    = "3306"
+  vpc_security_group_ids  = [module.aws_security_group_db_default.this_security_group_id]
+  maintenance_window      = "Mon:00:00-Mon:03:00"
+  backup_window           = "03:00-06:00"
+  publicly_accessible     = false
   backup_retention_period = 0
-  subnet_ids = data.aws_subnet_ids.all.ids
-  family = "mysql8.0"
-  major_engine_version = "8.0"
+  subnet_ids              = data.aws_subnet_ids.all.ids
+  family                  = "mysql8.0"
+  major_engine_version    = "8.0"
 
   tags = local.user_tag
 }
@@ -102,7 +102,7 @@ module "aws_security_group_db_custom" {
     },
   ]
 
-  tags = merge(local.user_tag,local.security_group_tag_db)
+  tags = merge(local.user_tag, local.security_group_tag_db)
 }
 
 
@@ -130,5 +130,5 @@ module "aws_security_group_db_default" {
     },
   ]
 
-  tags = merge(local.user_tag,local.security_group_tag_db)
+  tags = merge(local.user_tag, local.security_group_tag_db)
 }

@@ -19,48 +19,48 @@ resource "aws_key_pair" "this" {
 }
 
 module "ec2_public" {
-  source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
-  name                   = "public_server"
-  instance_count         = 1
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t2.micro"
-  key_name               = aws_key_pair.this.key_name
+  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  name                        = "public_server"
+  instance_count              = 1
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.this.key_name
   associate_public_ip_address = true //use this feature only for test/dev purposes
-  monitoring             = false
-  vpc_security_group_ids = [module.aws_security_group_server.this_security_group_id]
-  subnet_id              = tolist(module.vpc.public_subnets)[0]
+  monitoring                  = false
+  vpc_security_group_ids      = [module.aws_security_group_server.this_security_group_id]
+  subnet_id                   = tolist(module.vpc.public_subnets)[0]
 
-  tags = merge(local.user_tag,local.ec2_tag_public)
+  tags = merge(local.user_tag, local.ec2_tag_public)
 }
 
 module "ec2_private" {
-  source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
-  name                   = "private_server"
-  instance_count         = 1
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t2.micro"
-  key_name               = aws_key_pair.this.key_name
+  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  name                        = "private_server"
+  instance_count              = 1
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.this.key_name
   associate_public_ip_address = true //use this feature only for test/dev purposes
-  monitoring             = false
-  vpc_security_group_ids = [module.aws_security_group_server.this_security_group_id]
-  subnet_id              = tolist(module.vpc.private_subnets)[0]
+  monitoring                  = false
+  vpc_security_group_ids      = [module.aws_security_group_server.this_security_group_id]
+  subnet_id                   = tolist(module.vpc.private_subnets)[0]
 
-  tags = merge(local.user_tag,local.ec2_tag_private)
+  tags = merge(local.user_tag, local.ec2_tag_private)
 }
 
 module "ec2_database" {
-  source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
-  name                   = "database_server"
-  instance_count         = 1
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t2.micro"
-  key_name               = aws_key_pair.this.key_name
+  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  name                        = "database_server"
+  instance_count              = 1
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.this.key_name
   associate_public_ip_address = true //use this feature only for test/dev purposes
-  monitoring             = false
-  vpc_security_group_ids = [module.aws_security_group_server.this_security_group_id]
-  subnet_id              = tolist(module.vpc.database_subnets)[0]
+  monitoring                  = false
+  vpc_security_group_ids      = [module.aws_security_group_server.this_security_group_id]
+  subnet_id                   = tolist(module.vpc.database_subnets)[0]
 
-  tags = merge(local.user_tag,local.ec2_tag_database)
+  tags = merge(local.user_tag, local.ec2_tag_database)
 }
 
 module "aws_security_group_server" {
@@ -94,5 +94,5 @@ module "aws_security_group_server" {
     },
   ]
 
-  tags = merge(local.user_tag,local.security_group_tag_ec2)
+  tags = merge(local.user_tag, local.security_group_tag_ec2)
 }

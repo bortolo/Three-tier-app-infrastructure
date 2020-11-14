@@ -8,14 +8,14 @@ locals {
     Test  = "EC2andRDS"
   }
   security_group_tag_db = {
-                        scope = "db_server"
-                        }
-  ec2_tag =  {
-              server_type = "fe_server"
-            }
+    scope = "db_server"
+  }
+  ec2_tag = {
+    server_type = "fe_server"
+  }
   security_group_tag_ec2 = {
-                        scope = "fe_server"
-                        }
+    scope = "fe_server"
+  }
 }
 
 #####################################
@@ -43,9 +43,9 @@ resource "aws_route53_zone" "private" {
 
 resource "aws_route53_record" "database" {
   zone_id = aws_route53_zone.private.zone_id
-  name = var.db_private_dns
-  type = "CNAME"
-  ttl = "300"
+  name    = var.db_private_dns
+  type    = "CNAME"
+  ttl     = "300"
   records = ["${module.db.this_db_instance_address}"]
 }
 
@@ -55,17 +55,17 @@ resource "aws_route53_record" "database" {
 module "db-secrets" {
   source = "../../modules_AWS/terraform-aws-secrets-manager-master"
   secrets = [
-   {
+    {
       name        = var.db_secret_name
       description = "db user and password"
       secret_key_value = {
         username = var.db_username
         password = var.db_password
-        db_dns = var.db_private_dns
+        db_dns   = var.db_private_dns
       }
       recovery_window_in_days = 7
     },
- ]
+  ]
 
   tags = local.user_tag
 }
@@ -78,15 +78,15 @@ data "aws_secretsmanager_secret_version" "db-secret" {
 # IAM assumable role with custom policies
 ##########################################
 module "iam_assumable_role_custom" {
-  source = "../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
+  source            = "../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
   trusted_role_arns = []
   trusted_role_services = [
     "ec2.amazonaws.com"
   ]
-  create_role = true
+  create_role             = true
   create_instance_profile = true
-  role_name         = "custom"
-  role_requires_mfa = false
+  role_name               = "custom"
+  role_requires_mfa       = false
   custom_role_policy_arns = [
     "arn:aws:iam::aws:policy/SecretsManagerReadWrite",
   ]
@@ -136,7 +136,7 @@ module "ec2_FE" {
   subnet_id              = tolist(data.aws_subnet_ids.all.ids)[0]
   iam_instance_profile   = module.iam_assumable_role_custom.this_iam_instance_profile_name
 
-  tags = merge(local.user_tag,local.ec2_tag)
+  tags = merge(local.user_tag, local.ec2_tag)
 }
 
 module "aws_security_group_FE" {
@@ -170,32 +170,32 @@ module "aws_security_group_FE" {
     },
   ]
 
-  tags = merge(local.user_tag,local.security_group_tag_ec2)
+  tags = merge(local.user_tag, local.security_group_tag_ec2)
 }
 
 #####
 # DB
 #####
 module "db" {
-  source = "../../modules_AWS/terraform-aws-rds-master/"
-  identifier = "demodb"
-  engine            = "mysql"
-  engine_version    = "8.0.20"
-  instance_class    = "db.t2.micro"
-  allocated_storage = 5
-  storage_encrypted = false
-  name     = "demodb"
-  username = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
-  password = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
-  port     = "3306"
-  vpc_security_group_ids = [module.aws_security_group_db.this_security_group_id]
-  maintenance_window = "Mon:00:00-Mon:03:00"
-  backup_window      = "03:00-06:00"
-  publicly_accessible = false
+  source                  = "../../modules_AWS/terraform-aws-rds-master/"
+  identifier              = "demodb"
+  engine                  = "mysql"
+  engine_version          = "8.0.20"
+  instance_class          = "db.t2.micro"
+  allocated_storage       = 5
+  storage_encrypted       = false
+  name                    = "demodb"
+  username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
+  password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
+  port                    = "3306"
+  vpc_security_group_ids  = [module.aws_security_group_db.this_security_group_id]
+  maintenance_window      = "Mon:00:00-Mon:03:00"
+  backup_window           = "03:00-06:00"
+  publicly_accessible     = false
   backup_retention_period = 0
-  subnet_ids = data.aws_subnet_ids.all.ids
-  family = "mysql8.0"
-  major_engine_version = "8.0"
+  subnet_ids              = data.aws_subnet_ids.all.ids
+  family                  = "mysql8.0"
+  major_engine_version    = "8.0"
 
   tags = local.user_tag
 }
@@ -224,5 +224,5 @@ module "aws_security_group_db" {
     },
   ]
 
-  tags = merge(local.user_tag,local.security_group_tag_db)
+  tags = merge(local.user_tag, local.security_group_tag_db)
 }

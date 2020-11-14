@@ -33,51 +33,51 @@ resource "aws_key_pair" "this_2" {
 }
 
 module "ec2_1" {
-  source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
-  name                   = "server_1"
-  instance_count         = 1
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t2.micro"
-  key_name               = aws_key_pair.this.key_name
+  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  name                        = "server_1"
+  instance_count              = 1
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.this.key_name
   associate_public_ip_address = true //use this feature only for test/dev purposes
-  monitoring             = false
-  vpc_security_group_ids = [module.aws_security_group_custom.this_security_group_id]
-  subnet_id              = module.vpc.public_subnets[0]
-  iam_instance_profile   = module.iam_assumable_role_custom.this_iam_instance_profile_name
+  monitoring                  = false
+  vpc_security_group_ids      = [module.aws_security_group_custom.this_security_group_id]
+  subnet_id                   = module.vpc.public_subnets[0]
+  iam_instance_profile        = module.iam_assumable_role_custom.this_iam_instance_profile_name
 
-  tags = merge(local.user_tag,local.ec2_tag)
+  tags = merge(local.user_tag, local.ec2_tag)
 }
 
 module "ec2_2" {
-  source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
-  name                   = "server_2"
-  instance_count         = 1
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t2.micro"
-  key_name               = aws_key_pair.this_2.key_name
+  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  name                        = "server_2"
+  instance_count              = 1
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.this_2.key_name
   associate_public_ip_address = true //use this feature only for test/dev purposes
-  monitoring             = false
-  vpc_security_group_ids = [module.aws_security_group_custom.this_security_group_id]
-  subnet_id              = module.vpc.database_subnets[0]
-  iam_instance_profile   = module.iam_assumable_role_custom.this_iam_instance_profile_name
+  monitoring                  = false
+  vpc_security_group_ids      = [module.aws_security_group_custom.this_security_group_id]
+  subnet_id                   = module.vpc.database_subnets[0]
+  iam_instance_profile        = module.iam_assumable_role_custom.this_iam_instance_profile_name
 
-  tags = merge(local.user_tag,local.ec2_tag)
+  tags = merge(local.user_tag, local.ec2_tag)
 }
 
 module "ec2_3" {
-  source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
-  name                   = "server_3"
-  instance_count         = 1
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t2.micro"
-  key_name               = aws_key_pair.this.key_name
+  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  name                        = "server_3"
+  instance_count              = 1
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t2.micro"
+  key_name                    = aws_key_pair.this.key_name
   associate_public_ip_address = true //use this feature only for test/dev purposes
-  monitoring             = false
-  vpc_security_group_ids = [module.aws_security_group_default.this_security_group_id]
-  subnet_id              = tolist(data.aws_subnet_ids.all.ids)[0]
-  iam_instance_profile   = module.iam_assumable_role_custom.this_iam_instance_profile_name
+  monitoring                  = false
+  vpc_security_group_ids      = [module.aws_security_group_default.this_security_group_id]
+  subnet_id                   = tolist(data.aws_subnet_ids.all.ids)[0]
+  iam_instance_profile        = module.iam_assumable_role_custom.this_iam_instance_profile_name
 
-  tags = merge(local.user_tag,local.ec2_tag)
+  tags = merge(local.user_tag, local.ec2_tag)
 }
 
 module "aws_security_group_custom" {
@@ -111,7 +111,7 @@ module "aws_security_group_custom" {
     },
   ]
 
-  tags = merge(local.user_tag,local.security_group_tag_ec2)
+  tags = merge(local.user_tag, local.security_group_tag_ec2)
 }
 
 module "aws_security_group_default" {
@@ -145,5 +145,5 @@ module "aws_security_group_default" {
     },
   ]
 
-  tags = merge(local.user_tag,local.security_group_tag_ec2)
+  tags = merge(local.user_tag, local.security_group_tag_ec2)
 }

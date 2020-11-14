@@ -8,8 +8,8 @@ locals {
     Test  = "DNS"
   }
   security_group_tag = {
-                        scope = "db_server"
-                        }
+    scope = "db_server"
+  }
 }
 
 ##############################################################
@@ -64,7 +64,7 @@ module "db" {
 
   # DB option group
   major_engine_version = "8.0"
-  
+
 }
 
 module "aws_security_group_db" {
@@ -90,5 +90,5 @@ module "aws_security_group_db" {
       cidr_blocks = "0.0.0.0/0"
     },
   ]
-  tags = merge(local.user_tag,local.security_group_tag)
+  tags = merge(local.user_tag, local.security_group_tag)
 }

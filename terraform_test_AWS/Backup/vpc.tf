@@ -34,7 +34,7 @@ module "vpc" {
   single_nat_gateway     = false
   one_nat_gateway_per_az = false
 
-  enable_vpn_gateway = false
+  enable_vpn_gateway  = false
   enable_dhcp_options = true
 
   tags = local.user_tag
