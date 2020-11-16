@@ -1,0 +1,85 @@
+# RDS usage - WIP
+
+Deploy a EC2 with a node.js app and a mySQL RDS instance.
+
+![appview](./images/architecture.png)
+
+| Topic | Data |
+|------|---------|
+| Time to deploy (Terraform) | 8 min |
+| Time to deploy (Ansible) | 30 sec |
+| Time to destroy | 5 min |
+| Estimated cost | 0,05 €/h |
+
+## Useful links
+
+[AWS RDS site](https://docs.aws.amazon.com/rds/index.html?nc2=h_ql_doc_rds)
+
+## Usage
+
+### Set db Credentials
+
+Set user and password in `set_db_credentials.sh` script and than run it
+```
+. ./set_db_credentials.sh
+```
+
+Set also `config.service` and `configure_nodejs.yml` with the same inputs of `set_db_credentials.sh`.
+
+Generete your [public ssh key](https://www.ssh.com/ssh/keygen/) and update `main.tf` file with your `id_rsa.pub` in the field `public_key` of the `aws_key_pair` resource.
+
+Now you can deploy the ec2 and the db instance with terraform.
+
+### Deploy EC2 and RDS instance
+
+To run this example you need to execute:
+
+```
+$ terraform init
+$ terraform plan
+$ terraform apply
+```
+
+Note that this example may create resources which can cost money (AWS Elastic IP, for example). Run `terraform destroy` when you don't need these resources.
+
+### Deploy node.js app
+
+Before this step you have to deploy the EC2 and the RDS mySQL instance.
+
+If you already updated both `config.service` and `configure_nodejs.yml` just run the following command from the `playbooks` folder.
+```
+ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_fe_server
+```
+
+On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you should see a screen like this (with zero rows because db is still empty)
+
+![appview](./images/appview.png)
+
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.21 |
+| aws | >= 2.68 |
+| ansible | >= 2.9.1 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| aws | >= 2.68 |
+
+## Inputs
+
+| Name | Description |
+|------|---------|
+| awsusername | Aws username |
+| db_username | db username |
+| db_password | db password |
+| db_private_dns | db private dns name |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| ec2_public_ip | The public IP of the EC2 instance |
