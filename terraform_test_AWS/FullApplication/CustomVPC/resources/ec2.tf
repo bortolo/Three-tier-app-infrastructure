@@ -5,6 +5,36 @@
 # ec_3 is in default VPC in public subnet
 #######
 
+provider "aws" {
+  region = "eu-central-1"
+}
+
+locals {
+  user_tag = {
+    Owner = var.awsusername
+    Test  = "RDS endpoint"
+  }
+  security_group_tag_db     = { scope = "db_server" }
+  ec2_tag                   = { server_type = "fe_server" }
+  security_group_tag_ec2    = { scope = "fe_server" }
+  database_route_table_tags = { type = "RDS db" }
+}
+
+################################################################################
+# Data sources to get default VPC and subnets
+################################################################################
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnet_ids" "all" {
+  vpc_id = data.aws_vpc.default.id
+}
+
+################################################################################
+# EC2
+################################################################################
+
 data "aws_ami" "ubuntu" {
   most_recent = true
   filter {
@@ -33,7 +63,7 @@ resource "aws_key_pair" "this_2" {
 }
 
 module "ec2_1" {
-  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  source                      = "../../../../modules_AWS/terraform-aws-ec2-instance-master"
   name                        = "server_1"
   instance_count              = 1
   ami                         = data.aws_ami.ubuntu.id
@@ -49,7 +79,7 @@ module "ec2_1" {
 }
 
 module "ec2_2" {
-  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  source                      = "../../../../modules_AWS/terraform-aws-ec2-instance-master"
   name                        = "server_2"
   instance_count              = 1
   ami                         = data.aws_ami.ubuntu.id
@@ -65,7 +95,7 @@ module "ec2_2" {
 }
 
 module "ec2_3" {
-  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  source                      = "../../../../modules_AWS/terraform-aws-ec2-instance-master"
   name                        = "server_3"
   instance_count              = 1
   ami                         = data.aws_ami.ubuntu.id
@@ -81,7 +111,7 @@ module "ec2_3" {
 }
 
 module "aws_security_group_custom" {
-  source      = "../../modules_AWS/terraform-aws-security-group-master"
+  source      = "../../../../modules_AWS/terraform-aws-security-group-master"
   name        = "FE_security_group"
   description = "Security group for front-end servers"
   vpc_id      = module.vpc.vpc_id
@@ -115,7 +145,7 @@ module "aws_security_group_custom" {
 }
 
 module "aws_security_group_default" {
-  source      = "../../modules_AWS/terraform-aws-security-group-master"
+  source      = "../../../../modules_AWS/terraform-aws-security-group-master"
   name        = "FE_security_group"
   description = "Security group for front-end servers"
   vpc_id      = data.aws_vpc.default.id

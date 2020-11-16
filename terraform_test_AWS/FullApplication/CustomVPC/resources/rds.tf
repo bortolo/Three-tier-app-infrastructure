@@ -5,9 +5,48 @@
 # db_3 is in default VPC in public subnet
 #####
 
+################################################################################
+# Route53
+################################################################################
+resource "aws_route53_zone" "private" {
+  name = "private_host_zone"
+  vpc {
+    vpc_id = var.vpc_id
+  }
+
+  tags = local.user_tag
+}
+
+resource "aws_route53_record" "database_1" {
+  zone_id = aws_route53_zone.private.zone_id
+  name    = "${var.db_private_dns}_1"
+  type    = "CNAME"
+  ttl     = "300"
+  records = ["${module.db_1.this_db_instance_address}"]
+}
+
+resource "aws_route53_record" "database_2" {
+  zone_id = aws_route53_zone.private.zone_id
+  name    = "${var.db_private_dns}_2"
+  type    = "CNAME"
+  ttl     = "300"
+  records = ["${module.db_2.this_db_instance_address}"]
+}
+
+resource "aws_route53_record" "database_3" {
+  zone_id = aws_route53_zone.private.zone_id
+  name    = "${var.db_private_dns}_3"
+  type    = "CNAME"
+  ttl     = "300"
+  records = ["${module.db_3.this_db_instance_address}"]
+}
+
+################################################################################
+# DBs
+################################################################################
 
 module "db_1" {
-  source                  = "../../modules_AWS/terraform-aws-rds-master/"
+  source                  = "../../../../modules_AWS/terraform-aws-rds-master/"
   identifier              = "demodb1"
   engine                  = "mysql"
   engine_version          = "8.0.20"
@@ -32,7 +71,7 @@ module "db_1" {
 
 
 module "db_2" {
-  source                  = "../../modules_AWS/terraform-aws-rds-master/"
+  source                  = "../../../../modules_AWS/terraform-aws-rds-master/"
   identifier              = "demodb2"
   engine                  = "mysql"
   engine_version          = "8.0.20"
@@ -57,7 +96,7 @@ module "db_2" {
 }
 
 module "db_3" {
-  source                  = "../../modules_AWS/terraform-aws-rds-master/"
+  source                  = "../../../../modules_AWS/terraform-aws-rds-master/"
   identifier              = "demodb3"
   engine                  = "mysql"
   engine_version          = "8.0.20"
@@ -81,7 +120,7 @@ module "db_3" {
 }
 
 module "aws_security_group_db_custom" {
-  source      = "../../modules_AWS/terraform-aws-security-group-master"
+  source      = "../../../../modules_AWS/terraform-aws-security-group-master"
   name        = "db_security_group_custom"
   description = "Security group for db mysql in custom VPC"
   vpc_id      = module.vpc.vpc_id
@@ -109,7 +148,7 @@ module "aws_security_group_db_custom" {
 
 
 module "aws_security_group_db_default" {
-  source      = "../../modules_AWS/terraform-aws-security-group-master"
+  source      = "../../../../modules_AWS/terraform-aws-security-group-master"
   name        = "db_security_group_default"
   description = "Security group for db mysql in default VPC"
   vpc_id      = data.aws_vpc.default.id

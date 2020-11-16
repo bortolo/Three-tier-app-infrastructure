@@ -17,7 +17,7 @@ locals {
 # Data sources to create custom VPC and custom subnets (public and database)
 ################################################################################
 module "vpc" {
-  source = "../../modules_AWS/terraform-aws-vpc-master"
+  source = "../../../modules_AWS/terraform-aws-vpc-master"
   name   = "RDSendpoint"
   cidr   = "10.0.0.0/16"
   azs    = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
@@ -58,7 +58,7 @@ data "aws_subnet_ids" "all" {
 # Secret Manager
 ################################################################################
 module "db-secrets" {
-  source = "../../modules_AWS/terraform-aws-secrets-manager-master"
+  source = "../../../modules_AWS/terraform-aws-secrets-manager-master"
   secrets = [
     {
       name        = var.db_secret_name
@@ -75,54 +75,11 @@ module "db-secrets" {
   tags = local.user_tag
 }
 
-data "aws_secretsmanager_secret_version" "db-secret" {
-  secret_id = module.db-secrets.secret_ids[0]
-}
-
-################################################################################
-# Route53
-################################################################################
-resource "aws_route53_zone" "private" {
-  name = "private_host_zone"
-  vpc {
-    vpc_id = module.vpc.vpc_id
-    # Change route53 assignement
-    //vpc_id = data.aws_vpc.default.id
-  }
-
-  tags = local.user_tag
-}
-
-resource "aws_route53_record" "database_1" {
-  zone_id = aws_route53_zone.private.zone_id
-  name    = "${var.db_private_dns}_1"
-  type    = "CNAME"
-  ttl     = "300"
-  records = ["${module.db_1.this_db_instance_address}"]
-}
-
-
-resource "aws_route53_record" "database_2" {
-  zone_id = aws_route53_zone.private.zone_id
-  name    = "${var.db_private_dns}_2"
-  type    = "CNAME"
-  ttl     = "300"
-  records = ["${module.db_2.this_db_instance_address}"]
-}
-
-resource "aws_route53_record" "database_3" {
-  zone_id = aws_route53_zone.private.zone_id
-  name    = "${var.db_private_dns}_3"
-  type    = "CNAME"
-  ttl     = "300"
-  records = ["${module.db_3.this_db_instance_address}"]
-}
-
 ################################################################################
 # IAM assumable role with custom policies
 ################################################################################
 module "iam_assumable_role_custom" {
-  source            = "../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
+  source            = "../../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
   trusted_role_arns = []
   trusted_role_services = [
     "ec2.amazonaws.com"
