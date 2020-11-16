@@ -5,7 +5,7 @@ provider "aws" {
 locals {
   user_tag = {
     Owner = var.awsusername
-    Test  = "DNS"
+    Test  = "RDS"
   }
   security_group_tag = {
     scope = "db_server"

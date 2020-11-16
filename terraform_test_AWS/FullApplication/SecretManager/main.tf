@@ -5,7 +5,7 @@ provider "aws" {
 locals {
   user_tag = {
     Owner = var.awsusername
-    Test  = "EC2andRDS"
+    Test  = "SecretsManager"
   }
   security_group_tag_db = {
     scope = "db_server"
@@ -18,9 +18,9 @@ locals {
   }
 }
 
-#####################################
+################################################################################
 # Data sources to get VPC, subnets
-#####################################
+################################################################################
 data "aws_vpc" "default" {
   default = true
 }
@@ -29,9 +29,9 @@ data "aws_subnet_ids" "all" {
   vpc_id = data.aws_vpc.default.id
 }
 
-##############
+################################################################################
 # Route53
-##############
+################################################################################
 resource "aws_route53_zone" "private" {
   name = "private_host_zone"
   vpc {
@@ -49,11 +49,11 @@ resource "aws_route53_record" "database" {
   records = ["${module.db.this_db_instance_address}"]
 }
 
-##############
+################################################################################
 # Secret Manager
-##############
+################################################################################
 module "db-secrets" {
-  source = "../../modules_AWS/terraform-aws-secrets-manager-master"
+  source = "../../../modules_AWS/terraform-aws-secrets-manager-master"
   secrets = [
     {
       name        = var.db_secret_name
@@ -74,11 +74,11 @@ data "aws_secretsmanager_secret_version" "db-secret" {
   secret_id = module.db-secrets.secret_ids[0]
 }
 
-##########################################
+################################################################################
 # IAM assumable role with custom policies
-##########################################
+################################################################################
 module "iam_assumable_role_custom" {
-  source            = "../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
+  source            = "../../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
   trusted_role_arns = []
   trusted_role_services = [
     "ec2.amazonaws.com"
@@ -94,9 +94,9 @@ module "iam_assumable_role_custom" {
   tags = local.user_tag
 }
 
-#######
+################################################################################
 # EC2
-#######
+################################################################################
 data "aws_ami" "ubuntu" {
   most_recent = true
   filter {
@@ -117,15 +117,8 @@ resource "aws_key_pair" "this" {
   tags = local.user_tag
 }
 
-resource "aws_eip" "lb" {
-  instance = module.ec2_FE.id[0]
-  vpc      = true
-
-  tags = local.user_tag
-}
-
 module "ec2_FE" {
-  source                 = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  source                 = "../../../modules_AWS/terraform-aws-ec2-instance-master"
   name                   = "fe_server"
   instance_count         = 1
   ami                    = data.aws_ami.ubuntu.id
@@ -140,7 +133,7 @@ module "ec2_FE" {
 }
 
 module "aws_security_group_FE" {
-  source      = "../../modules_AWS/terraform-aws-security-group-master"
+  source      = "../../../modules_AWS/terraform-aws-security-group-master"
   name        = "FE_security_group"
   description = "Security group for front-end servers"
   vpc_id      = data.aws_vpc.default.id
@@ -173,11 +166,11 @@ module "aws_security_group_FE" {
   tags = merge(local.user_tag, local.security_group_tag_ec2)
 }
 
-#####
+################################################################################
 # DB
-#####
+################################################################################
 module "db" {
-  source                  = "../../modules_AWS/terraform-aws-rds-master/"
+  source                  = "../../../modules_AWS/terraform-aws-rds-master/"
   identifier              = "demodb"
   engine                  = "mysql"
   engine_version          = "8.0.20"
@@ -185,8 +178,8 @@ module "db" {
   allocated_storage       = 5
   storage_encrypted       = false
   name                    = "demodb"
-  username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["username"]
-  password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["password"]
+  username                = var.db_username
+  password                = var.db_password
   port                    = "3306"
   vpc_security_group_ids  = [module.aws_security_group_db.this_security_group_id]
   maintenance_window      = "Mon:00:00-Mon:03:00"
@@ -201,7 +194,7 @@ module "db" {
 }
 
 module "aws_security_group_db" {
-  source      = "../../modules_AWS/terraform-aws-security-group-master"
+  source      = "../../../modules_AWS/terraform-aws-security-group-master"
   name        = "db_security_group"
   description = "Security group for db mysql"
   vpc_id      = data.aws_vpc.default.id

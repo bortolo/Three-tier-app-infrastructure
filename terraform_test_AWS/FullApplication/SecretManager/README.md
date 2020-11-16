@@ -1,4 +1,4 @@
-# RDS usage - WIP
+# Manage secrets with AWS SecretsManager
 
 Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in AWS SecretsManager.
 
@@ -34,7 +34,9 @@ Set user, password, AWS SecretsManager name and db DNS name in `set_db_credentia
 ```
 **Important:** If you already used the same AWS SecretsManager name remember that each AWS secret needs at least 7 days to complete the deletion of the secret. Until the end of this period you cannot use the same secret name.
 
-Set also `config.service` with the same DNS name and with the regione name that you are going to use.
+Set also `config.service` with the same secret name and with the region name that you are going to use.
+
+Generete your [public ssh key](https://www.ssh.com/ssh/keygen/) and update `main.tf` file with your `id_rsa.pub` in the field `public_key` of the `aws_key_pair` resource.
 
 Now you can deploy the terraform infrastructure.
 
@@ -47,15 +49,14 @@ $ terraform init
 $ terraform plan
 $ terraform apply
 ```
-Run terraform apply one more time if something goes wrong.
 
-Note that this example may create resources which can cost money (AWS Elastic IP, for example). Run `terraform destroy` when you don't need these resources.
+Note that this example may create resources which can cost money. Run `terraform destroy` when you don't need these resources.
 
 ### Deploy node.js app
 
 Before this step you have to deploy the terraform script.
 
-If you already updated the `config.service` just run the following command from the `playbooks` folder.
+If you already updated the `config.service` just run the following command from the `playbooks` folder (please check if ec2.py is already executable or note, if note run `chmod +x ec2.py`).
 ```
 ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_fe_server
 ```
@@ -64,7 +65,6 @@ On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you shou
 
 ![appview](./images/appview.png)
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
 | Name | Version |
@@ -91,7 +91,6 @@ On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you shou
 
 ## Outputs
 
-No outputs
-
-
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+| Name | Description |
+|------|-------------|
+| ec2_public_ip | The public IP of the EC2 instance |
