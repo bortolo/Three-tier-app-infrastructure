@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-11-16T16:43:38.486Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.3 Safari/605.1.15" etag="I-RiYrxp3fpfSa0RU6ye" version="13.9.9" type="github">
+<mxfile host="app.diagrams.net" modified="2020-11-16T16:47:30.833Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.3 Safari/605.1.15" etag="5C8jS8EcqumC1kwpEwj5" version="13.9.9" type="github">
   <diagram id="UUgaOf1F6qNWSPvY_eEi" name="Page-1">
     <mxGraphModel dx="946" dy="662" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -156,7 +156,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="yWaF0EVfS8lJIimLc3lU-46" value="Subnet (default)" style="outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" vertex="1" parent="1">
+        <mxCell id="yWaF0EVfS8lJIimLc3lU-46" value="Subnet (custom)" style="outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" vertex="1" parent="1">
           <mxGeometry x="130" y="810" width="230" height="180" as="geometry" />
         </mxCell>
         <mxCell id="yWaF0EVfS8lJIimLc3lU-47" value="Security Group" style="fontStyle=0;verticalAlign=top;align=center;spacingTop=-2;fillColor=#fff2cc;rounded=0;whiteSpace=wrap;html=1;strokeColor=#d6b656;strokeWidth=2;dashed=1;container=1;collapsible=0;expand=0;recursiveResize=0;" vertex="1" parent="1">
@@ -165,10 +165,10 @@
         <mxCell id="yWaF0EVfS8lJIimLc3lU-48" value="&lt;b&gt;DB2&lt;/b&gt;" style="outlineConnect=0;dashed=0;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;shape=mxgraph.aws3.rds_db_instance;fillColor=#2E73B8;gradientColor=none;labelPosition=center;" vertex="1" parent="yWaF0EVfS8lJIimLc3lU-47">
           <mxGeometry x="30.130000000000003" y="40" width="39.75" height="53" as="geometry" />
         </mxCell>
-        <mxCell id="yWaF0EVfS8lJIimLc3lU-49" value="Subnet (default)" style="outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" vertex="1" parent="1">
+        <mxCell id="yWaF0EVfS8lJIimLc3lU-49" value="Subnet (custom)" style="outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" vertex="1" parent="1">
           <mxGeometry x="693" y="810" width="86" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="yWaF0EVfS8lJIimLc3lU-50" value="Subnet (default)" style="outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" vertex="1" parent="1">
+        <mxCell id="yWaF0EVfS8lJIimLc3lU-50" value="Subnet (custom)" style="outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" vertex="1" parent="1">
           <mxGeometry x="520" y="810" width="145" height="180" as="geometry" />
         </mxCell>
         <mxCell id="yWaF0EVfS8lJIimLc3lU-51" value="Security Group" style="fontStyle=0;verticalAlign=top;align=center;spacingTop=-2;fillColor=#fff2cc;rounded=0;whiteSpace=wrap;html=1;strokeColor=#d6b656;strokeWidth=2;dashed=1;container=1;collapsible=0;expand=0;recursiveResize=0;" vertex="1" parent="1">
