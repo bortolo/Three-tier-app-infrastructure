@@ -7,12 +7,10 @@ Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in
 
 | Resource | Estimated cost (without VAT) | Link |
 |------|---------|---------|
-| NLB | 0.027 $/h + 0.006 $/h per NLCU-hour | [Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/?nc=sn&loc=3) |
 | EC2 | 0,13 $/h x # of instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
-| RDS | 0,2 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
+| RDS | 0,2 $/h x # of instances (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
 | SecretsManager | <0,4$/month per secret - see pricing | [Pricing](https://aws.amazon.com/secrets-manager/pricing/) |
 | Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
-| Elastic IP | 0 $/h (it costs only if it is not assigned to EC2: 0,05$/h)| [Pricing](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/) |
 
 | Automation | Time |
 |------|---------|
@@ -35,7 +33,9 @@ Set user, password, AWS SecretsManager name and db DNS name in `set_db_credentia
 ```
 **Important:** If you already used the same AWS SecretsManager name remember that each AWS secret needs at least 7 days to complete the deletion of the secret. Until the end of this period you cannot use the same secret name.
 
-Set also `config.service` with the same DNS name and with the regione name that you are going to use.
+Set also `config.service` with the same DNS name and with the region name that you are going to use.
+
+Generete your [public ssh key](https://www.ssh.com/ssh/keygen/) and update `main.tf` file with your `id_rsa.pub` in the field `public_key` of the `aws_key_pair` resource.
 
 Now you can deploy the terraform infrastructure.
 
@@ -52,11 +52,15 @@ Run terraform apply one more time if something goes wrong.
 
 Note that this example may create resources which can cost money (AWS Elastic IP, for example). Run `terraform destroy` when you don't need these resources.
 
+### Check which EC2/RDS couple are you using
+
+
+
 ### Deploy node.js app
 
 Before this step you have to deploy the terraform script.
 
-If you already updated the `config.service` just run the following command from the `playbooks` folder.
+If you already updated the `config.service` just run the following command from the `playbooks` folder (please check if ec2.py is already executable or note, if note run `chmod +x ec2.py`).
 ```
 ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_fe_server
 ```

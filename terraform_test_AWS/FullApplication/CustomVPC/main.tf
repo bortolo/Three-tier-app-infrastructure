@@ -55,6 +55,39 @@ data "aws_subnet_ids" "all" {
 }
 
 ################################################################################
+# Activate VPC peering
+################################################################################
+resource "aws_vpc_peering_connection" "foo" {
+  peer_vpc_id   = data.aws_vpc.default.id
+  vpc_id        = module.vpc.vpc_id
+  auto_accept   = true
+  accepter {
+    allow_remote_vpc_dns_resolution = true
+  }
+  requester {
+    allow_remote_vpc_dns_resolution = true
+  }
+}
+
+resource "aws_route" "custom1" {
+  route_table_id            = module.vpc.public_route_table_ids[0]
+  destination_cidr_block    = data.aws_vpc.default.cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.foo.id
+}
+
+resource "aws_route" "custom2" {
+  route_table_id            = module.vpc.database_route_table_ids[0]
+  destination_cidr_block    = data.aws_vpc.default.cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.foo.id
+}
+
+resource "aws_route" "default" {
+  route_table_id            = data.aws_vpc.default.main_route_table_id
+  destination_cidr_block    = module.vpc.vpc_cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.foo.id
+}
+
+################################################################################
 # Secret Manager
 ################################################################################
 module "db-secrets" {

@@ -4,8 +4,8 @@
 resource "aws_route53_zone" "private" {
   name = "private_host_zone"
   vpc {
-    vpc_id = module.vpc.vpc_id
-    //vpc_id = data.aws_vpc.default.id
+    //vpc_id = module.vpc.vpc_id
+    vpc_id = data.aws_vpc.default.id
   }
 
   tags = local.user_tag
@@ -137,6 +137,13 @@ module "aws_security_group_custom" {
       description = "SSH port"
       cidr_blocks = "0.0.0.0/0"
     },
+    {
+      from_port   = 8
+      to_port     = 0
+      protocol    = "icmp"
+      description = "ICMP"
+      cidr_blocks = "0.0.0.0/0"
+    },
   ]
   egress_with_cidr_blocks = [
     {
@@ -169,6 +176,13 @@ module "aws_security_group_default" {
       to_port     = 22
       protocol    = "tcp"
       description = "SSH port"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 8
+      to_port     = 0
+      protocol    = "icmp"
+      description = "ICMP"
       cidr_blocks = "0.0.0.0/0"
     },
   ]
@@ -209,6 +223,7 @@ module "db_1" {
   backup_window           = "03:00-06:00"
   publicly_accessible     = false
   backup_retention_period = 0
+  availability_zone       = "eu-central-1a"
   db_subnet_group_name    = module.vpc.database_subnet_group
   family                  = "mysql8.0"
   major_engine_version    = "8.0"
@@ -234,7 +249,7 @@ module "db_2" {
   backup_window           = "03:00-06:00"
   publicly_accessible     = false
   backup_retention_period = 0
-  //db_subnet_group_name = module.vpc.database_subnet_group
+  availability_zone       = "eu-central-1a"
   subnet_ids           = module.vpc.public_subnets
   family               = "mysql8.0"
   major_engine_version = "8.0"
@@ -259,6 +274,7 @@ module "db_3" {
   backup_window           = "03:00-06:00"
   publicly_accessible     = false
   backup_retention_period = 0
+  availability_zone       = "eu-central-1a"
   subnet_ids              = data.aws_subnet_ids.all.ids
   family                  = "mysql8.0"
   major_engine_version    = "8.0"
