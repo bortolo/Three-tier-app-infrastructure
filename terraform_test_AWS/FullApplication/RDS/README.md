@@ -2,7 +2,7 @@
 
 Deploy a mySQL RDS instance and use mySQL dbs stored in it through a local node.js application.
 
-![appview](./images/RDSarchitecture.jpg)
+![appview](./images/RDSarchitecture.png)
 
 | Resource | Estimated cost (without VAT) | Link |
 |------|---------|---------|
