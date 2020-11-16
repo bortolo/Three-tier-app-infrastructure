@@ -1,4 +1,4 @@
-# RDS usage - WIP
+# RDS and EC2
 
 Deploy a EC2 with a node.js app and a mySQL RDS instance.
 
@@ -46,7 +46,8 @@ Note that this example may create resources which can cost money (AWS Elastic IP
 
 Before this step you have to deploy the EC2 and the RDS mySQL instance.
 
-If you already updated both `config.service` and `configure_nodejs.yml` just run the following command from the `playbooks` folder.
+If you already updated both `config.service` and `configure_nodejs.yml` just run the following command from the `playbooks` folder (please check if ec2.py is already executable or note, if note run `chmod +x ec2.py`).
+
 ```
 ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_fe_server
 ```
