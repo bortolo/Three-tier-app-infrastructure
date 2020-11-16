@@ -4,12 +4,17 @@ Deploy a EC2 with a node.js app and a mySQL RDS instance.
 
 ![appview](./images/RDSEC2architecture.png)
 
-| Topic | Data |
+| Resource | Estimated cost (without VAT) | Link |
+|------|---------|---------|
+| EC2 | 0,13 $/h x # of instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
+| RDS | 0,2 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
+| Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
+
+| Automation | Time |
 |------|---------|
 | Time to deploy (Terraform) | 8 min |
 | Time to deploy (Ansible) | 30 sec |
 | Time to destroy | 5 min |
-| Estimated cost | 0,05 €/h |
 
 ## Useful links
 
