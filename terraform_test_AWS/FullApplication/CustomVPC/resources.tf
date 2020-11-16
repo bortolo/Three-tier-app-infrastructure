@@ -4,8 +4,8 @@
 resource "aws_route53_zone" "private" {
   name = "private_host_zone"
   vpc {
-    //vpc_id = module.vpc.vpc_id
-    vpc_id = data.aws_vpc.default.id
+    vpc_id = module.vpc.vpc_id
+    //vpc_id = data.aws_vpc.default.id
   }
 
   tags = local.user_tag

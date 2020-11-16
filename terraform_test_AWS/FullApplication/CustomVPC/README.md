@@ -1,4 +1,4 @@
-# RDS enpoint - WIP (NOT WORKING)
+# Custom VPC and peering connections
 
 Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in AWS SecretsManager.
 
@@ -14,14 +14,11 @@ Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in
 
 | Automation | Time |
 |------|---------|
-| terraform apply (1st run) | 1 min |
-| terraform apply (2nd run) | 7 min |
+| terraform apply | 8 min |
 | ansible-playbook | 30 sec |
 | terraform destroy | 5 min |
 
 ## Useful links
-
-[AWS VPC Endpoints](https://docs.aws.amazon.com/vpc/latest/userguide/vpce-interface.html)
 
 ## Usage
 
@@ -52,24 +49,31 @@ Run terraform apply one more time if something goes wrong.
 
 Note that this example may create resources which can cost money (AWS Elastic IP, for example). Run `terraform destroy` when you don't need these resources.
 
-### Check which EC2/RDS couple are you using
-
-
-
 ### Deploy node.js app
 
 Before this step you have to deploy the terraform script.
 
 If you already updated the `config.service` just run the following command from the `playbooks` folder (please check if ec2.py is already executable or note, if note run `chmod +x ec2.py`).
 ```
-ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_fe_server
+ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_server_1
 ```
 
-On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you should see a screen like this (with zero rows because the db is still empty)
+On your preferred browser, go to `<ec2_1_public_ip>:8080/view`, you should see a screen like this (with zero rows because the db is still empty)
 
 ![appview](./images/appview.png)
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+### Tests
+
+You have now deployed the same configuration showed in the picture. With this configuration you can access all the DBs deployed from EC1 instance. To check this change the `config.service` file. If you want to work with DB2 you have to set `TF_VAR_db_dns=2`, and if you wanto to work with DB3 you have to set `TF_VAR_db_dns=3`.
+
+You can also use EC3 to run the app and work with the DBs. To do this you have to change the `resource.tf` file and assign the `aws_route53_zone` resource to the default VPC (change the comment between row 7 and 8).
+
+Now run `terraform apply` and then release the app on EC3 with ansible:
+```
+ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_server_3
+```
+On your preferred browser, go to `<ec2_3_public_ip>:8080/view`, you should see a screen with the same records that you already added in your dbs.
+
 ## Requirements
 
 | Name | Version |
@@ -96,7 +100,14 @@ On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you shou
 
 ## Outputs
 
-No outputs
+| Name | Description |
+|------|---------|
+| ec2_1_public_ip | public ip of EC1 |
+| ec2_1_private_ip | private ip of EC1 |
+| ec2_2_public_ip | public ip of EC2 |
+| ec2_2_private_ip | private ip of EC2 |
+| ec2_3_public_ip | public ip of EC3 |
+| ec2_3_private_ip | private ip of EC3 |
 
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
