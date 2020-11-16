@@ -2,7 +2,7 @@
 
 Deploy a EC2 with a node.js app and a mySQL RDS instance.
 
-![appview](./images/architecture.png)
+![appview](./images/RDSEC2architecture.png)
 
 | Topic | Data |
 |------|---------|
