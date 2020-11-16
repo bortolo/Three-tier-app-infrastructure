@@ -23,7 +23,6 @@ resource "aws_s3_bucket" "website_bucket" {
 }
 
 data "aws_iam_policy_document" "website_policy" {
-
   statement {
     actions = [
       "s3:GetObject",
@@ -36,7 +35,6 @@ data "aws_iam_policy_document" "website_policy" {
       "arn:aws:s3:::${var.domain_name}/*",
     ]
   }
-
 }
 
 

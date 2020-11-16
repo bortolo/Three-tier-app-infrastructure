@@ -5,6 +5,7 @@
 # db_3 is in default VPC in public subnet
 #####
 
+
 module "db_1" {
   source                  = "../../modules_AWS/terraform-aws-rds-master/"
   identifier              = "demodb1"
@@ -28,6 +29,7 @@ module "db_1" {
 
   tags = local.user_tag
 }
+
 
 module "db_2" {
   source                  = "../../modules_AWS/terraform-aws-rds-master/"

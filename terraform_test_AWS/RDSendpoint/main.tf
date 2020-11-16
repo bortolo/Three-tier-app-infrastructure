@@ -90,11 +90,13 @@ data "aws_secretsmanager_secret_version" "db-secret" {
 resource "aws_route53_zone" "private" {
   name = "private_host_zone"
   vpc {
-    vpc_id = data.aws_vpc.default.id //module.vpc.vpc_id
+    vpc_id = module.vpc.vpc_id
+    //    vpc_id = data.aws_vpc.default.id
   }
 
   tags = local.user_tag
 }
+
 
 resource "aws_route53_record" "database_1" {
   zone_id = aws_route53_zone.private.zone_id
@@ -103,6 +105,7 @@ resource "aws_route53_record" "database_1" {
   ttl     = "300"
   records = ["${module.db_1.this_db_instance_address}"]
 }
+
 
 resource "aws_route53_record" "database_2" {
   zone_id = aws_route53_zone.private.zone_id

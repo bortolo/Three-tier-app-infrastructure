@@ -24,7 +24,7 @@ client.getSecretValue({ SecretId: secretName }, function (err, data) {
     const con_create = mysql_create.createConnection({
     //  host: "demodb3.ck0joffnfyxn.eu-central-1.rds.amazonaws.com",
     //    host: "rds.eu-central-1.amazonaws.com",
-        host: secretJSON.db_dns+"_1.private_host_zone",
+        host: secretJSON.db_dns+"_2.private_host_zone",
         user: secretJSON.username,
         password: secretJSON.password
     });
@@ -58,7 +58,7 @@ client.getSecretValue({ SecretId: secretName }, function (err, data) {
   con = mysql.createConnection({
     //host: "demodb3.ck0joffnfyxn.eu-central-1.rds.amazonaws.com",
   //  host: "rds.eu-central-1.amazonaws.com",
-    host: secretJSON.db_dns+"_1.private_host_zone",
+    host: secretJSON.db_dns+"_2.private_host_zone",
     user: secretJSON.username,
     password: secretJSON.password,
     database: "main"
