@@ -10,5 +10,5 @@ Here below you can find an index of all the examples related to this tutorial. I
 - **[RDS](./RDS):** deploy an RDS mysql instance and access it through a local node.js app.
 - **[RDS + EC2](./EC2andRDS):** deploy an RDS instance and an EC2 instance. Configure EC2 instance with ansible.
 - **[SecretsManager and IAM role](./SecretManager):** learn how to manage database secrets dynamically and assign role to AWS services.
-- **[Use a custom VPC](./RDS):** deploy you infrastructure in a custom VPC.
-- **[Deploy network loadbalancer](./RDS):** learn how to add a NLP and an Elastic IP in front of you app.
+- **[Use a custom VPC](./CustomVPC):** deploy you infrastructure in a custom VPC.
+- **[Deploy network loadbalancer](./RDS):** WIP
