@@ -57,9 +57,11 @@ If you already updated both `config.service` and `configure_nodejs.yml` just run
 ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_fe_server
 ```
 
-On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you should see a screen like this (with zero rows because db is still empty)
+On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you should see a screen like this (with zero rows because db is still empty).
 
 ![appview](./images/appview.png)
+
+The main issue of this example is that all the database secrets are stored in a Git repository. This is a bad practice, in the next section you are going to see how to use AWS SecretsManager service to safely store and dynamically retrieve secrets.
 
 ## Requirements
 
