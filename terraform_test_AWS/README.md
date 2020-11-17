@@ -13,6 +13,9 @@ This is the list of the available tests with a short description. Click on one o
 - **[Try an application deployment](./FullApplication)**
   - **Status**, DONE (alpha)
   - **Description**, deploy a node.js app on EC2 and work with RDS, SecretsManager, VPC peering.
+- **[Test EBS volume performances](./EBS)**
+  - **Status**, DONE (alpha)
+  - **Description**, create several EBS volumes and test their performances (IOPS, latency and throughput).
 - **[IAM](./IAM)**
   - **Status**, WIP
   - **Description**, create several users and groups. Assign users to groups and upload custom policies.
