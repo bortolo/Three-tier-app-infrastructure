@@ -11,4 +11,4 @@ Here below you can find an index of all the examples related to this tutorial. I
 - **[RDS + EC2](./EC2andRDS):** deploy an RDS instance and an EC2 instance. Configure EC2 instance with ansible.
 - **[SecretsManager and IAM role](./SecretManager):** learn how to manage database secrets dynamically and assign role to AWS services.
 - **[Use a custom VPC](./CustomVPC):** deploy you infrastructure in a custom VPC.
-- **[Deploy network loadbalancer](./RDS):** WIP
+- **[Deploy network loadbalancer](./Loadbalancer):** deploy a NLB and try to scale-out manually.

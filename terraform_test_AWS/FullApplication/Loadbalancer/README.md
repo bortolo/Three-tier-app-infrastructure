@@ -109,7 +109,11 @@ Wait for a while and have a look to the terminal window where the script `callip
 
 ## Outputs
 
-No outputs
+| Name | Description |
+|------|---------|
+| ec2_public_ips | vector of public ip of EC2 instances |
+| ec2_private_ips | vector of public ip of EC2 instances |
+| elastic_public_ip | The public ip of the loadbalancer |
 
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

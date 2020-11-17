@@ -16,9 +16,6 @@ This is the list of the available tests with a short description. Click on one o
 - **[IAM](./IAM)**
   - **Status**, WIP
   - **Description**, create several users and groups. Assign users to groups and upload custom policies.
-- **[Deploy network loadbalancer](./Loadbalancer)**
-  - **Status**, WIP
-  - **Description**, WIP
 - **[Deploy a react website on S3](./S3website)**
   - **Status**, WIP
   - **Description**, WIP
