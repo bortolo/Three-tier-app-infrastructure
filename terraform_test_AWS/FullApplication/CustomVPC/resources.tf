@@ -250,9 +250,9 @@ module "db_2" {
   publicly_accessible     = false
   backup_retention_period = 0
   availability_zone       = "eu-central-1a"
-  subnet_ids           = module.vpc.public_subnets
-  family               = "mysql8.0"
-  major_engine_version = "8.0"
+  subnet_ids              = module.vpc.public_subnets
+  family                  = "mysql8.0"
+  major_engine_version    = "8.0"
 
   tags = local.user_tag
 }

@@ -58,9 +58,9 @@ data "aws_subnet_ids" "all" {
 # Activate VPC peering
 ################################################################################
 resource "aws_vpc_peering_connection" "foo" {
-  peer_vpc_id   = data.aws_vpc.default.id
-  vpc_id        = module.vpc.vpc_id
-  auto_accept   = true
+  peer_vpc_id = data.aws_vpc.default.id
+  vpc_id      = module.vpc.vpc_id
+  auto_accept = true
   accepter {
     allow_remote_vpc_dns_resolution = true
   }

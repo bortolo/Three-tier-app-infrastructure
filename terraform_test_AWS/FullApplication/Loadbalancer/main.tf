@@ -129,7 +129,7 @@ module "nlb" {
   vpc_id = module.vpc.vpc_id
 
   //  Use `subnet_mapping` to attach EIPs
-  subnet_mapping = [{ allocation_id : aws_eip.lb[0].id, subnet_id : module.vpc.public_subnets[0]}]
+  subnet_mapping = [{ allocation_id : aws_eip.lb[0].id, subnet_id : module.vpc.public_subnets[0] }]
 
   // TCP_UDP, UDP, TCP
   http_tcp_listeners = [

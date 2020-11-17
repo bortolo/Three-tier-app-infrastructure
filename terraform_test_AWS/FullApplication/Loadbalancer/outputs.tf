@@ -10,5 +10,5 @@ output "ec2_private_ips" {
 
 output "elastic_public_ip" {
   description = "The public ip of the loadbalancer"
-  value = aws_eip.lb.*.public_ip
+  value       = aws_eip.lb.*.public_ip
 }
