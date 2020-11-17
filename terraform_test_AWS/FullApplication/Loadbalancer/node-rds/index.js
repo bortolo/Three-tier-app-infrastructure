@@ -69,7 +69,10 @@ var express = require('express');
 var bodyParser = require('body-parser');
 
 const { networkInterfaces } = require('os');
+var os = require('os');
 
+var osu = require('node-os-utils')
+var cpu = osu.cpu
 
 var app = express();
 
@@ -85,12 +88,7 @@ app.get('/ip', (req, res) => {
   for (const name of Object.keys(nets)) {
       for (const net of nets[name]) {
           if (net.family === 'IPv4' && !net.internal) {
-              if (!results[name]) {
-                  results[name] = [];
-              }
-
-              results[name].push(net.address);
-              ip.push(net.address);
+              ip.push({cpu_idle: (os.cpus()[0].times.idle/(os.cpus()[0].times.idle+os.cpus()[0].times.sys+os.cpus()[0].times.user+os.cpus()[0].times.nice)).toFixed(2), fremem: (os.freemem()/os.totalmem()).toFixed(2), ip:net.address});
           }
       }
   }

@@ -16,14 +16,11 @@ Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in
 
 | Automation | Time |
 |------|---------|
-| terraform apply (1st run) | 1 min |
-| terraform apply (2nd run) | 7 min |
+| terraform apply | 8 min |
 | ansible-playbook | 30 sec |
 | terraform destroy | 5 min |
 
 ## Useful links
-
-[AWS RDS site](https://docs.aws.amazon.com/rds/index.html?nc2=h_ql_doc_rds)
 
 ## Usage
 
@@ -36,6 +33,8 @@ Set user, password, AWS SecretsManager name and db DNS name in `set_db_credentia
 **Important:** If you already used the same AWS SecretsManager name remember that each AWS secret needs at least 7 days to complete the deletion of the secret. Until the end of this period you cannot use the same secret name.
 
 Set also `config.service` with the same DNS name and with the regione name that you are going to use.
+
+Generete your [public ssh key](https://www.ssh.com/ssh/keygen/) and update `main.tf` file with your `id_rsa.pub` in the field `public_key` of the `aws_key_pair` resource.
 
 Now you can deploy the terraform infrastructure.
 
@@ -61,9 +60,27 @@ If you already updated the `config.service` just run the following command from 
 ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_Name_fe_server
 ```
 
-On your preferred browser, go to `<EC2-instance-public-ip>:8080/views`, you should see a screen like this (with zero rows because the db is still empty)
+On your preferred browser, go to `<elastic_public_ip/view`, you should see a screen like this (with zero rows because the db is still empty)
 
 ![appview](./images/appview.png)
+
+### Tests
+
+Run the script `callip.sh`
+
+```
+. ./callip.sh
+```
+This script is doing a while loop calling the `/ip` route of tha node.js app. This route returns the private ip address, the percentage of the not used memory and the percentage the not used cpu of the server hit by the call.
+
+Now try to increase the number of servers changing the `main.tf` in the ec2 module:
+```
+instance_count = 5
+```
+Run `terraform apply`. Now you have two more EC2 images but they are not still configured with the nodejs app.
+Run again the `ansible-playbook` command that you used before.
+
+Wait for a while and have a look to the terminal window where the script `callip.sh` is running. New private ip addresses will show up soon.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements

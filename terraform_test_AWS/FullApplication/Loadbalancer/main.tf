@@ -146,18 +146,7 @@ module "nlb" {
       backend_protocol = "TCP"
       backend_port     = 8080
       target_type      = "instance"
-      /*
-      health_check = {
-          enabled             = true
-          path                = "/ip"
-          port                = 8080
-          healthy_threshold   = 3
-          unhealthy_threshold = 3
-          timeout             = 5
-          protocol            = "TCP"
-      }
-      */
-      
+
       tags = {
         tcp_udp = true
       }
