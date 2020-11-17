@@ -1,4 +1,4 @@
-# RDS usage - WIP
+# Deploy Network Load Balancer
 
 Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in AWS SecretsManager.
 

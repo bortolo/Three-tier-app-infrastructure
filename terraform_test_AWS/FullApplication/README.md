@@ -3,7 +3,7 @@
 In this example we are going to deploy step-by-step a multi-tier application on AWS infrastructure.
 The final layout that you are going to build at the end of this tutorial is depicted by the following picture.
 
-*[insert final architectural layout]*
+![appview](./Loadbalancer/images/Loadbalancerarchitecture.png)
 
 Here below you can find an index of all the examples related to this tutorial. In each example we are going to focus on a particular component of the final architectural layout. Each step is an auto-consistent that you can run and play with it to gain more confidence with the modules of the full example.
 
