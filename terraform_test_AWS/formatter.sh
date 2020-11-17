@@ -13,22 +13,28 @@ for f in *;  do
       terraform fmt;
       echo -e "\e[0m\e[2m[Resources] ${r// /-}\e[0m";
       terraform plan -detailed-exitcode &> /dev/null;
-      if [ $? ]; then
-      echo -e "terraform plan: WORKING"
-      else
-      echo -e "\e[31mterraform plan: NOT WORKING\e[0m"
-      fi
-      if test -f "terraform.tfstate"; then
-        echo -e "tfstate: YES"
-        RES=$(jq '.resources | length' terraform.tfstate)
-        if [ $RES = 0 ]; then
-        echo -e "resources: "$RES
+
+        if [ $? ];
+        then
+          echo -e "terraform plan: WORKING"
         else
-        echo -e "\e[31mresources: $RES\e[0m"
+          echo -e "\e[31mterraform plan: NOT WORKING\e[0m"
         fi
-      else
-        echo -e "tfstate: NO"
-      fi
+
+        if test -f "terraform.tfstate";
+        then
+          echo -e "tfstate: YES"
+          RES=$(jq '.resources | length' terraform.tfstate)
+          if [ $RES = 0 ];
+          then
+            echo -e "resources: "$RES
+          else
+            echo -e "\e[31mresources: $RES\e[0m"
+          fi
+        else
+          echo -e "tfstate: NO"
+        fi
+
       cd ..;
   fi;
 done;
