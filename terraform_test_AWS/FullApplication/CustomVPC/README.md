@@ -38,16 +38,18 @@ Now you can deploy the terraform infrastructure.
 
 ### Deploy EC2, RDS and AWS SecretsManager
 
-To run this example you need to execute:
+To run this example you need to hide the file `resources.tf` and `outputs.tf` first (rename them as resources.tf.hide and outputs.tf.hide). Then execute:
 
 ```
 $ terraform init
 $ terraform plan
 $ terraform apply
 ```
+You have now deployed your custom VPC. Rename againg the `resources.tf` and `outputs.tf` file to the original name and then run again `terraform applly`
+
 Run terraform apply one more time if something goes wrong.
 
-Note that this example may create resources which can cost money (AWS Elastic IP, for example). Run `terraform destroy` when you don't need these resources.
+Note that this example may create resources which can cost money. Run `terraform destroy` when you don't need these resources.
 
 ### Deploy node.js app
 
