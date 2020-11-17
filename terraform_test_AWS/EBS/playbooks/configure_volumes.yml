@@ -16,7 +16,7 @@
     # xvdl - sc1
     # xvdm - st1
     ############################################################################
-    
+
   tasks:
 
   - name: Install fio test suite
@@ -47,8 +47,8 @@
      fstype: ext4
      state: mounted
 
-  - name: Unmount volume {{volume}}
-    become: yes
-    mount:
-     path: "{{mount_path}}"
-     state: unmounted
+  # - name: Unmount volume {{volume}}
+  #   become: yes
+  #   mount:
+  #    path: "{{mount_path}}"
+  #    state: unmounted

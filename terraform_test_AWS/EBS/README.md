@@ -11,9 +11,9 @@ Deploy an EC2 instance and several EBS volumes to test them.
 
 | Automation | Time |
 |------|---------|
-| Time to deploy (Terraform) | ? min |
+| Time to deploy (Terraform) | 1 min 30 sec |
 | Time to deploy (Ansible) | 30 sec |
-| Time to destroy | ? min |
+| Time to destroy | 1 min 30 sec |
 
 ## Useful links
 
