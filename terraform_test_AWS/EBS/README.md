@@ -2,7 +2,7 @@
 
 Deploy an EC2 instance and several EBS volumes to test them.
 
-![appview](./images/RDSEC2architecture.png)
+![appview](./images/EBSarchitecture.png)
 
 | Resource | Estimated cost (without VAT) | Link |
 |------|---------|---------|

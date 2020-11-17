@@ -1,24 +1,3 @@
-/*
-mount a volume
-https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
-
-unmount a volume
-https://www.digitalocean.com/docs/volumes/how-to/unmount/
-
-check disk speed
-https://askubuntu.com/questions/87035/how-to-check-hard-disk-performance
-
-volume name convention
-https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html#available-ec2-device-names
-
-You've reached the maximum modification rate per volume limit. Wait at least 6 hours between modifications per EBS volume
-
-fio command to test IOPS:
-sudo fio --filename=/mnt/data/test --size=9GB --direct=1 --rw=randrw --bs=4k --ioengine=libaio --iodepth=256 --runtime=120 --numjobs=4 --time_based --group_reporting --name=iops-test-job --eta-newline=1
-
-*/
-
-
 provider "aws" {
   region = "eu-central-1"
 }
