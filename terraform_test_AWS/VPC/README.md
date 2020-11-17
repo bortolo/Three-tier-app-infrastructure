@@ -2,7 +2,7 @@
 
 Deploy a custom VPC with Route53 records and simple EC2 instances to test ping and ssh authentication.
 
- ![appview](./images/architecture.png)
+ ![appview](./images/VPCarchitecture.png)
 
  | Resource | Estimated cost (without VAT) | Link |
  |------|---------|---------|
