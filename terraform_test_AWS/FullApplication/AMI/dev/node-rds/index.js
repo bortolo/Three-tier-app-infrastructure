@@ -22,9 +22,9 @@ client.getSecretValue({ SecretId: secretName }, function (err, data) {
     const secretJSON = JSON.parse(secret);
     const mysql_create = require('mysql');
     const con_create = mysql_create.createConnection({
-        host: secretJSON.db_dns+".private_host_zone",
-        user: secretJSON.username,
-        password: secretJSON.password
+        host: secretJSON.DATABASE_URL+".private_host_zone",
+        user: secretJSON.USERNAME,
+        password: secretJSON.PASSWORD
     });
 
     con_create.connect(function(err) {
@@ -54,9 +54,9 @@ client.getSecretValue({ SecretId: secretName }, function (err, data) {
                 }
   const secretJSON = JSON.parse(secret);
   con = mysql.createConnection({
-    host: secretJSON.db_dns+".private_host_zone",
-    user: secretJSON.username,
-    password: secretJSON.password,
+    host: secretJSON.DATABASE_URL+".private_host_zone",
+    user: secretJSON.USERNAME,
+    password: secretJSON.PASSWORD,
     database: "main"
   });
 });

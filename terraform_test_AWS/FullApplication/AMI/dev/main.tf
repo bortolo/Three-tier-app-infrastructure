@@ -39,11 +39,11 @@ module "vpc" {
   name   = "customVPC"
   cidr   = "10.0.0.0/16"
   azs    = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
-  public_subnets = ["10.0.128.0/20"]
+  public_subnets = ["10.0.8.0/21"]
   public_subnet_tags = {
     subnet_type = "public"
   }
-  database_subnets = ["10.0.176.0/21"]
+  database_subnets = ["10.0.16.0/21","10.0.24.0/21"]
   database_subnet_tags = {
     subnet_type = "database"
   }
@@ -58,8 +58,12 @@ module "vpc" {
 ################################################################################
 # Get information about cross services
 ################################################################################
-data "aws_secretsmanager_secret_version" "db-secret" {
+data "aws_secretsmanager_secret" "db-secret" {
   name = var.db_secret_name
+}
+
+data "aws_secretsmanager_secret_version" "db-secret-version" {
+  secret_id = data.aws_secretsmanager_secret.db-secret.id
 }
 
 ################################################################################
@@ -76,7 +80,7 @@ resource "aws_route53_zone" "private" {
 
 resource "aws_route53_record" "database" {
   zone_id = aws_route53_zone.private.zone_id
-  name    = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["DATABASE_URL"]
+  name    = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["DATABASE_URL"]
   type    = "CNAME"
   ttl     = "300"
   records = ["${module.db.this_db_instance_address}"]
@@ -209,8 +213,8 @@ module "db" {
   allocated_storage       = 5
   storage_encrypted       = false
   name                    = "demodb"
-  username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["USERNAME"]
-  password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["PASSWORD"]
+  username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["USERNAME"]
+  password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["PASSWORD"]
   port                    = "3306"
   vpc_security_group_ids  = [module.aws_security_group_db.this_security_group_id]
   maintenance_window      = "Mon:00:00-Mon:03:00"

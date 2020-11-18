@@ -14,7 +14,7 @@ locals {
 # Secret Manager
 ################################################################################
 module "db-secrets" {
-  source = "../../../modules_AWS/terraform-aws-secrets-manager-master"
+  source = "../../../../modules_AWS/terraform-aws-secrets-manager-master"
   secrets = [
     {
       name        = var.db_secret_name
@@ -35,7 +35,7 @@ module "db-secrets" {
 # IAM assumable role with custom policies
 ################################################################################
 module "iam_assumable_role_custom" {
-  source            = "../../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
+  source            = "../../../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
   trusted_role_arns = []
   trusted_role_services = [
     "ec2.amazonaws.com"
