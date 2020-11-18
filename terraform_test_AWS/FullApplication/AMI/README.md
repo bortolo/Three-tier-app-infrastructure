@@ -2,7 +2,7 @@
 
 Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in AWS SecretsManager.
 
-![appview](./images/Loadbalancerarchitecture.png)
+![appview](./images/AMIarchitecture.png)
 
 
 | Resource | Estimated cost (without VAT) | Link |
