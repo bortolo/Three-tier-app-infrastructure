@@ -30,7 +30,9 @@ resource "aws_volume_attachment" "this_standard" {
 }
 
 ################################################################################
-# gp2 EBS (read: 1543 IOPS / write: 1542 IOPS)
+# gp2 EBS
+# t2.micro (read: 1543 IOPS / write: 1542 IOPS)
+# i3.large (read: 1542 IOPS / write: 1542 IOPS)
 ################################################################################
 resource "aws_ebs_volume" "gp2" {
   availability_zone = "eu-central-1a"
@@ -45,6 +47,14 @@ resource "aws_volume_attachment" "this_gp2" {
   volume_id   = aws_ebs_volume.gp2.id
   instance_id = module.ec2_public.id[0]
 }
+
+/*
+resource "aws_volume_attachment" "this_gp2" {
+  device_name = "/dev/sdg"
+  volume_id   = aws_ebs_volume.gp2.id
+  instance_id = module.ec2_public_i.id[0]
+}
+*/
 
 ################################################################################
 # io1 EBS
@@ -151,6 +161,10 @@ resource "aws_key_pair" "this" {
   tags = local.user_tag
 }
 
+################################################################################
+# Attached disk
+# t2.micro (read: 1541 IOPS / write: 1540 IOPS)
+################################################################################
 module "ec2_public" {
   source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
   name                        = "public_server"
@@ -165,6 +179,27 @@ module "ec2_public" {
 
   tags = merge(local.user_tag, local.ec2_tag_public)
 }
+
+################################################################################
+# Attached disk
+# i3.large (read: 23.000 IOPS / write: 23.900 IOPS)
+################################################################################
+/*
+module "ec2_public_i" {
+  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  name                        = "public_server_i"
+  instance_count              = 1
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "i3.large"
+  key_name                    = aws_key_pair.this.key_name
+  associate_public_ip_address = true
+  monitoring                  = false
+  vpc_security_group_ids      = [module.aws_security_group_server.this_security_group_id]
+  subnet_id                   = tolist(data.aws_subnet_ids.all.ids)[0]
+
+  tags = merge(local.user_tag, local.ec2_tag_public)
+}
+*/
 
 module "aws_security_group_server" {
   source      = "../../modules_AWS/terraform-aws-security-group-master"

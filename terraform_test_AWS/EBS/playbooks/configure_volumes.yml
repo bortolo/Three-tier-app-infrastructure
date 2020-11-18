@@ -5,7 +5,7 @@
   vars:
     user: ubuntu
     mount_path: /mnt/data
-    volume: xvdm
+    volume: xvdg
 
     ############################################################################
     # EBS volumes
