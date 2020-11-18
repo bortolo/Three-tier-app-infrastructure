@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-11-18T18:03:27.066Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.3 Safari/605.1.15" etag="_Vd-1-FI4Uj44fz_57Ag" version="13.9.9" type="github">
+<mxfile host="app.diagrams.net" modified="2020-11-18T18:07:46.956Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.3 Safari/605.1.15" etag="EDCgElLEZEKnUuyqZwDG" version="13.9.9" type="github">
   <diagram id="UUgaOf1F6qNWSPvY_eEi" name="Page-1">
     <mxGraphModel dx="946" dy="662" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -27,6 +27,24 @@
         </mxCell>
         <mxCell id="LLyH-jrI4SZby10niK_6-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.92;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="LLyH-jrI4SZby10niK_6-12" target="LLyH-jrI4SZby10niK_6-2" edge="1">
           <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FU5zcwVCU_c94r31TygK-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.92;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.038;entryY=0.449;entryDx=0;entryDy=0;entryPerimeter=0;labelBackgroundColor=none;fontSize=9;fontColor=#000000;align=center;curved=1;dashed=1;dashPattern=1 1;strokeColor=#CC0000;" edge="1" parent="1" source="LLyH-jrI4SZby10niK_6-12" target="FU5zcwVCU_c94r31TygK-41">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="130" y="50" />
+              <mxPoint x="130" y="261" />
+              <mxPoint x="40" y="261" />
+              <mxPoint x="40" y="461" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FU5zcwVCU_c94r31TygK-46" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.92;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.038;entryY=0.591;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=1 1;labelBackgroundColor=none;strokeColor=#CC0000;fontSize=9;fontColor=#000000;align=center;" edge="1" parent="1" source="LLyH-jrI4SZby10niK_6-12" target="FU5zcwVCU_c94r31TygK-43">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="50" />
+              <mxPoint x="200" y="464" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="LLyH-jrI4SZby10niK_6-12" value="" style="aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#00188D;shape=mxgraph.azure.laptop" parent="1" vertex="1">
           <mxGeometry x="50" y="30" width="66.66" height="40" as="geometry" />
@@ -57,6 +75,9 @@
         </mxCell>
         <mxCell id="mmzX4yjb0Bl6ZRDBmCqj-3" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn2.iconfinder.com/data/icons/nodejs-1/128/nodejs-128.png" parent="mmzX4yjb0Bl6ZRDBmCqj-1" vertex="1">
           <mxGeometry x="16.45" y="30" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="FU5zcwVCU_c94r31TygK-41" value="&lt;i style=&quot;font-size: 9px;&quot;&gt;EC2&lt;br style=&quot;font-size: 9px;&quot;&gt;public ip&lt;/i&gt;" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=9;image=img/lib/azure2/networking/Public_IP_Addresses.svg;labelBackgroundColor=none;" vertex="1" parent="mmzX4yjb0Bl6ZRDBmCqj-1">
+          <mxGeometry x="-10" y="78" width="26.45" height="21.16" as="geometry" />
         </mxCell>
         <mxCell id="mmzX4yjb0Bl6ZRDBmCqj-11" value="&lt;b&gt;Subnet&lt;br&gt;DEV&lt;/b&gt;" style="outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" parent="1" vertex="1">
           <mxGeometry x="70" y="510" width="140" height="123.5" as="geometry" />
@@ -193,9 +214,9 @@
             <mxPoint x="121.32719999999995" y="60" as="sourcePoint" />
             <mxPoint x="154.375" y="210" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="170" y="50" />
-              <mxPoint x="170" y="160" />
-              <mxPoint x="490" y="160" />
+              <mxPoint x="250" y="50" />
+              <mxPoint x="250" y="160" />
+              <mxPoint x="510" y="160" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -213,6 +234,9 @@
         </mxCell>
         <mxCell id="mmzX4yjb0Bl6ZRDBmCqj-6" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn2.iconfinder.com/data/icons/nodejs-1/128/nodejs-128.png" parent="mmzX4yjb0Bl6ZRDBmCqj-4" vertex="1">
           <mxGeometry x="16.45" y="30" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="FU5zcwVCU_c94r31TygK-43" value="&lt;i style=&quot;font-size: 9px;&quot;&gt;EC2&lt;br style=&quot;font-size: 9px;&quot;&gt;public ip&lt;/i&gt;" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=9;image=img/lib/azure2/networking/Public_IP_Addresses.svg;labelBackgroundColor=none;" vertex="1" parent="mmzX4yjb0Bl6ZRDBmCqj-4">
+          <mxGeometry x="-10" y="78" width="26.45" height="21.16" as="geometry" />
         </mxCell>
         <mxCell id="FU5zcwVCU_c94r31TygK-35" value="&lt;b&gt;Subnet&lt;br&gt;DEV&lt;/b&gt;" style="outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" vertex="1" parent="1">
           <mxGeometry x="230" y="510" width="136" height="123.5" as="geometry" />
