@@ -23,27 +23,18 @@ locals {
 }
 
 ################################################################################
-# Create AMI image of the app
-################################################################################
-resource "aws_ami_from_instance" "example" {
-  count = var.create_AMI ? 1 : 0
-  name               = var.AMI_name
-  source_instance_id = module.ec2_FE.id[0]
-}
-
-################################################################################
 # Data sources to create custom VPC and custom subnets (public and database)
 ################################################################################
 module "vpc" {
   source = "../../../../modules_AWS/terraform-aws-vpc-master"
-  name   = "customVPC"
+  name   = "customVPC_prod"
   cidr   = "10.0.0.0/16"
-  azs    = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
-  public_subnets = ["10.0.128.0/20"]
+  azs    = ["eu-central-1a", "eu-central-1b"]
+  public_subnets = ["10.0.8.0/21"]
   public_subnet_tags = {
     subnet_type = "public"
   }
-  database_subnets = ["10.0.176.0/21"]
+  database_subnets = ["10.0.16.0/21","10.0.24.0/21"]
   database_subnet_tags = {
     subnet_type = "database"
   }
@@ -58,8 +49,12 @@ module "vpc" {
 ################################################################################
 # Get information about cross services
 ################################################################################
-data "aws_secretsmanager_secret_version" "db-secret" {
+data "aws_secretsmanager_secret" "db-secret" {
   name = var.db_secret_name
+}
+
+data "aws_secretsmanager_secret_version" "db-secret-version" {
+  secret_id = data.aws_secretsmanager_secret.db-secret.id
 }
 
 ################################################################################
@@ -76,7 +71,7 @@ resource "aws_route53_zone" "private" {
 
 resource "aws_route53_record" "database" {
   zone_id = aws_route53_zone.private.zone_id
-  name    = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["DATABASE_URL"]
+  name    = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["DATABASE_URL"]
   type    = "CNAME"
   ttl     = "300"
   records = ["${module.db.this_db_instance_address}"]
@@ -89,7 +84,7 @@ resource "aws_route53_record" "database" {
 module "nlb" {
   source = "../../../../modules_AWS/terraform-aws-alb-master"
 
-  name = "complete-nlb"
+  name = "complete-nlb-prod"
   load_balancer_type = "network"
   vpc_id = module.vpc.vpc_id
   subnet_mapping = [{ allocation_id : aws_eip.lb[0].id, subnet_id : module.vpc.public_subnets[0] }]
@@ -146,7 +141,7 @@ data "aws_ami" "app_ami" {
 module "ec2_FE" {
   source                      = "../../../../modules_AWS/terraform-aws-ec2-instance-master"
   name                        = "fe_server"
-  instance_count              = 2
+  instance_count              = 3
   ami                         = data.aws_ami.app_ami.id
   instance_type               = "t2.micro"
   key_name                    = var.key_pair_name
@@ -198,15 +193,15 @@ module "aws_security_group_FE" {
 ################################################################################
 module "db" {
   source                  = "../../../../modules_AWS/terraform-aws-rds-master/"
-  identifier              = "demodb"
+  identifier              = "demodbprod"
   engine                  = "mysql"
   engine_version          = "8.0.20"
   instance_class          = "db.t2.micro"
   allocated_storage       = 5
   storage_encrypted       = false
-  name                    = "demodb"
-  username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["USERNAME"]
-  password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret.secret_string)["PASSWORD"]
+  name                    = "demodb_prod"
+  username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["USERNAME"]
+  password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["PASSWORD"]
   port                    = "3306"
   vpc_security_group_ids  = [module.aws_security_group_db.this_security_group_id]
   maintenance_window      = "Mon:00:00-Mon:03:00"

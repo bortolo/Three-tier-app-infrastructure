@@ -38,7 +38,7 @@ module "vpc" {
   source = "../../../../modules_AWS/terraform-aws-vpc-master"
   name   = "customVPC"
   cidr   = "10.0.0.0/16"
-  azs    = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
+  azs    = ["eu-central-1a", "eu-central-1b"]
   public_subnets = ["10.0.8.0/21"]
   public_subnet_tags = {
     subnet_type = "public"
