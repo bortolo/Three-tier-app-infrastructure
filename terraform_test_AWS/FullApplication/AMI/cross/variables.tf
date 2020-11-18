@@ -18,8 +18,10 @@ variable "db_secret_name" {
   description = "(Required) db secret name for AWS SecretsManager"
 }
 
-variable "create_AMI" {
-  description = "(Required) Create or not the AMI of the EC2 instance"
-  type = bool
-  default = false
+variable "iam_role_name" {
+  description = "(Required) IAM role name for the custom policy of EC2 instances running nodejs and accessing AWS SecretsManager"
+}
+
+variable "key_pair_name" {
+  description = "(Required) The key pair name to log in EC2 instances"
 }
