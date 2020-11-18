@@ -6,7 +6,7 @@ Deploy an EC2 instance and several EBS volumes to test them.
 
 | Resource | Estimated cost (without VAT) | Link |
 |------|---------|---------|
-| EC2 | 0,13 $/h x # of instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
+| EC2 | 0,013 $/h x # of instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
 | EBS | see pricing | [Pricing](https://aws.amazon.com/ebs/pricing/) |
 
 | Automation | Time |

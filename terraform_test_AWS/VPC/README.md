@@ -6,7 +6,7 @@ Deploy a custom VPC with Route53 records and simple EC2 instances to test ping a
 
  | Resource | Estimated cost (without VAT) | Link |
  |------|---------|---------|
- | EC2 | 0,13x3 $/h | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
+ | EC2 | 0,013x3 $/h | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
  | Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
 
  | Automation | Time |

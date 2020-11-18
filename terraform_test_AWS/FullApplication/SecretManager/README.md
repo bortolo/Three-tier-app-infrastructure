@@ -7,8 +7,8 @@ Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in
 
 | Resource | Estimated cost (without VAT) | Link |
 |------|---------|---------|
-| EC2 | 0,13 $/h | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
-| RDS | 0,2 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
+| EC2 | 0,013 $/h | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
+| RDS | 0,02 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
 | SecretsManager | <0,4$/month per secret - see pricing | [Pricing](https://aws.amazon.com/secrets-manager/pricing/) |
 | Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
 | Elastic IP | 0 $/h (it costs only if it is not assigned to EC2: 0,05$/h)| [Pricing](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/) |
