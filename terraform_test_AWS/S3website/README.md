@@ -23,7 +23,6 @@ Deploy a custom VPC with Route53 records and simple EC2 instances to test ping a
 
 ## Usage
 
-Generete your [public ssh key](https://www.ssh.com/ssh/keygen/) and update `main.tf` file with your `id_rsa.pub` in the field `public_key` of the `aws_key_pair` resource.
 To run this example you need to execute:
 
 ```bash
@@ -34,11 +33,14 @@ $ terraform apply
 
 Note that this example may create resources which can cost money. Run `terraform destroy` when you don't need these resources.
 
-### How to test it
+Go to Route53 dashboard, ***Hosted Zone*** and select the zone that you just created. Copy the name servers of the record type NS (there should be four of them). Now go to Route53 dashboard, ***Registered domain*** and select your domain. Update ***Nameservers*** section with the name servers just copied from the the zone.
 
-All the EC2 instances have public_ip enabled but only public_subnet is routed to the internet gateway. Therefore you will be able to reach only the public instance from your workstation (with both `ssh` or `ping` command).
+### Test
 
-If you log-in the public instance you can also try the Route53 records. Run the `ping` command using `database.example.com.private_host_zone` or `private.example.com.private_host_zone` instead of the IP address of the instances.
+To test S3 type the following URL `http://<your-domain-name>.s3-website.eu-central-1.amazonaws.com`
+
+If it works you have correctly deployed your s3 bucket.
+Test the Route53 DNS resolution (remember that for DNS propagation you need at lease 2 days for a new hosted zone) with the follwing URL `http://<your-domain-name>`
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
