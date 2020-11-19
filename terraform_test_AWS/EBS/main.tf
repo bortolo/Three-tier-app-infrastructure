@@ -184,7 +184,6 @@ module "ec2_public" {
 # Attached disk
 # i3.large (read: 23.000 IOPS / write: 23.900 IOPS)
 ################################################################################
-/*
 module "ec2_public_i" {
   source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
   name                        = "public_server_i"
@@ -199,7 +198,7 @@ module "ec2_public_i" {
 
   tags = merge(local.user_tag, local.ec2_tag_public)
 }
-*/
+
 
 module "aws_security_group_server" {
   source      = "../../modules_AWS/terraform-aws-security-group-master"
