@@ -13,6 +13,10 @@ formatter() {
           g=$(printf "%-$(($w-10))s" "-")
           r=$(printf "%-$(($w-9))s" "-")
           echo -e "\e[34m\e[1m[$f] ${s// /*}\e[0m";
+
+          if test -f "main.tf";
+          then
+
           echo -e "\e[2m[Formatting] ${g// /-}\e[0m";
           terraform fmt;
           echo -e "\e[0m\e[2m[Resources] ${r// /-}\e[0m";
@@ -39,6 +43,10 @@ formatter() {
             else
               echo -e "tfstate: NO"
             fi
+
+          else
+            echo -e "N/A"
+          fi
 
         formatter
         cd ..
