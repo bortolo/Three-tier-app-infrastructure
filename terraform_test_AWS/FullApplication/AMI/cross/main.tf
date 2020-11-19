@@ -4,8 +4,8 @@ provider "aws" {
 
 locals {
   user_tag = {
-    Owner = var.awsusername
-    Test  = "AMI"
+    Owner       = var.awsusername
+    Test        = "AMI"
     Environment = "cross"
   }
 }
@@ -20,9 +20,9 @@ module "db-secrets" {
       name        = var.db_secret_name
       description = "db user and password"
       secret_key_value = {
-        USERNAME = var.db_username
-        PASSWORD = var.db_password
-        DATABASE_URL   = var.db_private_dns
+        USERNAME     = var.db_username
+        PASSWORD     = var.db_password
+        DATABASE_URL = var.db_private_dns
       }
       recovery_window_in_days = 7
     },
