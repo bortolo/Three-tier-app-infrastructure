@@ -6,8 +6,13 @@ Deploy an EC2 instance and several EBS volumes to test them.
 
 | Resource | Estimated cost (without VAT) | Link |
 |------|---------|---------|
-| EC2 | 0,013 $/h x # of instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
+| EC2 t2.micro | 0,013 $/h | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
 | EBS | see pricing | [Pricing](https://aws.amazon.com/ebs/pricing/) |
+| gp2 | 0,0026 $/h for 16GB (example) | [Pricing](https://aws.amazon.com/ebs/pricing/) |
+| io2 | 0,72 $/h for 128GB and 6.400 IOPS (example) | [Pricing](https://aws.amazon.com/ebs/pricing/) |
+| io1 | 0,18 $/h for 32GB and 1.600 IOPS (example) | [Pricing](https://aws.amazon.com/ebs/pricing/) |
+| st1 | 0,0375 $/h for 500GB (minimum size) | [Pricing](https://aws.amazon.com/ebs/pricing/) |
+| sc1 | 0,0125 $/h for 500GB (minimum size) | [Pricing](https://aws.amazon.com/ebs/pricing/) |
 
 | Automation | Time |
 |------|---------|
