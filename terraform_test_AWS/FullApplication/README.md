@@ -12,4 +12,4 @@ Here below you can find an index of all the examples related to this tutorial. I
 - **[SecretsManager and IAM role](./SecretManager):** learn how to manage database secrets dynamically and assign role to AWS services.
 - **[Use a custom VPC](./CustomVPC):** deploy you infrastructure in a custom VPC.
 - **[Deploy network loadbalancer](./Loadbalancer):** deploy a NLB and try to scale-out manually.
-- **[Use AMI to promete app into production](./AMI):** deploy a dev environment and build AMI to promote the app into a production environment
+- **[Use AMI to promote app into production](./AMI):** deploy a dev environment and build AMI to promote the app into a production environment
