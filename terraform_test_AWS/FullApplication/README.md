@@ -3,7 +3,7 @@
 In this example we are going to deploy step-by-step a multi-tier application on AWS infrastructure.
 The final layout that you are going to build at the end of this tutorial is depicted by the following picture.
 
-![appview](./Loadbalancer/images/Loadbalancerarchitecture.png)
+![appview](./AMI/images/AMIarchitecture.png)
 
 Here below you can find an index of all the examples related to this tutorial. In each example we are going to focus on a particular component of the final architectural layout. Each step is an auto-consistent that you can run and play with it to gain more confidence with the modules of the full example.
 
@@ -12,3 +12,4 @@ Here below you can find an index of all the examples related to this tutorial. I
 - **[SecretsManager and IAM role](./SecretManager):** learn how to manage database secrets dynamically and assign role to AWS services.
 - **[Use a custom VPC](./CustomVPC):** deploy you infrastructure in a custom VPC.
 - **[Deploy network loadbalancer](./Loadbalancer):** deploy a NLB and try to scale-out manually.
+- **[Use AMI to promete app into production](./AMI):** deploy a dev environment and build AMI to promote the app into a production environment
