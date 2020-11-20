@@ -49,7 +49,7 @@ iperf3 -c <private-ip-of-server-iperf3>
 ```
 You should get the following results:
 | EC2 | cluster (a) | spread (b) | partition (b) |
-|------|---------|---------|
+|------|---------|---------|---------|
 | cluster (a) | ping:0,2ms - throughput:10Gbits | ping:0,6ms - throughput:5Gbits | ping:0,6ms / throughput:5Gbits |
 | spread (a)| ping:0,2ms - throughput:5Gbits | ping:0,6ms - throughput:5Gbits | ping:0,6ms / throughput:5Gbits |
 | partition (a)| ping:0,2ms - throughput:5Gbits | ping:0,6ms - throughput:5Gbits | ping:0,6ms / throughput:5Gbits |
