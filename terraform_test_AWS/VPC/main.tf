@@ -1,77 +1,119 @@
+################################################################################
+# GETTING STARTED WITH TERRAFORM LANGUAGE
+# Terraform uses its own configuration language, designed to allow concise
+# descriptions of infrastructure. The Terraform language is declarative,
+# describing an intended goal rather than the steps to reach that goal.
+# There are 5 type of terraform block in this .tf file:
+#
+# - provider configuration; the name given in the block header (es. "aws") is
+#                           the local name of the provider to configure.
+#                           This provider should already be included in a
+#                           required_providers block (see versions.tf file)
+#
+# - locals (see the code below in this file)
+#
+# - data (see the code below in this file)
+#
+# - resource (see the code below in this file)
+#
+# - module (see the code below in this file)
+#
+################################################################################
+
 provider "aws" {
   region = "eu-central-1"
 }
 
+################################################################################
+# - locals;
+#
+################################################################################
 locals {
   user_tag = {
-    Owner = var.awsusername
-    Test  = "VPC"
-  }
-
+                # Here you can see how to use a variable defined in variable.tf file var.<name-of-the-variable>
+                Owner = var.awsusername
+                Test  = "VPC"
+              }
   ec2_tag_public   = { server_type = "public" }
   ec2_tag_private  = { server_type = "private" }
   ec2_tag_database = { server_type = "database" }
-
-  security_group_tag_ec2 = {
-    scope = "security_server"
-  }
+  security_group_tag_ec2 = {scope = "security_server"}
 }
 
-data "aws_security_group" "default" {
-  name   = "default"
-  vpc_id = module.vpc.vpc_id
+
+################################################################################
+# Get the aws ami metadata of and Ubuntu OS image
+# - data;
+#
+################################################################################
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  owners = ["099720109477"] # Canonical
 }
 
-module "vpc" {
-  source = "../../modules_AWS/terraform-aws-vpc-master"
-
-  name = "complete-example"
-
-  cidr = "10.0.0.0/16"
-
-  azs = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
-
-  private_subnets = ["10.0.0.0/21", "10.0.16.0/21", "10.0.32.0/21"]
-  private_subnet_tags = {
-    subnet_type = "private"
-  }
-
-  public_subnets = ["10.0.48.0/21", "10.0.64.0/21", "10.0.80.0/21"]
-  public_subnet_tags = {
-    subnet_type = "public"
-  }
-
-  database_subnets = ["10.0.96.0/21", "10.0.112.0/21", "10.0.128.0/21"]
-  database_subnet_tags = {
-    subnet_type = "database"
-  }
-
-  create_database_subnet_group = false
-
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-
-  enable_classiclink             = false
-  enable_classiclink_dns_support = false
-
-  enable_nat_gateway     = false
-  single_nat_gateway     = false
-  one_nat_gateway_per_az = false
-
-
-  enable_vpn_gateway = false
-
-  enable_dhcp_options = true
-  //dhcp_options_domain_name         = "service.consul"
-  //dhcp_options_domain_name_servers = ["127.0.0.1", "10.10.0.2"]
-
+################################################################################
+# Create a key pair to ssh on remote EC2 host
+# - resource;
+#
+################################################################################
+resource "aws_key_pair" "this" {
+  key_name   = "${local.user_tag.Owner}${local.user_tag.Test}"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCVPI+y9VK/2KhV0kNH1boKE3xTkVIo57fWX1qf8+AR4uu+IIr1sM4LLWcbhTR4WY8okfzv9LoCl/LWg30ODsbLuYX2heamZOuSg5CyFSJj6i2RgS2M2wppKLo13+tEqUm4c4E6dnVk2YHeDs7A5asL1IUGnqvcpey2+ZMTgCEa6nfqxitSl3wWSuMZpNUTXtnQh/3Yp1dMlHjdUuiUCHEKIPyHdz2mF/i6yEf4RPLFWVKpX+o1TpfnoVlFipiobcqiZ0SOOgJsbqWGrykrdnYbvOYtKBpNF3OSTZdBaxRHtH907ykre+9gqTPnQFqq3hncUNQuQvpiv9SlZyuCVmr5 andreabortolossi@Andreas-MBP.lan"
 
   tags = local.user_tag
 }
 
-##############
-# Route53
-##############
+################################################################################
+# Create a custom VPC using the terraform module terraform-aws-vpc-master
+# - module;
+#
+################################################################################
+module "vpc" {
+  source = "../../modules_AWS/terraform-aws-vpc-master"
+
+  name = "complete-example"
+  cidr = "10.0.0.0/16"
+  azs = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
+
+  private_subnets = ["10.0.0.0/21", "10.0.16.0/21", "10.0.32.0/21"]
+  private_subnet_tags = {subnet_type = "private"}
+
+  public_subnets = ["10.0.48.0/21", "10.0.64.0/21", "10.0.80.0/21"]
+  public_subnet_tags = {subnet_type = "public"}
+
+  database_subnets = ["10.0.96.0/21", "10.0.112.0/21", "10.0.128.0/21"]
+  database_subnet_tags = {subnet_type = "database"}
+
+  enable_dns_hostnames            = true
+  enable_dns_support              = true
+  enable_dhcp_options             = true
+
+  create_database_subnet_group    = false
+  enable_classiclink              = false
+  enable_classiclink_dns_support  = false
+  enable_nat_gateway              = false
+  single_nat_gateway              = false
+  one_nat_gateway_per_az          = false
+  enable_vpn_gateway              = false
+
+  tags = local.user_tag
+}
+
+################################################################################
+# Create Route53 host zone and add some DNS records
+#
+#
+#
+#
+################################################################################
 resource "aws_route53_zone" "private" {
   name = "private_host_zone"
   vpc {
@@ -97,31 +139,14 @@ resource "aws_route53_record" "database" {
   records = ["${module.ec2_database.private_ip[0]}"]
 }
 
-#######
-# EC2
-#######
-data "aws_ami" "ubuntu" {
-  most_recent = true
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-  owners = ["099720109477"] # Canonical
-}
-
-resource "aws_key_pair" "this" {
-  key_name   = "${local.user_tag.Owner}${local.user_tag.Test}"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCVPI+y9VK/2KhV0kNH1boKE3xTkVIo57fWX1qf8+AR4uu+IIr1sM4LLWcbhTR4WY8okfzv9LoCl/LWg30ODsbLuYX2heamZOuSg5CyFSJj6i2RgS2M2wppKLo13+tEqUm4c4E6dnVk2YHeDs7A5asL1IUGnqvcpey2+ZMTgCEa6nfqxitSl3wWSuMZpNUTXtnQh/3Yp1dMlHjdUuiUCHEKIPyHdz2mF/i6yEf4RPLFWVKpX+o1TpfnoVlFipiobcqiZ0SOOgJsbqWGrykrdnYbvOYtKBpNF3OSTZdBaxRHtH907ykre+9gqTPnQFqq3hncUNQuQvpiv9SlZyuCVmr5 andreabortolossi@Andreas-MBP.lan"
-
-  tags = local.user_tag
-}
-
+################################################################################
+# Create an EC2 instances using the terraform module terraform-aws-ec2-instance-master
+#
+#
+################################################################################
 module "ec2_public" {
   source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+
   name                        = "public_server"
   instance_count              = 1
   ami                         = data.aws_ami.ubuntu.id
@@ -135,6 +160,11 @@ module "ec2_public" {
   tags = merge(local.user_tag, local.ec2_tag_public)
 }
 
+################################################################################
+# Create an EC2 instances using the terraform module terraform-aws-ec2-instance-master
+#
+#
+################################################################################
 module "ec2_private" {
   source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
   name                        = "private_server"
@@ -150,6 +180,11 @@ module "ec2_private" {
   tags = merge(local.user_tag, local.ec2_tag_private)
 }
 
+################################################################################
+# Create an EC2 instances using the terraform module terraform-aws-ec2-instance-master
+#
+#
+################################################################################
 module "ec2_database" {
   source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
   name                        = "database_server"
@@ -165,6 +200,11 @@ module "ec2_database" {
   tags = merge(local.user_tag, local.ec2_tag_database)
 }
 
+################################################################################
+# Create a security group using the terraform module terraform-aws-security-group-master
+#
+#
+################################################################################
 module "aws_security_group_server" {
   source      = "../../modules_AWS/terraform-aws-security-group-master"
   name        = "server_security_group"
