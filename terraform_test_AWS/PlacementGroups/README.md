@@ -1,28 +1,19 @@
-# VPC architecture
+# AWS Placement Groups
 
-Deploy a custom VPC with Route53 records and simple EC2 instances to test ping and ssh authentication.
+Deploy several EC2 instances inside different placement groups. Test different network performances with iperf3 suite.
 
- ![appview](./images/VPCarchitecture.png)
+ ![appview](./images/PGarchitecture.png)
 
  | Resource | Estimated cost (without VAT) | Link |
  |------|---------|---------|
- | EC2 | 0,013x3 $/h | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
- | Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
+ | Total cost | 0,522 (0,696) $/h | |
+ | EC2 | 0,087x6 (8) $/h | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
 
  | Automation | Time |
  |------|---------|
  | terraform apply | 2min 30sec |
+ | ansible | 30sec |
  | terraform destroy | 1min 30sec |
-
-## Useful links
-
-[AWS VPC site](https://aws.amazon.com/vpc/)
-
-[AWS VPC User Guide](https://docs.aws.amazon.com/vpc/index.html)
-
-[VPC on AWS Quickstart](https://aws-quickstart.github.io/quickstart-aws-vpc/)
-
-[AWS SINGLE VPC DESIGN](http://d0.awsstatic.com/aws-answers/AWS_Single_VPC_Design.pdf)
 
 ## Usage
 
@@ -37,11 +28,31 @@ $ terraform apply
 
 Note that this example may create resources which can cost money. Run `terraform destroy` when you don't need these resources.
 
+Now run ansible playbook to install iperf3 on every EC2 instance:
+```
+ansible-playbook -i ./ec2.py ./configure_volumes.yml -l type_c5a_large
+```
+
 ### How to test it
 
-All the EC2 instances have public_ip enabled but only public_subnet is routed to the internet gateway. Therefore you will be able to reach only the public instance from your workstation (with both `ssh` or `ping` command).
+All the EC2 instances have public_ip enabled, you will be able to reach all the instances from your workstation (with both `ssh` or `ping` command).
 
-If you log-in the public instance you can also try the Route53 records. Run the `ping` command using `database.example.com.private_host_zone` or `private.example.com.private_host_zone` instead of the IP address of the instances.
+If you log-in you can also try different throughput performances.
+Choose one instances for each placement group type. Log-in and run iperf3 as server:
+```
+iperf3 -s
+```
+
+Now log-in on the other instances and launch the client call to the server that you want to test:
+```
+iperf3 -c <private-ip-of-server-iperf3>
+```
+You should get the following results:
+| EC2 | cluster (a) | spread (b) | partition (b) |
+|------|---------|---------|
+| cluster (a) | ping:0,2ms - throughput:10Gbits | ping:0,6ms - throughput:5Gbits | ping:0,6ms / throughput:5Gbits |
+| spread (a)| ping:0,2ms - throughput:5Gbits | ping:0,6ms - throughput:5Gbits | ping:0,6ms / throughput:5Gbits |
+| partition (a)| ping:0,2ms - throughput:5Gbits | ping:0,6ms - throughput:5Gbits | ping:0,6ms / throughput:5Gbits |
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
