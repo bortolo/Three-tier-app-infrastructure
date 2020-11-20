@@ -24,9 +24,24 @@ Deploy a custom VPC with Route53 records and simple EC2 instances to test ping a
 
 [AWS SINGLE VPC DESIGN](http://d0.awsstatic.com/aws-answers/AWS_Single_VPC_Design.pdf)
 
+## Terraform code
+
+If you are new to terraform language read the code of this example, there are many comments that help you understand the basics of this configuration language. Take a moment to read the [terraform documentation](https://www.terraform.io/docs/configuration/index.html).
+
+### What can you find in a terraform folder (aka root module)?
+These are the files that you can find in a terraform folder:
+- `main.tf`; main file where all the AWS resources are defined
+- `variables.tf`; collection of all the terraform variables
+- `outputs.tf`; collection of all the terraform output
+- `versions.tf`; terraform settings
+- `.terraform/`; in this folder terraform will install all the modules and provider plugins
+- `terraform.tfstate`; terraform save in this file the remote state of the resources that have been deployed
+- `terraform.tfstate.backup`; by default, a backup of the state file is written to this file in case the state file is lost or corrupted to simplify recovery
+
 ## Usage
 
 Generete your [public ssh key](https://www.ssh.com/ssh/keygen/) and update `main.tf` file with your `id_rsa.pub` in the field `public_key` of the `aws_key_pair` resource.
+
 To run this example you need to execute:
 
 ```bash

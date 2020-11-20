@@ -14,5 +14,5 @@
 
 variable "awsusername" {
   description = "(Required) Aws username"
-  type = string
+  type        = string
 }

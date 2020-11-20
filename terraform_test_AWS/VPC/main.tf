@@ -1,3 +1,4 @@
+
 ################################################################################
 # GETTING STARTED WITH TERRAFORM LANGUAGE
 # Terraform uses its own configuration language, designed to allow concise
@@ -18,8 +19,13 @@
 #
 # - module (see the code below in this file)
 #
+# - variable (see variables.tf file)
+#
+# - output (see outputs.tf file)
+#
+# - terraform / required_providers (see versions.tf file)
+#
 ################################################################################
-
 provider "aws" {
   region = "eu-central-1"
 }
@@ -33,15 +39,15 @@ provider "aws" {
 ################################################################################
 locals {
   user_tag = {
-                # Here you can see how to use a variable defined in variable.tf
-                # file var.<name-of-the-variable>
-                Owner = var.awsusername
-                Test  = "VPC"
-              }
-  ec2_tag_public   = { server_type = "public" }
-  ec2_tag_private  = { server_type = "private" }
-  ec2_tag_database = { server_type = "database" }
-  security_group_tag_ec2 = {scope = "security_server"}
+    # Here you can see how to use a variable defined in variable.tf
+    # file var.<name-of-the-variable>
+    Owner = var.awsusername
+    Test  = "VPC"
+  }
+  ec2_tag_public         = { server_type = "public" }
+  ec2_tag_private        = { server_type = "private" }
+  ec2_tag_database       = { server_type = "database" }
+  security_group_tag_ec2 = { scope = "security_server" }
 }
 
 
@@ -130,28 +136,28 @@ module "vpc" {
 
   name = "complete-example"
   cidr = "10.0.0.0/16"
-  azs = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
+  azs  = ["eu-central-1a", "eu-central-1b", "eu-central-1c"]
 
-  public_subnets = ["10.0.48.0/21", "10.0.64.0/21", "10.0.80.0/21"]
-  public_subnet_tags = {subnet_type = "public"}
+  public_subnets     = ["10.0.48.0/21", "10.0.64.0/21", "10.0.80.0/21"]
+  public_subnet_tags = { subnet_type = "public" }
 
-  private_subnets = ["10.0.0.0/21", "10.0.16.0/21", "10.0.32.0/21"]
-  private_subnet_tags = {subnet_type = "private"}
+  private_subnets     = ["10.0.0.0/21", "10.0.16.0/21", "10.0.32.0/21"]
+  private_subnet_tags = { subnet_type = "private" }
 
-  database_subnets = ["10.0.96.0/21", "10.0.112.0/21", "10.0.128.0/21"]
-  database_subnet_tags = {subnet_type = "database"}
+  database_subnets     = ["10.0.96.0/21", "10.0.112.0/21", "10.0.128.0/21"]
+  database_subnet_tags = { subnet_type = "database" }
 
-  enable_dns_hostnames            = true
-  enable_dns_support              = true
-  enable_dhcp_options             = true
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+  enable_dhcp_options  = true
 
-  create_database_subnet_group    = false
-  enable_classiclink              = false
-  enable_classiclink_dns_support  = false
-  enable_nat_gateway              = false
-  single_nat_gateway              = false
-  one_nat_gateway_per_az          = false
-  enable_vpn_gateway              = false
+  create_database_subnet_group   = false
+  enable_classiclink             = false
+  enable_classiclink_dns_support = false
+  enable_nat_gateway             = false
+  single_nat_gateway             = false
+  one_nat_gateway_per_az         = false
+  enable_vpn_gateway             = false
 
   tags = local.user_tag
 }
@@ -221,7 +227,7 @@ resource "aws_route53_record" "database" {
 # - tolist(module.vpc.public_subnets)[0]; associate the first public subnet of the VPC
 ################################################################################
 module "ec2_public" {
-  source                      = "../../modules_AWS/terraform-aws-ec2-instance-master"
+  source = "../../modules_AWS/terraform-aws-ec2-instance-master"
 
   name                        = "public_server"
   instance_count              = 1
