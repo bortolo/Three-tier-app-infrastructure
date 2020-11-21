@@ -1,6 +1,10 @@
 #!/bin/bash
 
-folders=("module" "images" "playbooks" "node-rds" "code" "dist" "custom_policies" "Management")
+folders_without_tf=("images" "playbooks" "node-rds" "code" "dist" "custom_policies")
+not_ready_modules=("Management")
+not_root_modules=("module")
+
+folders=("${folders_without_tf[@]}" "${not_ready_modules[@]}" "${not_root_modules[@]}")
 
 formatter() {
   for f in *;  do
