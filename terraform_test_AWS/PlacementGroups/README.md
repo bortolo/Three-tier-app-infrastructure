@@ -6,7 +6,7 @@ Deploy several EC2 instances inside different placement groups. Test different n
 
  | Resource | Estimated cost (without VAT) | Link |
  |------|---------|---------|
- | Total cost | 0,522 (0,696) $/h | |
+ | Total cost | 0,522 (0,696) $/h + # of iperf3 test x 0,02 $ | |
  | EC2 | 0,087x6 (8) $/h | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
  | INTRA Data Transfer (between different AZs) | 0,01 $/GB (each iperf3 test is around 1GB of in and 1GB of out - 0,02 $/iperf3 test) | [Pircing](https://medium.com/@mulupuru/your-comprehensive-guide-to-understanding-aws-data-transfer-costs-f5c8241d65ed) |
 
