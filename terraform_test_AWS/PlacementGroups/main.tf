@@ -9,8 +9,8 @@ locals {
   }
 
   ec2_tag_cluster   = { server_type = "cluster" }
-  ec2_tag_spread   = { server_type = "spread" }
-  ec2_tag_partition   = { server_type = "partition" }
+  ec2_tag_spread    = { server_type = "spread" }
+  ec2_tag_partition = { server_type = "partition" }
   security_group_tag_ec2 = {
     scope = "security_server"
   }
@@ -46,16 +46,16 @@ module "vpc" {
     subnet_type = "public"
   }
 
-  create_database_subnet_group = false
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+  create_database_subnet_group   = false
+  enable_dns_hostnames           = true
+  enable_dns_support             = true
   enable_classiclink             = false
   enable_classiclink_dns_support = false
-  enable_nat_gateway     = false
-  single_nat_gateway     = false
-  one_nat_gateway_per_az = false
-  enable_vpn_gateway = false
-  enable_dhcp_options = true
+  enable_nat_gateway             = false
+  single_nat_gateway             = false
+  one_nat_gateway_per_az         = false
+  enable_vpn_gateway             = false
+  enable_dhcp_options            = true
 
   tags = local.user_tag
 }
@@ -89,9 +89,9 @@ module "ec2_cluster" {
   associate_public_ip_address = true //use this feature only for test/dev purposes
   monitoring                  = false
   vpc_security_group_ids      = [module.aws_security_group_server.this_security_group_id]
-  subnet_id                  = tolist(module.vpc.public_subnets)[0]
+  subnet_id                   = tolist(module.vpc.public_subnets)[0]
 
-  placement_group             = aws_placement_group.cluster.id
+  placement_group = aws_placement_group.cluster.id
 
   tags = merge(local.user_tag, local.ec2_tag_cluster)
 }
@@ -108,7 +108,7 @@ module "ec2_spread" {
   vpc_security_group_ids      = [module.aws_security_group_server.this_security_group_id]
   subnet_ids                  = module.vpc.public_subnets
 
-  placement_group             = aws_placement_group.spread.id
+  placement_group = aws_placement_group.spread.id
 
   tags = merge(local.user_tag, local.ec2_tag_spread)
 }
@@ -125,7 +125,7 @@ module "ec2_partition" {
   vpc_security_group_ids      = [module.aws_security_group_server.this_security_group_id]
   subnet_ids                  = module.vpc.public_subnets
 
-  placement_group             = aws_placement_group.partition.id
+  placement_group = aws_placement_group.partition.id
 
   tags = merge(local.user_tag, local.ec2_tag_partition)
 }

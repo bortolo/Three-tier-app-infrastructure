@@ -1,6 +1,6 @@
 #!/bin/bash
 
-folders=("module" "images" "playbooks" "node-rds" "code" "dist" "custom_policies")
+folders=("module" "images" "playbooks" "node-rds" "code" "dist" "custom_policies" "Management")
 
 formatter() {
   for f in *;  do
@@ -20,6 +20,11 @@ formatter() {
           echo -e "\e[2m[Formatting] ${g// /-}\e[0m";
           terraform fmt;
           echo -e "\e[0m\e[2m[Resources] ${r// /-}\e[0m";
+
+          if test -f "configure_variables.sh";
+          then
+            . ./configure_variables.sh
+          fi
 
           terraform plan -detailed-exitcode &> /dev/null;
 
