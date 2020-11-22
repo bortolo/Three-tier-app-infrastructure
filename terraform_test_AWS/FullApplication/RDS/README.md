@@ -6,7 +6,7 @@ Deploy a mySQL RDS instance and use mySQL dbs stored in it through a local node.
 
 | Resource | Estimated cost (without VAT) | Link |
 |------|---------|---------|
-| RDS | 0,2 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
+| RDS | 0,02 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
 
 | Topic | Data |
 |------|---------|
@@ -19,26 +19,32 @@ Deploy a mySQL RDS instance and use mySQL dbs stored in it through a local node.
 
 ## Usage
 
-### Set db Credentials
-
-Set user and password in `set_db_credentials.sh` script and than run it
-```
-. ./set_db_credentials.sh
-```
-
-Now you can deploy the db instance with terraform. Remember that at the and of the terraform deployment phase you have to copy/paste the `this_db_instance_endpoint` output variable (without the port number) in `dbsees.js` and `index.js`.
-
 ### Deploy RDS instance
 
-To run this example you need to execute:
+When variables are declared in the root module of your configuration (es. `variable.tf`), they can be set in a number of ways. In this example we are going to use a variable definition file (`.tfvars`).
+
+Update the `input.tfvars` file with your own inputs (es. `example_input.tfvars`).
+
+Initialize terraform root module with all the provider plugins and module needed to run this example:
+```
+terraform init
+```
+Verify with `terraform plan` command if everything is ok
+```
+terraform plan -var-file="input.tfvars"
+```
+Now you can deploy the db instance with terraform. Remember that at the and of the terraform deployment phase you have to copy/paste the `this_db_instance_endpoint` output variable (without the port number) in `dbsees.js` and `index.js`.
 
 ```
-$ terraform init
-$ terraform plan
-$ terraform apply
+terraform apply -var-file="input.tfvars"
 ```
 
-Note that this example may create resources which can cost money (AWS Elastic IP, for example). Run `terraform destroy` when you don't need these resources.
+If you want to print again the outputs after you already run the `terraform apply` command you can just run `terraform output`
+
+Note that this example may create resources which can cost money. When you don't need these resources just run:
+```
+terraform destroy -var-file="input.tfvars"
+```
 
 ### Set-up node.js app
 
@@ -46,12 +52,13 @@ Before to do this step you have to deploy an RDS mySQL instance.
 
 If you do not have npm yet installed please follow this [guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 
-Update `dbseed.js` and `index.js` with your RDS inputs (if you user the `set_db_credentials.sh` script you just need to update `<your-db-endpoint>`):
+Update both `dbseed.js` and `index.js` with your RDS inputs:
 ```
+// [LOOK HERE] - Update the code with your data before to run it
 const con = mysql.createConnection({
-    host: "<your-db-endpoint>",                  //Find this info in terraform output or in the db panel Connectivity&Security (don't add port)
-    user: "<admin-name>",                        //The user name you defined during provisioning
-    password: "<your-rds-instance-password>"     //The password you defined during provisioning
+  host: "<your-rds-endpoint>",    // Pick up this value from AWS console or look at the output of terraform apply
+  user: "<admin-user-for-db>",    // This must be the same value as the one you set up in your .tfvars file
+  password: "<password-for-db>",  // This must be the same value as the one you set up in your .tfvars file
 });
 ```
 Run `dbseed.js` to create the table
@@ -82,7 +89,7 @@ On your preferred browser, go to `localhost:3000/view`, you should see a screen 
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12.21 |
+| terraform | >= 0.13.5 |
 | aws | >= 2.68 |
 | node | >= 10.13.0 |
 | npm | >= 6.4.1 |

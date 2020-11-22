@@ -1,9 +1,10 @@
 const mysql = require('mysql');
 
+// [LOOK HERE] - Update the code with your data before to run it
 const con = mysql.createConnection({
-    host: "demodb.ck0joffnfyxn.eu-central-1.rds.amazonaws.com",
-    user: process.env.TF_VAR_db_username,
-    password: process.env.TF_VAR_db_password
+  host: "<your-rds-endpoint>",    // Pick up this value from AWS console or look at the output of terraform apply
+  user: "<admin-user-for-db>",    // This must be the same value as the one you set up in your .tfvars file
+  password: "<password-for-db>",  // This must be the same value as the one you set up in your .tfvars file
 });
 
 con.connect(function(err) {
