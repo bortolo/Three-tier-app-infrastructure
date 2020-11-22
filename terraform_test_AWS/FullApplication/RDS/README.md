@@ -74,7 +74,7 @@ Now that you have created the main table you can run your code
 ```
 node index.js
 ```
-On your preferred browser, go to `localhost:3000/views`, you should see a screen like this (with zero rows because it is still empty)
+On your preferred browser, go to `localhost:3000/view`, you should see a screen like this (with zero rows because it is still empty)
 
 ![appview](./images/appview.png)
 
