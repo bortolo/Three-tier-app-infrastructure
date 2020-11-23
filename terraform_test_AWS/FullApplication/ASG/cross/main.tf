@@ -13,43 +13,43 @@ locals {
 ################################################################################
 # Secret Manager
 ################################################################################
-module "db-secrets" {
-  source = "../../../../modules_AWS/terraform-aws-secrets-manager-master"
-  secrets = [
-    {
-      name        = var.db_secret_name
-      description = "db user and password"
-      secret_key_value = {
-        USERNAME     = var.db_username
-        PASSWORD     = var.db_password
-        DATABASE_URL = var.db_private_dns
-      }
-      recovery_window_in_days = 7
-    },
-  ]
-
-  tags = local.user_tag
-}
+// module "db-secrets" {
+//   source = "../../../../modules_AWS/terraform-aws-secrets-manager-master"
+//   secrets = [
+//     {
+//       name        = var.db_secret_name
+//       description = "db user and password"
+//       secret_key_value = {
+//         USERNAME     = var.db_username
+//         PASSWORD     = var.db_password
+//         DATABASE_URL = var.db_private_dns
+//       }
+//       recovery_window_in_days = 7
+//     },
+//   ]
+//
+//   tags = local.user_tag
+// }
 
 ################################################################################
 # IAM assumable role with custom policies
 ################################################################################
-module "iam_assumable_role_custom" {
-  source            = "../../../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
-  trusted_role_arns = []
-  trusted_role_services = [
-    "ec2.amazonaws.com"
-  ]
-  create_role             = true
-  create_instance_profile = true
-  role_name               = var.iam_role_name
-  role_requires_mfa       = false
-  custom_role_policy_arns = [
-    "arn:aws:iam::aws:policy/SecretsManagerReadWrite",
-  ]
-
-  tags = local.user_tag
-}
+// module "iam_assumable_role_custom" {
+//   source            = "../../../../modules_AWS/terraform-aws-iam-master/modules/iam-assumable-role"
+//   trusted_role_arns = []
+//   trusted_role_services = [
+//     "ec2.amazonaws.com"
+//   ]
+//   create_role             = true
+//   create_instance_profile = true
+//   role_name               = var.iam_role_name
+//   role_requires_mfa       = false
+//   custom_role_policy_arns = [
+//     "arn:aws:iam::aws:policy/SecretsManagerReadWrite",
+//   ]
+//
+//   tags = local.user_tag
+// }
 
 ################################################################################
 # Key pair name for the EC2 instances

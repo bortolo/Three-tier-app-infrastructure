@@ -2,9 +2,9 @@
 ################################################################################
 # General services variables
 ################################################################################
-variable "db_secret_name" {
-  description = "(Required) db secret name for AWS SecretsManager"
-}
+// variable "db_secret_name" {
+//   description = "(Required) db secret name for AWS SecretsManager"
+// }
 
 ################################################################################
 # VPC variables
@@ -46,22 +46,22 @@ variable "vpc_tags" {
 ################################################################################
 # Route53 variables
 ################################################################################
-variable "route53_tags" {
-  description = "A map of tags to add to route53 resources"
-  type        = map(string)
-  default     = {}
-}
+// variable "route53_tags" {
+//   description = "A map of tags to add to route53 resources"
+//   type        = map(string)
+//   default     = {}
+// }
 
 ################################################################################
 # Network Load Balancer variables
 ################################################################################
-variable "nlb_name" {
-  description = "(Required) The Network Load Balancer name (must be unique)"
+variable "alb_name" {
+  description = "(Required) The Application Load Balancer name (must be unique)"
   type = string
 }
 
-variable "nlb_tags" {
-  description = "A map of tags to add to NLB resources"
+variable "alb_tags" {
+  description = "A map of tags to add to ALB resources"
   type        = map(string)
   default     = {}
 }
@@ -99,10 +99,10 @@ variable "ec2_public_ip" {
   type = bool
 }
 
-variable "ec2_iam_role_name" {
-  description = "(Required) IAM role name for the custom policy of EC2 instances running nodejs and accessing AWS SecretsManager"
-  type = string
-}
+// variable "ec2_iam_role_name" {
+//   description = "(Required) IAM role name for the custom policy of EC2 instances running nodejs and accessing AWS SecretsManager"
+//   type = string
+// }
 
 variable "ec2_user_data" {
   description = "The user data to provide when launching the instance. Do not pass gzip-compressed data via this argument; see user_data_base64 instead."
@@ -119,23 +119,23 @@ variable "ec2_tags" {
 ################################################################################
 # DB variables
 ################################################################################
-variable "db_name" {
-  description = "(Required) The DB name"
-  type = string
-}
-
-variable "db_identifier" {
-  description = "(Required) The DB identifier (must be unique)"
-  type = string
-}
-
-variable "db_instance_class" {
-  description = "(Required) The DB size to use"
-  type = string
-}
-
-variable "db_tags" {
-  description = "A map of tags to add to DB resources"
-  type        = map(string)
-  default     = {}
-}
+// variable "db_name" {
+//   description = "(Required) The DB name"
+//   type = string
+// }
+//
+// variable "db_identifier" {
+//   description = "(Required) The DB identifier (must be unique)"
+//   type = string
+// }
+//
+// variable "db_instance_class" {
+//   description = "(Required) The DB size to use"
+//   type = string
+// }
+//
+// variable "db_tags" {
+//   description = "A map of tags to add to DB resources"
+//   type        = map(string)
+//   default     = {}
+// }

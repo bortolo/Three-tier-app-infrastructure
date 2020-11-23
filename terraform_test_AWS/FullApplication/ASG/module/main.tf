@@ -1,13 +1,13 @@
 ################################################################################
 # Get information about cross services
 ################################################################################
-data "aws_secretsmanager_secret" "db-secret" {
-  name = var.db_secret_name
-}
-
-data "aws_secretsmanager_secret_version" "db-secret-version" {
-  secret_id = data.aws_secretsmanager_secret.db-secret.id
-}
+// data "aws_secretsmanager_secret" "db-secret" {
+//   name = var.db_secret_name
+// }
+//
+// data "aws_secretsmanager_secret_version" "db-secret-version" {
+//   secret_id = data.aws_secretsmanager_secret.db-secret.id
+// }
 
 ################################################################################
 # Data sources to create custom VPC and custom subnets (public and database)
@@ -36,67 +36,85 @@ module "vpc" {
 ################################################################################
 # Route53
 ################################################################################
-resource "aws_route53_zone" "private" {
-  name = "private_host_zone"
-  vpc {
-    vpc_id = module.vpc.vpc_id
-  }
-
-  tags = var.route53_tags
-}
-
-resource "aws_route53_record" "database" {
-  zone_id = aws_route53_zone.private.zone_id
-  name    = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["DATABASE_URL"]
-  type    = "CNAME"
-  ttl     = "300"
-  records = ["${module.db.this_db_instance_address}"]
-}
+// resource "aws_route53_zone" "private" {
+//   name = "private_host_zone"
+//   vpc {
+//     vpc_id = module.vpc.vpc_id
+//   }
+//
+//   tags = var.route53_tags
+// }
+//
+// resource "aws_route53_record" "database" {
+//   zone_id = aws_route53_zone.private.zone_id
+//   name    = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["DATABASE_URL"]
+//   type    = "CNAME"
+//   ttl     = "300"
+//   records = ["${module.db.this_db_instance_address}"]
+// }
 
 ##################################################################
-# Network Load Balancer with Elastic IPs attached
+# Application Load Balancer
 ##################################################################
-
-module "nlb" {
+module "alb" {
   source = "../../../../modules_AWS/terraform-aws-alb-master"
-  name = var.nlb_name
-  load_balancer_type = "network"
-  vpc_id = module.vpc.vpc_id
-  subnet_mapping = [{ allocation_id : aws_eip.lb[0].id, subnet_id : module.vpc.public_subnets[0] }]
+
+  name                 = var.alb_name
+  load_balancer_type   = "application"
+  vpc_id               = module.vpc.vpc_id
+  security_groups      = [module.aws_security_group_ALB.this_security_group_id]
+  subnets              = module.vpc.public_subnets
+
   http_tcp_listeners = [
     {
       port               = 80
-      protocol           = "TCP"
+      protocol           = "HTTP"
       target_group_index = 0
     },
   ]
   target_groups = [
-    {
-      name_prefix      = "tu1-"
-      backend_protocol = "TCP"
-      backend_port     = 8080
-      target_type      = "instance"
-
-      tags = {
-        tcp_udp = true
-      }
-    },
+  {
+    name_prefix          = "h1"
+    backend_protocol     = "HTTP"
+    backend_port         = 8080
+    target_type          = "instance"
+    deregistration_delay = 10
+    health_check = {
+      enabled             = true
+      interval            = 30
+      path                = "/"
+      port                = "traffic-port"
+      healthy_threshold   = 3
+      unhealthy_threshold = 3
+      timeout             = 6
+      protocol            = "HTTP"
+      matcher             = "200-399"
+    }
+    tags = {
+      InstanceTargetGroupTag = "baz"
+    }
+  },
   ]
 
-  tags = var.nlb_tags
+  tags = var.alb_tags
+}
+
+module "aws_security_group_ALB" {
+  source      = "../../../../modules_AWS/terraform-aws-security-group-master"
+  name        = "ALB_security_group"
+  description = "Security group for ALB"
+  vpc_id      = module.vpc.vpc_id
+  ingress_cidr_blocks = ["0.0.0.0/0"]
+  ingress_rules       = ["http-80-tcp"]
+  egress_rules        = ["all-all"]
+
+  tags = var.alb_tags
 }
 
 resource "aws_lb_target_group_attachment" "test" {
   count            = length(module.ec2_FE.id)
-  target_group_arn = module.nlb.target_group_arns[0]
+  target_group_arn = module.alb.target_group_arns[0]
   target_id        = module.ec2_FE.id[count.index]
-}
-
-resource "aws_eip" "lb" {
-  count = 1
-  vpc   = true
-
-  tags = var.nlb_tags
 }
 
 ################################################################################
@@ -113,7 +131,7 @@ module "ec2_FE" {
   monitoring                  = false
   vpc_security_group_ids      = [module.aws_security_group_FE.this_security_group_id]
   subnet_id                   = module.vpc.public_subnets[0]
-  iam_instance_profile        = var.ec2_iam_role_name //it is highly dependent on terraform custom module
+  // iam_instance_profile        = var.ec2_iam_role_name //it is highly dependent on terraform custom module
   user_data                   = var.ec2_user_data
 
   tags = var.ec2_tags
@@ -126,18 +144,20 @@ module "aws_security_group_FE" {
   vpc_id      = module.vpc.vpc_id
   ingress_with_cidr_blocks = [
     {
-      from_port   = 8080
-      to_port     = 8080
-      protocol    = "tcp"
-      description = "http port"
-      cidr_blocks = "0.0.0.0/0"
-    },
-    {
       from_port   = 22
       to_port     = 22
       protocol    = "tcp"
       description = "SSH port"
       cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+  ingress_with_source_security_group_id = [
+    {
+      from_port                = 8080
+      to_port                  = 8080
+      protocol                 = "tcp"
+      description              = "Service name"
+      source_security_group_id = module.aws_security_group_ALB.this_security_group_id
     },
   ]
   egress_with_cidr_blocks = [
@@ -156,53 +176,53 @@ module "aws_security_group_FE" {
 ################################################################################
 # DB
 ################################################################################
-module "db" {
-  source                  = "../../../../modules_AWS/terraform-aws-rds-master/"
-  identifier              = var.db_identifier
-  engine                  = "mysql"
-  engine_version          = "8.0.20"
-  instance_class          = var.db_instance_class
-  allocated_storage       = 5
-  storage_encrypted       = false
-  name                    = var.db_name
-  username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["USERNAME"]
-  password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["PASSWORD"]
-  port                    = "3306"
-  vpc_security_group_ids  = [module.aws_security_group_db.this_security_group_id]
-  maintenance_window      = "Mon:00:00-Mon:03:00"
-  backup_window           = "03:00-06:00"
-  publicly_accessible     = false
-  backup_retention_period = 0
-  subnet_ids              = module.vpc.database_subnets
-  family                  = "mysql8.0"
-  major_engine_version    = "8.0"
-
-  tags = var.db_tags
-}
-
-module "aws_security_group_db" {
-  source      = "../../../../modules_AWS/terraform-aws-security-group-master"
-  name        = "db_security_group"
-  description = "Security group for db mysql"
-  vpc_id      = module.vpc.vpc_id
-  ingress_with_cidr_blocks = [
-    {
-      from_port   = 0
-      to_port     = 0
-      protocol    = -1
-      description = "allo all inbound"
-      cidr_blocks = "0.0.0.0/0"
-    },
-  ]
-  egress_with_cidr_blocks = [
-    {
-      from_port   = 0
-      to_port     = 0
-      protocol    = -1
-      description = "allow all outbound"
-      cidr_blocks = "0.0.0.0/0"
-    },
-  ]
-
-  tags = var.db_tags
-}
+// module "db" {
+//   source                  = "../../../../modules_AWS/terraform-aws-rds-master/"
+//   identifier              = var.db_identifier
+//   engine                  = "mysql"
+//   engine_version          = "8.0.20"
+//   instance_class          = var.db_instance_class
+//   allocated_storage       = 5
+//   storage_encrypted       = false
+//   name                    = var.db_name
+//   username                = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["USERNAME"]
+//   password                = jsondecode(data.aws_secretsmanager_secret_version.db-secret-version.secret_string)["PASSWORD"]
+//   port                    = "3306"
+//   vpc_security_group_ids  = [module.aws_security_group_db.this_security_group_id]
+//   maintenance_window      = "Mon:00:00-Mon:03:00"
+//   backup_window           = "03:00-06:00"
+//   publicly_accessible     = false
+//   backup_retention_period = 0
+//   subnet_ids              = module.vpc.database_subnets
+//   family                  = "mysql8.0"
+//   major_engine_version    = "8.0"
+//
+//   tags = var.db_tags
+// }
+//
+// module "aws_security_group_db" {
+//   source      = "../../../../modules_AWS/terraform-aws-security-group-master"
+//   name        = "db_security_group"
+//   description = "Security group for db mysql"
+//   vpc_id      = module.vpc.vpc_id
+//   ingress_with_cidr_blocks = [
+//     {
+//       from_port   = 0
+//       to_port     = 0
+//       protocol    = -1
+//       description = "allo all inbound"
+//       cidr_blocks = "0.0.0.0/0"
+//     },
+//   ]
+//   egress_with_cidr_blocks = [
+//     {
+//       from_port   = 0
+//       to_port     = 0
+//       protocol    = -1
+//       description = "allow all outbound"
+//       cidr_blocks = "0.0.0.0/0"
+//     },
+//   ]
+//
+//   tags = var.db_tags
+// }

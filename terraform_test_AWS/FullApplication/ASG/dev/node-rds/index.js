@@ -1,65 +1,4 @@
-/**************
-*** AWS SDK ***
-***************/
-var AWS = require('aws-sdk'),
-region = process.env.TF_VAR_region,
-secretName = process.env.TF_VAR_db_secret,
-secret,
-decodedBinarySecret;
-var client = new AWS.SecretsManager({region: region});
 
-/**************
-*** DB seed ***
-***************/
-client.getSecretValue({ SecretId: secretName }, function (err, data) {
-  if (err) console.log(err, err.stack);
-  if ("SecretString" in data) {
-        secret = data.SecretString;
-      } else {
-                let buff = new Buffer(data.SecretBinary, "base64");
-                decodedBinarySecret = buff.toString("ascii");
-                }
-    const secretJSON = JSON.parse(secret);
-    const mysql_create = require('mysql');
-    const con_create = mysql_create.createConnection({
-        host: secretJSON.DATABASE_URL+".private_host_zone",
-        user: secretJSON.USERNAME,
-        password: secretJSON.PASSWORD
-    });
-
-    con_create.connect(function(err) {
-        if (err) throw err;
-        con_create.query('CREATE DATABASE IF NOT EXISTS main;');
-        con_create.query('USE main;');
-        con_create.query('CREATE TABLE IF NOT EXISTS users(id int NOT NULL AUTO_INCREMENT, username varchar(30), email varchar(255), age int, PRIMARY KEY(id));', function(error, result, fields) {
-            console.log(result);
-        });
-        con_create.end();
-    });
-
-});
-
-/**************
-*** DB mgmt ***
-***************/
-const mysql = require('mysql');
-var con;
-client.getSecretValue({ SecretId: secretName }, function (err, data) {
-  if (err) console.log(err, err.stack);
-  if ("SecretString" in data) {
-        secret = data.SecretString;
-      } else {
-                let buff = new Buffer(data.SecretBinary, "base64");
-                decodedBinarySecret = buff.toString("ascii");
-                }
-  const secretJSON = JSON.parse(secret);
-  con = mysql.createConnection({
-    host: secretJSON.DATABASE_URL+".private_host_zone",
-    user: secretJSON.USERNAME,
-    password: secretJSON.PASSWORD,
-    database: "main"
-  });
-});
 
 /**************
 *** Routes ****
@@ -96,27 +35,5 @@ app.get('/ip', (req, res) => {
 });
 app.get('/', (req, res) => {
       res.render('home');
-});
-app.get('/view', (req, res) => {
-    con.connect(function(err) {
-        con.query(`SELECT * FROM main.users`, function(err, result, fields) {
-            if (err) res.send(err);
-            if (result) res.render('viewdb', {obj: result});
-        });
-    });
-});
-app.post('/view/add', (req, res) => {
-    if (req.body.username && req.body.email && req.body.age) {
-        console.log('Request received');
-        con.connect(function(err) {
-            con.query(`INSERT INTO main.users (username, email, age) VALUES ('${req.body.username}', '${req.body.email}', '${req.body.age}')`, function(err, result, fields) {
-                if (err) res.send(err);
-                if (result) res.redirect('/view'); //res.send({username: req.body.username, email: req.body.email, age: req.body.age});
-                if (fields) console.log(fields);
-            });
-        });
-    } else {
-        console.log('Missing a parameter');
-    }
 });
 app.listen(port);
