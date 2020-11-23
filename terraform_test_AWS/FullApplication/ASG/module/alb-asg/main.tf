@@ -33,7 +33,7 @@ module "alb" {
   load_balancer_type   = "application"
   vpc_id               = module.vpc.vpc_id
   security_groups      = [module.aws_security_group_ALB.this_security_group_id]
-  subnets              = module.vpc.public_subnets
+  // subnets              = module.vpc.public_subnets
 
   http_tcp_listeners = [
     {
@@ -110,8 +110,8 @@ module "asg_prod" {
   vpc_zone_identifier       = module.vpc.public_subnets
   health_check_type         = "EC2"
   min_size                  = 0
-  max_size                  = 3
-  desired_capacity          = 1
+  max_size                  = 4
+  desired_capacity          = 4
   wait_for_capacity_timeout = 0
   // service_linked_role_arn   = aws_iam_service_linked_role.autoscaling.arn
 
