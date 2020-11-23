@@ -45,18 +45,14 @@ data "aws_ami" "ubuntu" {
 # Create the app infrastructure
 ################################################################################
 module "myapp" {
-  source = "../module"
-
-  // db_secret_name = var.db_secret_name
+  source = "../module/nlb-static"
 
   vpc_name             = "custom-dev"
   vpc_cidr             = "10.0.0.0/16"
   vpc_azs              = ["eu-central-1a","eu-central-1b"]
   vpc_public_subnets   = ["10.0.8.0/21","10.0.16.0/21"]
-  // vpc_database_subnets = ["10.0.16.0/21", "10.0.24.0/21"]
-  vpc_tags             = local.user_tag
 
-  // route53_tags = local.user_tag
+  vpc_tags             = local.user_tag
 
   alb_name = "alb-dev"
   alb_tags = local.user_tag
@@ -67,12 +63,6 @@ module "myapp" {
   ec2_instance_type       = "t2.micro"
   ec2_key_pair_name       = var.key_pair_name
   ec2_public_ip           = true
-  // ec2_iam_role_name       = var.iam_role_name
   ec2_tags                = merge(local.user_tag, local.ec2_tag)
-
-  // db_name           = "demodbdev"
-  // db_identifier     = "demodbdev"
-  // db_instance_class = "db.t2.micro"
-  // db_tags           = merge(local.user_tag, local.db_tag)
 
 }

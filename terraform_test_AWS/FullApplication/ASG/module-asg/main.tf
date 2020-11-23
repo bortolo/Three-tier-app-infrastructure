@@ -111,31 +111,71 @@ module "aws_security_group_ALB" {
   tags = var.alb_tags
 }
 
-resource "aws_lb_target_group_attachment" "test" {
-  count            = length(module.ec2_FE.id)
-  target_group_arn = module.alb.target_group_arns[0]
-  target_id        = module.ec2_FE.id[count.index]
+// resource "aws_lb_target_group_attachment" "test" {
+//   target_group_arn = module.alb.target_group_arns[0]
+//   target_id        = module.ec2_FE.id[count.index]
+// }
+//
+// resource "aws_autoscaling_attachment" "asg_attachment_bar" {
+//   autoscaling_group_name = module.asg_prod.this_autoscaling_group_id
+//   alb_target_group_arn   = module.alb.this_lb_arn
+// }
+
+################################################################################
+# EC2 wit ASG
+################################################################################
+module "asg_prod" {
+  source = "../../../../modules_AWS/terraform-aws-autoscaling-master"
+
+  name = "asg-prod"
+
+  # Launch configuration
+  #
+  # launch_configuration = "my-existing-launch-configuration" # Use the existing launch configuration
+  # create_lc = false # disables creation of launch configuration
+  lc_name = "example-lc"
+
+  image_id                     = var.ec2_ami_id
+  instance_type                = var.ec2_instance_type
+  security_groups              = [module.aws_security_group_FE.this_security_group_id]
+  associate_public_ip_address  = var.ec2_public_ip
+  key_name                     = var.ec2_key_pair_name
+  recreate_asg_when_lc_changes = true
+  target_group_arns            = [module.alb.target_group_arns[0]]
+
+  user_data                    = var.ec2_user_data
+
+  # Auto scaling group
+  asg_name                  = "example-asg"
+  vpc_zone_identifier       = module.vpc.public_subnets
+  health_check_type         = "EC2"
+  min_size                  = 0
+  max_size                  = 3
+  desired_capacity          = 1
+  wait_for_capacity_timeout = 0
+  // service_linked_role_arn   = aws_iam_service_linked_role.autoscaling.arn
+
 }
 
 ################################################################################
 # EC2
 ################################################################################
-module "ec2_FE" {
-  source                      = "../../../../modules_AWS/terraform-aws-ec2-instance-master"
-  name                        = var.ec2_name
-  instance_count              = var.ec2_number_of_instances
-  ami                         = var.ec2_ami_id
-  instance_type               = var.ec2_instance_type
-  key_name                    = var.ec2_key_pair_name
-  associate_public_ip_address = var.ec2_public_ip
-  monitoring                  = false
-  vpc_security_group_ids      = [module.aws_security_group_FE.this_security_group_id]
-  subnet_id                   = module.vpc.public_subnets[0]
-  // iam_instance_profile        = var.ec2_iam_role_name //it is highly dependent on terraform custom module
-  user_data                   = var.ec2_user_data
-
-  tags = var.ec2_tags
-}
+// module "ec2_FE" {
+//   source                      = "../../../../modules_AWS/terraform-aws-ec2-instance-master"
+//   name                        = var.ec2_name
+//   instance_count              = var.ec2_number_of_instances
+//   ami                         = var.ec2_ami_id
+//   instance_type               = var.ec2_instance_type
+//   key_name                    = var.ec2_key_pair_name
+//   associate_public_ip_address = var.ec2_public_ip
+//   monitoring                  = false
+//   vpc_security_group_ids      = [module.aws_security_group_FE.this_security_group_id]
+//   subnet_id                   = module.vpc.public_subnets[0]
+//   // iam_instance_profile        = var.ec2_iam_role_name //it is highly dependent on terraform custom module
+//   user_data                   = var.ec2_user_data
+//
+//   tags = var.ec2_tags
+// }
 
 module "aws_security_group_FE" {
   source      = "../../../../modules_AWS/terraform-aws-security-group-master"
