@@ -62,7 +62,7 @@ module "myapp" {
   alb_tags = local.user_tag
 
   ec2_name                = "fe_server-dev"
-  ec2_number_of_instances = 2
+  ec2_number_of_instances = 1
   ec2_ami_id              = data.aws_ami.ubuntu.id
   ec2_instance_type       = "t2.micro"
   ec2_key_pair_name       = var.key_pair_name

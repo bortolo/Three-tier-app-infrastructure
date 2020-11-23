@@ -32,7 +32,7 @@ data "aws_ami" "app_ami" {
 # Create the app infrastructure
 ################################################################################
 module "myapp" {
-  source = "../module"
+  source = "../module-2"
 
   // db_secret_name = var.db_secret_name
 
