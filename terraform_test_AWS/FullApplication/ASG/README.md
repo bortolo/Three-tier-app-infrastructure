@@ -1,4 +1,4 @@
-# Deploy Network Load Balancer
+# Use Auto Scaling Group (ASG)
 
 Deploy a node.js app on a development environment with terraform and ansbile.
 Build the AMI from the devevlopment environment. Use the AMI to deploy a production environment on an autoscaling group.
@@ -16,8 +16,8 @@ This deployment is divided across three folders:
 
 | Automation | Time |
 |------|---------|
-| terraform apply | 30 sec |
-| terraform destroy | 30 sec |
+| terraform apply | 3 sec |
+| terraform destroy | 3 sec |
 
 ## dev
 
@@ -28,9 +28,10 @@ This deployment is divided across three folders:
 
 | Automation | Time |
 |------|---------|
-| terraform apply | 8 min |
-| ansible-playbook | 30 sec |
-| terraform destroy | 5 min |
+| terraform apply | 2min 15sec |
+| ansible-playbook | 40 sec |
+| terraform apply (create AMI)| 3min 15sec |
+| terraform destroy | 1 min |
 
 ## prod
 
@@ -41,9 +42,8 @@ This deployment is divided across three folders:
 
 | Automation | Time |
 |------|---------|
-| terraform apply | 8 min |
-| ansible-playbook | 30 sec |
-| terraform destroy | 5 min |
+| terraform apply | 2min 30sec |
+| terraform destroy | 2min 15sec |
 
 # Usage
 
@@ -88,7 +88,9 @@ To test dynamic ASG effect open another CLI window and run the `callip.sh` scrip
 ```
 . ./callip.sh <your-production-alb-dns>/ip
 ```
-You should see a number of different private IP addresses equal to asg_desired_capacity. Now go back to the CLI where you was launching terraform command. Set the asg_desired_capacity to 4, then run terraform apply again.
+You should see a number of different private IP addresses equal to asg_desired_capacity (if you run this command to early you will see 503 error from ALB because the first EC2 instances are not still available, just wait a minute).
+
+Now go back to the CLI where you was launching terraform command. Set the asg_desired_capacity to 4, then run terraform apply again.
 ```
 terraform apply -var-file="input.tfvars"
 ```
@@ -118,7 +120,7 @@ terraform destroy -var-file="input.tfvars"
 |------|---------|
 | aws | >= 2.68 |
 
-## Inputs
+## Inputs TO BE UPDATED
 
 | Name | Description |
 |------|---------|
@@ -128,7 +130,7 @@ terraform destroy -var-file="input.tfvars"
 | db_private_dns | domain called by the node.js app to call the mysql db |
 | db_secret_name | name of the secret to store in AWS SecretsManager |
 
-## Outputs
+## Outputs TO BE UPDATED
 
 | Name | Description |
 |------|---------|

@@ -1,8 +1,8 @@
-awsusername             = "andrea"
+awsusername             = "<your-aws-username>"
 
-AMI_name                = "ASGapp_0_1"
+AMI_name                = "<ami-name-as-you-set-in-dev-env>"
 
-key_pair_name           = "ASGappkey"
+key_pair_name           = "<key-name-as-you-set-in-cross-env>"
 ec2_user_data           = <<EOF
                             #!/bin/bash
                             systemctl restart nodejs"
