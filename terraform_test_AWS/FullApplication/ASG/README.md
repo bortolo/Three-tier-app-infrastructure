@@ -1,55 +1,30 @@
 # Deploy Network Load Balancer
 
-Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in AWS SecretsManager.
+Deploy a node.js app on a development environment with terraform and ansbile.
+Build the AMI from the devevlopment environment. Use the AMI to deploy a production environment on an autoscaling group.
 
-![appview](./images/AMIarchitecture.png)
+![appview](./images/ASGarchitecture.png)
 
 This deployment is divided across three folders:
-- **./cross**; deploy the AWS SecretsManager and define the IAM role
+- **./cross**; deploy the keypair to log in EC2 instances
 - **./dev**;
   - ***deploy***: deploy dev environment
-  - ***ami***: build AMI for production
+  - ***ami***: build AMI for production (create_AMI variable set to true)
 - **./prod**: deploy prod environment
 
 ## cross
 
-| Resource | Estimated cost (without VAT) | Link |
-|------|---------|---------|
-| SecretsManager | <0,4$/month per secret - see pricing | [Pricing](https://aws.amazon.com/secrets-manager/pricing/) |
-
 | Automation | Time |
 |------|---------|
-| terraform apply | 1 min |
-| terraform destroy | 1 min |
+| terraform apply | 30 sec |
+| terraform destroy | 30 sec |
 
 ## dev
 
-### Deploy dev environment
-
 | Resource | Estimated cost (without VAT) | Link |
 |------|---------|---------|
-| NLB | 0.027 $/h + 0.006 $/h per NLCU-hour | [Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/?nc=sn&loc=3) |
+| ALB | 0.027 $/h + 0.006 $/h per NLCU-hour | [Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/?nc=sn&loc=3) |
 | EC2 | 0,013 $/h x # of instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
-| RDS | 0,02 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
-| SecretsManager | <0,4$/month per secret - see pricing | [Pricing](https://aws.amazon.com/secrets-manager/pricing/) |
-| Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
-| Elastic IP | 0 $/h (it costs only if it is not assigned to EC2: 0,05$/h)| [Pricing](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/) |
-
-| Automation | Time |
-|------|---------|
-| terraform apply | 8 min |
-| ansible-playbook | 30 sec |
-| terraform destroy | 5 min |
-
-### Create AMI
-
-| Resource | Estimated cost (without VAT) | Link |
-|------|---------|---------|
-| NLB | 0.027 $/h + 0.006 $/h per NLCU-hour | [Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/?nc=sn&loc=3) |
-| EC2 | 0,013 $/h x 2 instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
-| RDS | 0,02 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
-| Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
-| Elastic IP | 0 $/h (it costs only if it is not assigned to EC2: 0,05$/h)| [Pricing](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/) |
 
 | Automation | Time |
 |------|---------|
@@ -61,17 +36,72 @@ This deployment is divided across three folders:
 
 | Resource | Estimated cost (without VAT) | Link |
 |------|---------|---------|
-| NLB | 0.027 $/h + 0.006 $/h per NLCU-hour | [Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/?nc=sn&loc=3) |
+| ALB | 0.027 $/h + 0.006 $/h per NLCU-hour | [Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/?nc=sn&loc=3) |
 | EC2 | 0,013 $/h x 3 instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
-| RDS | 0,02 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
-| Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
-| Elastic IP | 0 $/h (it costs only if it is not assigned to EC2: 0,05$/h)| [Pricing](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/) |
 
 | Automation | Time |
 |------|---------|
 | terraform apply | 8 min |
 | ansible-playbook | 30 sec |
 | terraform destroy | 5 min |
+
+# Usage
+
+Go to the `./cross` folder and update the `input.tfvars` with your inputs. With this root module we are going to create just the key pair to log in the EC2 instances (both dev and prod environments).
+```
+terraform init
+terraform apply -var-file="input.tfvars"
+```
+
+Now go to `./dev` folder and update the `input.tfvars` with your inputs. the `key_pair_name` variable must be the sameone of the `./cross` folder. Check if `create_AMI` is set to `false`. We want only to deploy the development environment, later on we will build the AMI.
+```
+terraform init
+terraform apply -var-file="input.tfvars"
+```
+
+You have just deployed the development environment (see VPC DEV in the first picture of this page). Go to `./playbook` folder and deploy the `node.js` application.
+```
+ansible-playbook -i ./ec2.py ./configure_nodejs.yml -l tag_server_type_fe_server
+```
+
+Check if the application is working
+```
+curl <your-alb-dns>/ip
+```
+You should receive an answer like this one (with private IP address of your EC2 instance):
+```
+{"cpu_idle":"0.98","fremem":"0.59","ip":"10.0.13.161"}
+```
+Now that we tested our application we can create the AMI for production purpose. Go to the `./dev` folder and set to true the `create_AMI` variable in `input.tfvars` then run terraform again
+```
+terraform init
+terraform apply -var-file="input.tfvars"
+```
+
+You are ready to deploy your production environment. Update the `input.tfvars` with your own inputs.
+```
+terraform init
+terraform apply -var-file="input.tfvars"
+```
+
+To test dynamic ASG effect open another CLI window and run the `callip.sh` script
+```
+. ./callip.sh <your-production-alb-dns>/ip
+```
+You should see a number of different private IP addresses equal to asg_desired_capacity. Now go back to the CLI where you was launching terraform command. Set the asg_desired_capacity to 4, then run terraform apply again.
+```
+terraform apply -var-file="input.tfvars"
+```
+
+In a couple of minutes you will see in the CLI window where you launched `callip.sh` the answer of new IP addresses.
+Just update the terraform configuration to test the different behaviours of ASG.
+
+![asg](./images/newipaddresses.png)
+
+Remember to destroy everything from each folder. Go to `./cross`, `./dev` and `./prod` and launch
+```
+terraform destroy -var-file="input.tfvars"
+```
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements

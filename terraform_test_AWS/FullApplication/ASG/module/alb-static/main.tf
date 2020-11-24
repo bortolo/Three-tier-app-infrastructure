@@ -1,13 +1,3 @@
-################################################################################
-# Get information about cross services
-################################################################################
-// data "aws_secretsmanager_secret" "db-secret" {
-//   name = var.db_secret_name
-// }
-//
-// data "aws_secretsmanager_secret_version" "db-secret-version" {
-//   secret_id = data.aws_secretsmanager_secret.db-secret.id
-// }
 
 ################################################################################
 # Data sources to create custom VPC and custom subnets (public and database)
@@ -20,10 +10,6 @@ module "vpc" {
   public_subnets = var.vpc_public_subnets
   public_subnet_tags = {
     subnet_type = "public"
-  }
-  database_subnets = var.vpc_database_subnets
-  database_subnet_tags = {
-    subnet_type = "database"
   }
   enable_dhcp_options      = true
   dhcp_options_domain_name = "eu-central-1.compute.internal"
@@ -70,9 +56,9 @@ module "alb" {
       protocol            = "HTTP"
       matcher             = "200-399"
     }
-    tags = {
-      InstanceTargetGroupTag = "baz"
-    }
+    // tags = {
+    //   InstanceTargetGroupTag = "baz"
+    // }
   },
   ]
 

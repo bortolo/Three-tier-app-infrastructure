@@ -5,15 +5,12 @@ provider "aws" {
 locals {
   user_tag = {
     Owner       = var.awsusername
-    Test        = "AMI"
+    Test        = "ASG"
     Environment = "dev"
   }
   ec2_tag = {
     server_type = "fe_server"
   }
-  // db_tag = {
-  //   type = "test_db"
-  // }
 }
 
 ################################################################################
@@ -42,10 +39,10 @@ data "aws_ami" "ubuntu" {
 }
 
 ################################################################################
-# Create the app infrastructure
+# Create the app infrastructure (stati infra without ASG)
 ################################################################################
 module "myapp" {
-  source = "../module/nlb-static"
+  source = "../module/alb-static"
 
   vpc_name             = "custom-dev"
   vpc_cidr             = "10.0.0.0/16"

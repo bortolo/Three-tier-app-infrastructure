@@ -11,10 +11,6 @@ module "vpc" {
   public_subnet_tags = {
     subnet_type = "public"
   }
-  database_subnets = var.vpc_database_subnets
-  database_subnet_tags = {
-    subnet_type = "database"
-  }
   enable_dhcp_options      = true
   dhcp_options_domain_name = "eu-central-1.compute.internal"
   enable_dns_hostnames = true
@@ -33,7 +29,7 @@ module "alb" {
   load_balancer_type   = "application"
   vpc_id               = module.vpc.vpc_id
   security_groups      = [module.aws_security_group_ALB.this_security_group_id]
-  // subnets              = module.vpc.public_subnets
+  subnets              = module.vpc.public_subnets
 
   http_tcp_listeners = [
     {
@@ -60,9 +56,9 @@ module "alb" {
       protocol            = "HTTP"
       matcher             = "200-399"
     }
-    tags = {
-      InstanceTargetGroupTag = "baz"
-    }
+    // tags = {
+    //   InstanceTargetGroupTag = "baz"
+    // }
   },
   ]
 
@@ -71,7 +67,7 @@ module "alb" {
 
 module "aws_security_group_ALB" {
   source      = "../../../../../modules_AWS/terraform-aws-security-group-master"
-  name        = "ALB_security_group"
+  name        = "ALB_security_group-${var.alb_name}"
   description = "Security group for ALB"
   vpc_id      = module.vpc.vpc_id
   ingress_cidr_blocks = ["0.0.0.0/0"]
@@ -87,13 +83,13 @@ module "aws_security_group_ALB" {
 module "asg_prod" {
   source = "../../../../../modules_AWS/terraform-aws-autoscaling-master"
 
-  name = "asg-prod"
+  name = "asg-prod-${var.ec2_name}"
 
   # Launch configuration
   #
   # launch_configuration = "my-existing-launch-configuration" # Use the existing launch configuration
   # create_lc = false # disables creation of launch configuration
-  lc_name = "example-lc"
+  lc_name = "lc-${var.ec2_name}"
 
   image_id                     = var.ec2_ami_id
   instance_type                = var.ec2_instance_type
@@ -106,12 +102,12 @@ module "asg_prod" {
   user_data                    = var.ec2_user_data
 
   # Auto scaling group
-  asg_name                  = "example-asg"
+  asg_name                  = "asg-${var.ec2_name}"
   vpc_zone_identifier       = module.vpc.public_subnets
   health_check_type         = "EC2"
-  min_size                  = 0
-  max_size                  = 4
-  desired_capacity          = 4
+  min_size                  = var.asg_min_size
+  max_size                  = var.asg_max_size
+  desired_capacity          = var.asg_desired_capacity
   wait_for_capacity_timeout = 0
   // service_linked_role_arn   = aws_iam_service_linked_role.autoscaling.arn
 

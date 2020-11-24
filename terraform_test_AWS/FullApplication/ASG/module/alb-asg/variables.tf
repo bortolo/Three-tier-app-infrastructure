@@ -1,12 +1,5 @@
 
 ################################################################################
-# General services variables
-################################################################################
-// variable "db_secret_name" {
-//   description = "(Required) db secret name for AWS SecretsManager"
-// }
-
-################################################################################
 # VPC variables
 ################################################################################
 variable "vpc_name" {
@@ -31,26 +24,11 @@ variable "vpc_public_subnets" {
   default     = []
 }
 
-variable "vpc_database_subnets" {
-  description = "A list of database subnets"
-  type        = list(string)
-  default     = []
-}
-
 variable "vpc_tags" {
   description = "A map of tags to add to VPC resources"
   type        = map(string)
   default     = {}
 }
-
-################################################################################
-# Route53 variables
-################################################################################
-// variable "route53_tags" {
-//   description = "A map of tags to add to route53 resources"
-//   type        = map(string)
-//   default     = {}
-// }
 
 ################################################################################
 # Network Load Balancer variables
@@ -67,15 +45,10 @@ variable "alb_tags" {
 }
 
 ################################################################################
-# EC2 variables
+# EC2 and ASG variables
 ################################################################################
 variable "ec2_name" {
   description = "(Required) The EC2 name"
-  type = string
-}
-
-variable "ec2_number_of_instances" {
-  description = "(Required) The number of EC2 instances to deploy"
   type = string
 }
 
@@ -99,11 +72,6 @@ variable "ec2_public_ip" {
   type = bool
 }
 
-// variable "ec2_iam_role_name" {
-//   description = "(Required) IAM role name for the custom policy of EC2 instances running nodejs and accessing AWS SecretsManager"
-//   type = string
-// }
-
 variable "ec2_user_data" {
   description = "The user data to provide when launching the instance. Do not pass gzip-compressed data via this argument; see user_data_base64 instead."
   type        = string
@@ -116,26 +84,17 @@ variable "ec2_tags" {
   default     = {}
 }
 
-################################################################################
-# DB variables
-################################################################################
-// variable "db_name" {
-//   description = "(Required) The DB name"
-//   type = string
-// }
-//
-// variable "db_identifier" {
-//   description = "(Required) The DB identifier (must be unique)"
-//   type = string
-// }
-//
-// variable "db_instance_class" {
-//   description = "(Required) The DB size to use"
-//   type = string
-// }
-//
-// variable "db_tags" {
-//   description = "A map of tags to add to DB resources"
-//   type        = map(string)
-//   default     = {}
-// }
+variable "asg_min_size" {
+  description = "(Required) The minimum number of EC2 instances in the ASG"
+  type        = string
+}
+
+variable "asg_max_size" {
+  description = "(Required) The maximum number of EC2 instances in the ASG"
+  type        = string
+}
+
+variable "asg_desired_capacity" {
+  description = "(Required) The desired number of EC2 instances in the ASG"
+  type        = string
+}

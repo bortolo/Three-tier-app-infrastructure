@@ -5,12 +5,10 @@ provider "aws" {
 locals {
   user_tag = {
     Owner       = var.awsusername
-    Test        = "AMI"
+    Test        = "ASG"
     Environment = "prod"
   }
-  ec2_tag = {
-    server_type = "fe_server"
-  }
+  ec2_tag = {server_type = "fe_server"}
 }
 
 ################################################################################
@@ -26,12 +24,12 @@ data "aws_ami" "app_ami" {
 }
 
 ################################################################################
-# Create the app infrastructure
+# Create the app infrastructure (dynamic infra with ASG)
 ################################################################################
 module "myapp" {
   source = "../module/alb-asg"
 
-  vpc_name             = "custom-prod"
+  vpc_name             = "vpc-prod"
   vpc_cidr             = "10.0.0.0/16"
   vpc_azs              = ["eu-central-1a","eu-central-1b"]
   vpc_public_subnets   = ["10.0.8.0/21","10.0.16.0/21"]
@@ -41,16 +39,15 @@ module "myapp" {
   alb_tags = local.user_tag
 
   ec2_name                = "fe_server-prod"
-  ec2_number_of_instances = 3
   ec2_ami_id              = data.aws_ami.app_ami.id
   ec2_instance_type       = "t2.micro"
   ec2_key_pair_name       = var.key_pair_name
-  ec2_public_ip           = true //TODO DB doesn't work with public_ip set to false
+  ec2_public_ip           = false //TODO DB doesn't work with public_ip set to false
+  ec2_user_data           = var.ec2_user_data
 
-  ec2_user_data     = <<EOF
-                              #!/bin/bash
-                              systemctl restart nodejs"
-                              EOF
+  asg_min_size            = var.asg_min_size
+  asg_max_size            = var.asg_max_size
+  asg_desired_capacity    = var.asg_desired_capacity
 
   ec2_tags          = merge(local.user_tag, local.ec2_tag)
 }
