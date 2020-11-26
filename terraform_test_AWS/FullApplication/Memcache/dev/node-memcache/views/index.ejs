@@ -16,7 +16,7 @@
         Express.js caching example
       </h1>
 
-      <p class="lead">For any number N (max 10000), we'll find the largest prime number
+      <p class="lead">For any number N (max 10000000000), we'll find the largest prime number
         less than or equal to N.
       </p>
       <!-- Form to submit a number -->
@@ -33,7 +33,12 @@
         </div>
       <% } %>
 
-      <!-- TODO: Error handling -->
+      <!-- Error handling -->
+      <% if (locals.error) { %>
+        <div class="alert alert-danger">
+          <p class="lead"><%= error %></p>
+        </div>
+      <% } %>
 
     </div>
   </body>

@@ -48,6 +48,7 @@ module "myapp" {
   vpc_cidr             = "10.0.0.0/16"
   vpc_azs              = ["eu-central-1a","eu-central-1b"]
   vpc_public_subnets   = ["10.0.8.0/21","10.0.16.0/21"]
+  vpc_private_subnets   = ["10.0.24.0/21"]
 
   vpc_tags             = local.user_tag
 

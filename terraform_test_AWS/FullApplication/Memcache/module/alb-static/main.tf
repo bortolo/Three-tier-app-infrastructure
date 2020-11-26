@@ -11,6 +11,10 @@ module "vpc" {
   public_subnet_tags = {
     subnet_type = "public"
   }
+  private_subnets = var.vpc_private_subnets
+  private_subnet_tags = {
+    subnet_type = "private"
+  }
   enable_dhcp_options      = true
   dhcp_options_domain_name = "eu-central-1.compute.internal"
   enable_dns_hostnames = true
@@ -137,4 +141,23 @@ module "aws_security_group_FE" {
   ]
 
   tags = var.ec2_tags
+}
+
+################################################################################
+# memcache
+################################################################################
+module "memcached" {
+  source                  = "../../../../../modules_AWS/terraform-aws-elasticache-memcached-master"
+  namespace               = "eg"
+  stage                   = "dev"
+  name                    = "myfirstcache"
+  availability_zones      = ["eu-central-1a"]
+  vpc_id                  = module.vpc.vpc_id
+  allowed_security_groups = [module.aws_security_group_FE.this_security_group_id]
+  subnets                 = module.vpc.private_subnets
+  cluster_size            = 1
+  instance_type           = "cache.t3.micro"
+  engine_version          = "1.5.16"
+  apply_immediately       = true
+  // zone_id                 = var.zone_id
 }

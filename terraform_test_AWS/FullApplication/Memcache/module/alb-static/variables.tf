@@ -23,6 +23,12 @@ variable "vpc_public_subnets" {
   default     = []
 }
 
+variable "vpc_private_subnets" {
+  description = "A list of private subnets inside the VPC"
+  type        = list(string)
+  default     = []
+}
+
 variable "vpc_database_subnets" {
   description = "A list of database subnets"
   type        = list(string)
