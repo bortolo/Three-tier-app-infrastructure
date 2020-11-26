@@ -1,56 +1,19 @@
 # Deploy Network Load Balancer
 
-Deploy a EC2 with a node.js app and a mySQL RDS instance. Store the db secret in AWS SecretsManager.
+Deploy two EC2 with a node.js app and test Elasticache AWS service (memcache).
 
-![appview](./images/AMIarchitecture.png)
-
-### Deploy dev environment
+![appview](./images/CACHEarchitecture.png)
 
 | Resource | Estimated cost (without VAT) | Link |
 |------|---------|---------|
-| NLB | 0.027 $/h + 0.006 $/h per NLCU-hour | [Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/?nc=sn&loc=3) |
+| ALB | 0.027 $/h + 0.006 $/h per NLCU-hour | [Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/?nc=sn&loc=3) |
 | EC2 | 0,013 $/h x # of instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
-| RDS | 0,02 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
-| SecretsManager | <0,4$/month per secret - see pricing | [Pricing](https://aws.amazon.com/secrets-manager/pricing/) |
-| Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
-| Elastic IP | 0 $/h (it costs only if it is not assigned to EC2: 0,05$/h)| [Pricing](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/) |
+| MEMCACHE | 0,019 $/h x # of memcache nodes| [Pricing](https://aws.amazon.com/elasticache/pricing/) |
 
 | Automation | Time |
 |------|---------|
-| terraform apply | 8 min |
-| ansible-playbook | 30 sec |
-| terraform destroy | 5 min |
-
-### Create AMI
-
-| Resource | Estimated cost (without VAT) | Link |
-|------|---------|---------|
-| NLB | 0.027 $/h + 0.006 $/h per NLCU-hour | [Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/?nc=sn&loc=3) |
-| EC2 | 0,013 $/h x 2 instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
-| RDS | 0,02 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
-| Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
-| Elastic IP | 0 $/h (it costs only if it is not assigned to EC2: 0,05$/h)| [Pricing](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/) |
-
-| Automation | Time |
-|------|---------|
-| terraform apply | 8 min |
-| ansible-playbook | 30 sec |
-| terraform destroy | 5 min |
-
-## prod
-
-| Resource | Estimated cost (without VAT) | Link |
-|------|---------|---------|
-| NLB | 0.027 $/h + 0.006 $/h per NLCU-hour | [Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/?nc=sn&loc=3) |
-| EC2 | 0,013 $/h x 3 instances | [Pricing](https://aws.amazon.com/ec2/pricing/on-demand/) |
-| RDS | 0,02 $/h (it can increase if you upload a lot of data, see RDS Storage usage type)| [Pricing](https://aws.amazon.com/rds/mysql/pricing/?pg=pr&loc=2) |
-| Route53 | if deleted within 12h no charges are applied | [Pricing](https://aws.amazon.com/route53/pricing/) |
-| Elastic IP | 0 $/h (it costs only if it is not assigned to EC2: 0,05$/h)| [Pricing](https://aws.amazon.com/premiumsupport/knowledge-center/elastic-ip-charges/) |
-
-| Automation | Time |
-|------|---------|
-| terraform apply | 8 min |
-| ansible-playbook | 30 sec |
+| terraform apply | 5min 30sec |
+| ansible-playbook | 1 min |
 | terraform destroy | 5 min |
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
