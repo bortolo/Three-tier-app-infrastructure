@@ -148,16 +148,15 @@ module "aws_security_group_FE" {
 ################################################################################
 module "memcached" {
   source                  = "../../../../../modules_AWS/terraform-aws-elasticache-memcached-master"
-  namespace               = "eg"
-  stage                   = "dev"
-  name                    = "myfirstcache"
-  availability_zones      = ["eu-central-1a"]
+  name                    = var.mem_name
+  availability_zones      = var.mem_azs
   vpc_id                  = module.vpc.vpc_id
   allowed_security_groups = [module.aws_security_group_FE.this_security_group_id]
   subnets                 = module.vpc.private_subnets
-  cluster_size            = 1
-  instance_type           = "cache.t3.micro"
-  engine_version          = "1.5.16"
+  cluster_size            = var.mem_cluster_size
+  instance_type           = var.mem_instance_type
+  engine_version          = var.mem_engine_version
   apply_immediately       = true
-  // zone_id                 = var.zone_id
+  tags                    = var.mem_tags
+
 }

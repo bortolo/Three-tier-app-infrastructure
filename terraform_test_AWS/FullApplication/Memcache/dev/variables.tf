@@ -19,14 +19,6 @@ variable "AMI_name" {
 ################################################################################
 # Variable to create the app infrastructure
 ################################################################################
-// variable "db_secret_name" {
-//   description = "(Required) db secret name for AWS SecretsManager"
-// }
-
 variable "key_pair_name" {
   description = "(Required) The key pair name to log in EC2 instances"
 }
-
-// variable "iam_role_name" {
-//   description = "(Required) IAM role name for the custom policy of EC2 instances running nodejs and accessing AWS SecretsManager"
-// }

@@ -99,3 +99,38 @@ variable "ec2_tags" {
   type        = map(string)
   default     = {}
 }
+
+################################################################################
+# MEMCACHE variables
+################################################################################
+variable "mem_name" {
+  description = "(Required) The memcache cluster name"
+  type = string
+}
+
+variable "mem_azs" {
+  description = "(Required) The azs where run the memcache cluster"
+  type        = list(string)
+  default     = []
+}
+
+variable "mem_instance_type" {
+  description = "(Required) The type of memcache node instance"
+  type = string
+}
+
+variable "mem_engine_version" {
+  description = "(Required) The memcache engine version"
+  type = string
+}
+
+variable "mem_cluster_size" {
+  description = "(Required) The number of memcache nodes"
+  type        = number
+}
+
+variable "mem_tags" {
+  description = "(Required) The tags to be added to of memcache AWS resource"
+  type        = map(string)
+  default     = {}
+}

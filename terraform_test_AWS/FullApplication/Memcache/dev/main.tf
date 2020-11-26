@@ -56,11 +56,18 @@ module "myapp" {
   alb_tags = local.user_tag
 
   ec2_name                = "fe_server-dev"
-  ec2_number_of_instances = 1
+  ec2_number_of_instances = 2
   ec2_ami_id              = data.aws_ami.ubuntu.id
   ec2_instance_type       = "t2.micro"
   ec2_key_pair_name       = var.key_pair_name
   ec2_public_ip           = true
   ec2_tags                = merge(local.user_tag, local.ec2_tag)
+
+  mem_name                = "memcache-dev"
+  mem_azs                 = ["eu-central-1a"]
+  mem_instance_type       = "cache.t3.micro"
+  mem_engine_version      = "1.5.16"
+  mem_cluster_size        = 1
+  mem_tags                = local.user_tag
 
 }
