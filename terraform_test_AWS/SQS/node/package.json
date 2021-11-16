@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/methodin/SQS-node-intro#readme",
   "dependencies": {
-    "aws-sdk": "^2.437.0"
+    "aws-sdk": "^2.814.0"
   }
 }
